@@ -16,10 +16,8 @@ WriteCheck/
 sqlancer/
 coddtest-sqlancer/
 
-# Generated notes / downloaded paper copies
+# Generated investigation notes
 notes/
-papers/*.pdf
-!papers/README.md
 
 # Build/log output
 **/target/

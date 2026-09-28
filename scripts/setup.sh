@@ -6,7 +6,7 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TROC_COMMIT="a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5"
 TROC_DIR="$ROOT/.deps/Troc"
-MYSQL_CONTAINER="db-paper-mysql8032"
+MYSQL_CONTAINER="csi5137-atdm-mysql8032"
 
 need() {
   command -v "$1" >/dev/null 2>&1 || {

@@ -5,10 +5,12 @@
 Work only inside:
 
 ```text
-~/Projects/db-paper-repro
+~/Projects/csi5137-atdm-db-project
 ```
 
-This repo reproduces one MySQL bug for each of three database-testing papers:
+This is the class project repository for **CSI 5137 — Advanced Topics in Databases and Data Management (ATDM)**.
+
+It reproduces one MySQL bug for each of three database-testing papers:
 
 - CODDTest / MySQL #111241
 - DDLCheck / MySQL #114904
@@ -37,7 +39,7 @@ Do not claim success from build completion alone. Each runner must assert the bu
 Container:
 
 ```text
-name: db-paper-mysql8032
+name: csi5137-atdm-mysql8032
 image: mysql:8.0.32
 platform: linux/amd64
 host port: 3307

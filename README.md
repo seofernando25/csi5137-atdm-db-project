@@ -1,6 +1,8 @@
-# Database Bug Reproduction Project
+# CSI 5137 — ATDM Database Testing Project
 
-Small, reproducible companion repo for a 20–30 minute presentation on three recent database-testing papers.
+**Course:** CSI 5137 — Advanced Topics in Databases and Data Management (ATDM)
+
+Class project repository for a 20–30 minute presentation on three recent database-testing papers, with reproducible MySQL bug demonstrations.
 
 The common idea is:
 

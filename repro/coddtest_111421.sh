@@ -10,11 +10,11 @@ DB="codd111421_$(date +%Y%m%d%H%M%S)_$$"
 
 {
   echo "=== CODDTest / MySQL #111421 ==="
-  "$DOCKER" exec db-paper-mysql8032 mysql -h127.0.0.1 -uroot -proot -Nse "SELECT VERSION();"
+  "$DOCKER" exec csi5137-atdm-mysql8032 mysql -h127.0.0.1 -uroot -proot -Nse "SELECT VERSION();"
 
   echo
   echo "Expected bug: CREATE TABLE with CHECK(true) is rejected."
-  "$DOCKER" exec db-paper-mysql8032 mysql -h127.0.0.1 -uroot -proot -e "
+  "$DOCKER" exec csi5137-atdm-mysql8032 mysql -h127.0.0.1 -uroot -proot -e "
   CREATE DATABASE $DB;
   USE $DB;
   CREATE TABLE t0(c1 NUMERIC CHECK (true));

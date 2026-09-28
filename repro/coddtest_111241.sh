@@ -4,7 +4,7 @@ set -euo pipefail
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONTAINER="${MYSQL_CONTAINER:-db-paper-mysql8032}"
+CONTAINER="${MYSQL_CONTAINER:-csi5137-atdm-mysql8032}"
 RUN_ID="${REPRO_ID:-$(date +%Y%m%d%H%M%S)_$$}"
 DB="codd111241_${RUN_ID}"
 OUT="$ROOT/results/coddtest_111241.latest.txt"

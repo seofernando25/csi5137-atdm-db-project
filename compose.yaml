@@ -1,10 +1,10 @@
-name: db-paper-repro
+name: csi5137-atdm
 
 services:
   mysql:
     image: mysql:8.0.32
     platform: linux/amd64
-    container_name: db-paper-mysql8032
+    container_name: csi5137-atdm-mysql8032
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
