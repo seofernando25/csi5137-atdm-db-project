@@ -1,0 +1,18 @@
+name: db-paper-repro
+
+services:
+  mysql:
+    image: mysql:8.0.32
+    platform: linux/amd64
+    container_name: db-paper-mysql8032
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 2s
+      timeout: 2s
+      retries: 45
+      start_period: 20s

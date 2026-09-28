@@ -1,0 +1,6 @@
+=== CODDTest / MySQL #111241 ===
+version=8.0.32
+folded_value=1
+constant_form=1
+subquery_form=<empty>
+PASS: MySQL #111241 reproduced.

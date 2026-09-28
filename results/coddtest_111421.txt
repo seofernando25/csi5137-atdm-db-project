@@ -1,0 +1,8 @@
+=== CODDTest / MySQL #111421 ===
+mysql: [Warning] Using a password on the command line interface can be insecure.
+8.0.32
+
+Expected bug: CREATE TABLE with CHECK(true) is rejected.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 3813 (HY000) at line 4: Column check constraint 't0_chk_1' references other column.
+mysql_exit_status=1

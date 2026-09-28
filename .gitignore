@@ -1,0 +1,32 @@
+# OS/editor
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Local secrets/config
+.env
+.env.*
+
+# Upstream dependencies recreated by scripts/setup.sh
+.deps/
+Troc/
+WriteCheck/
+sqlancer/
+coddtest-sqlancer/
+
+# Generated notes / downloaded paper copies
+notes/
+papers/*.pdf
+!papers/README.md
+
+# Build/log output
+**/target/
+**/logs/
+*.log
+results/*.latest.txt
+results/tmp/
+
+# Java
+*.class
