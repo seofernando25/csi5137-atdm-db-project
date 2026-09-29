@@ -1,0 +1,17 @@
+{
+  "main_slides": 32,
+  "backup_slides": 6,
+  "spoken_words": 2549,
+  "explicit_hold_seconds": 88,
+  "advance_seconds": 31,
+  "base_wpm": 120,
+  "model_seconds": 1393.5,
+  "reserve_to_25_minutes_seconds": 106.5,
+  "checkpoints": {
+    "OPENING": "02:32",
+    "CODDTEST": "08:16",
+    "DDLCHECK": "14:01",
+    "WRITECHECK": "20:12",
+    "SYNTHESIS": "23:14"
+  }
+}

@@ -179,3 +179,8 @@ difference => potential DBMS bug
 ```
 
 For the presentation, one minimized deterministic testcase per paper is much clearer than rerunning the original long fuzzing campaigns.
+
+
+## Presentation (visual redesign)
+
+The [presentation/v2](presentation/v2/README.md) folder contains the 32-slide main deck, 6 backups, embedded notes, a full delivery script, a cue sheet, and a timing audit. Our transaction replay uses Troc; the deck explicitly distinguishes it from rerunning the WriteCheck implementation.
