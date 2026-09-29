@@ -15,11 +15,11 @@ tags: [paper, coddtest, metamorphic-testing, dbms-testing]
 
 ## Thesis
 
-CODDTest turns [[Concepts/CODDTest/04 Constant Folding|constant folding]] and [[Concepts/CODDTest/05 Constant Propagation|constant propagation]] into a [[Concepts/CODDTest/01 Test Oracle|test oracle]]. It evaluates an SQL expression under a fixed database state, replaces that expression with its computed value, and verifies that the original and transformed queries agree.
+CODDTest turns [[Concepts/CODDTest/04 Constant Folding|constant folding]] and [[Concepts/CODDTest/05 Constant Propagation|constant propagation]] into a [[Concepts/Shared/01 Test Oracle|test oracle]]. It evaluates an SQL expression under a fixed database state, replaces that expression with its computed value, and verifies that the original and transformed queries agree.
 
 ## Core notation
 
-- s: [[Concepts/CODDTest/11 Database State|database state]]
+- s: [[Concepts/Shared/05 Database State|database state]]
 - φ: expression selected for folding
 - A: [[Concepts/CODDTest/06 Original Auxiliary and Folded Queries|auxiliary query]]
 - O: original query

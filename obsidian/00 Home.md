@@ -7,41 +7,81 @@ tags: [atdm, database-testing, papers]
 
 # CSI 5137 — ATDM Paper Notebook
 
-## The three papers
+This vault decomposes the three class-project papers into small, linked study notes.
 
-1. [[Papers/01 CODDTest|CODDTest — Constant Optimization Driven Database System Testing]]
-   - PDF: [[PDFs/CODDTest_SIGMOD2025.pdf]]
-2. [[Papers/02 DDLCheck|DDLCheck — Equivalent Database Construction]]
-   - PDF: [[PDFs/DDLCheck_PVLDB2025.pdf]]
-3. [[Papers/03 WriteCheck|WriteCheck — Write-Specific Serializability Testing]]
-   - PDF: [[PDFs/WriteCheck_PVLDB2025.pdf]]
+## Start here
 
-## Current focus: CODDTest
+1. [[Concepts/00 Cross-Paper Map]]
+2. [[Concepts/Shared/00 Shared Concepts]]
+3. Choose a paper concept map.
 
-Start with [[Concepts/CODDTest/00 Concept Map]].
+## Papers
 
-Recommended order:
+### 1. CODDTest
 
-1. [[Concepts/CODDTest/01 Test Oracle]]
-2. [[Concepts/CODDTest/02 Metamorphic Testing]]
+[[Papers/01 CODDTest|Paper note]] · [[PDFs/CODDTest_SIGMOD2025.pdf|PDF]] · [[Concepts/CODDTest/00 Concept Map|Concept map]]
+
+Focus:
+
+> Evaluate an expression, substitute the result, and compare equivalent queries.
+
+### 2. DDLCheck
+
+[[Papers/02 DDLCheck|Paper note]] · [[PDFs/DDLCheck_PVLDB2025.pdf|PDF]] · [[Concepts/DDLCheck/00 Concept Map|Concept map]]
+
+Focus:
+
+> Construct the same visible schema through different histories and compare later behavior.
+
+### 3. WriteCheck
+
+[[Papers/03 WriteCheck|Paper note]] · [[PDFs/WriteCheck_PVLDB2025.pdf|PDF]]
+
+Focus:
+
+> Compare concurrent transaction behavior with an appropriate execution/state oracle.
+
+A full WriteCheck concept decomposition is the next notebook pass.
+
+## Shared project question
+
+> How can we test a DBMS for wrong answers when we do not know the correct answer in advance?
+
+| Paper | DBMS layer | Equivalence idea |
+|---|---|---|
+| CODDTest | Query / expression | Original query ≡ folded query |
+| DDLCheck | Schema / DDL | Evolved schema ≡ directly constructed schema |
+| WriteCheck | Transactions | Concurrent execution ≡ oracle execution/state |
+
+## Recommended CODDTest path
+
+1. [[Concepts/Shared/01 Test Oracle]]
+2. [[Concepts/Shared/03 Metamorphic Testing]]
 3. [[Concepts/CODDTest/03 Metamorphic Relation]]
 4. [[Concepts/CODDTest/04 Constant Folding]]
 5. [[Concepts/CODDTest/05 Constant Propagation]]
 6. [[Concepts/CODDTest/06 Original Auxiliary and Folded Queries]]
 7. [[Concepts/CODDTest/07 Independent and Dependent Expressions]]
-8. [[Concepts/CODDTest/07A Independent Expressions]]
-9. [[Concepts/CODDTest/07B Dependent Expressions]]
-10. [[Concepts/CODDTest/08A Predicates]]
-11. [[Concepts/CODDTest/08B SQL Three-Valued Logic]]
-12. [[Concepts/CODDTest/13 Algorithmic Sketch]]
-13. [[Concepts/CODDTest/17 How CODDTest Fits Together]]
+8. [[Concepts/CODDTest/17 How CODDTest Fits Together]]
 
-## Shared project question
+## Recommended DDLCheck path
 
-How can we test a DBMS for wrong answers when we do not know the correct answer in advance?
+1. [[Concepts/DDLCheck/01 Database Schema]]
+2. [[Concepts/DDLCheck/02 Schema Evolution]]
+3. [[Concepts/DDLCheck/04 Schema-Related Information]]
+4. [[Concepts/DDLCheck/06 Equivalent Databases]]
+5. [[Concepts/DDLCheck/08 Generated and Synthesized DDL Sequences]]
+6. [[Concepts/DDLCheck/14 DDLCheck Oracle]]
+7. [[Concepts/DDLCheck/10 DDL Sequence Generation]]
+8. [[Concepts/DDLCheck/12 DDL Sequence Synthesis]]
+9. [[Concepts/DDLCheck/16 Database Schema Transition Graph (DSTG)]]
+10. [[Concepts/DDLCheck/24 MySQL 114904 Walkthrough]]
+11. [[Concepts/DDLCheck/26 How DDLCheck Fits Together]]
 
-| Paper | Layer | Equivalence used as oracle |
-|---|---|---|
-| CODDTest | Query / expression | Original query ≡ folded query |
-| DDLCheck | Schema / DDL | Evolved schema ≡ directly created schema |
-| WriteCheck | Transactions | Concurrent execution ≡ serial/oracle execution |
+## Repository resources
+
+Outside the vault:
+
+- reproduction scripts: ../repro/
+- captured outputs: ../results/
+- presentation materials: ../presentation/

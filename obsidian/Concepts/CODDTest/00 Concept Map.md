@@ -22,17 +22,17 @@ Mismatch = logic-bug candidate
 
 ## Foundation
 
-- [[01 Test Oracle]]
-- [[02 Metamorphic Testing]]
+- [[Concepts/Shared/01 Test Oracle|Test Oracle]]
+- [[Concepts/Shared/03 Metamorphic Testing|Metamorphic Testing]]
 - [[03 Metamorphic Relation]]
-- [[12 Logic Bugs]]
+- [[Concepts/Shared/02 Logic Bugs|Logic Bugs]]
 
 ## Constant-optimization vocabulary
 
 - [[04 Constant Folding]]
 - [[05 Constant Propagation]]
 - [[06 Original Auxiliary and Folded Queries]]
-- [[11 Database State]]
+- [[Concepts/Shared/05 Database State|Database State]]
 
 ## SQL concepts
 
@@ -47,7 +47,7 @@ Mismatch = logic-bug candidate
 
 ## Implementation and comparisons
 
-- [[13 Algorithmic Sketch]]
+- [[Concepts/Shared/10 Algorithmic Sketch|Algorithmic Sketch]]
 - [[14 SQLancer]]
 - [[15 Abstract Syntax Tree (AST)]]
 - [[16 Existing Oracles - TLP NoREC PQS DQE]]

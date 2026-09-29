@@ -50,6 +50,6 @@ It can be fully deterministic while still producing different values for differe
 
 - [[07 Independent and Dependent Expressions]]
 - [[10 SQL CASE and Row Mapping]]
-- [[13 Algorithmic Sketch]]
+- [[Concepts/Shared/10 Algorithmic Sketch|Algorithmic Sketch]]
 
 Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=8]]

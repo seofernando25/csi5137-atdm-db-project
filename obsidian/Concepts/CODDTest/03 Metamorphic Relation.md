@@ -13,7 +13,7 @@ CODDTest expects:
 where:
 
 - E is the DBMS engine;
-- s is a fixed [[11 Database State|database state]];
+- s is a fixed [[Concepts/Shared/05 Database State|database state]];
 - O is the original query;
 - F is the folded query.
 
@@ -49,6 +49,6 @@ See [[18 False Positives and Floating Point]].
 
 ## Related
 
-- [[02 Metamorphic Testing]]
-- [[11 Database State]]
+- [[Concepts/Shared/03 Metamorphic Testing|Metamorphic Testing]]
+- [[Concepts/Shared/05 Database State|Database State]]
 - [[06 Original Auxiliary and Folded Queries]]

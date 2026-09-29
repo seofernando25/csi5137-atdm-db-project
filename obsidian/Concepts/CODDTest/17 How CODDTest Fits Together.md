@@ -6,17 +6,17 @@ If you understand this page, you understand the core paper.
 
 A DBMS can return a wrong answer without crashing.
 
-See [[01 Test Oracle]] and [[12 Logic Bugs]].
+See [[Concepts/Shared/01 Test Oracle|Test Oracle]] and [[Concepts/Shared/02 Logic Bugs|Logic Bugs]].
 
 ## Step 2 — Metamorphic solution
 
 We do not know the correct answer, but we can construct two queries that should agree.
 
-See [[02 Metamorphic Testing]] and [[03 Metamorphic Relation]].
+See [[Concepts/Shared/03 Metamorphic Testing|Metamorphic Testing]] and [[03 Metamorphic Relation]].
 
 ## Step 3 — Choose expression φ
 
-Generate an expression under a fixed [[11 Database State|database state]].
+Generate an expression under a fixed [[Concepts/Shared/05 Database State|database state]].
 
 ## Step 4 — Fold φ
 
