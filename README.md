@@ -184,3 +184,13 @@ For the presentation, one minimized deterministic testcase per paper is much cle
 ## Presentation (visual redesign)
 
 The [presentation/v2](presentation/v2/README.md) folder contains the 32-slide main deck, 6 backups, embedded notes, a full delivery script, a cue sheet, and a timing audit. Our transaction replay uses Troc; the deck explicitly distinguishes it from rerunning the WriteCheck implementation.
+
+## Obsidian study notebook
+
+The obsidian directory is an Obsidian vault for studying the three papers. Open that directory as a vault and start from 00 Home.md.
+
+It contains:
+
+- local copies of all three PDFs;
+- one note for each paper;
+- a linked CODDTest concept map and individual notes for the terminology used in the paper.

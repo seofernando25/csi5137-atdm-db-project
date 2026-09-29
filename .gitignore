@@ -28,3 +28,6 @@ results/tmp/
 
 # Java
 *.class
+
+# Obsidian local workspace state
+obsidian/.obsidian/workspace*.json
