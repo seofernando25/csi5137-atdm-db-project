@@ -34,7 +34,7 @@ Compare against:
 
     direct construction of S
 
-Then execute the same later SQL on both.
+Then execute the same later SQL on both databases.
 
 Core concepts:
 
@@ -43,19 +43,36 @@ Core concepts:
 - [[DDLCheck/06 Equivalent Databases]]
 - [[DDLCheck/14 DDLCheck Oracle]]
 
-## WriteCheck — transaction level
+## WriteCheck — transaction-schedule level
 
-    concurrent schedule
+    submitted transaction interleaving
+         ↓
+    actual concurrent schedule H_con
          ↓
     observed final state
 
-Compare against an execution/state oracle expected by the concurrency model.
+Infer:
 
-The detailed WriteCheck concept graph will be added next.
+    FCRFS serial schedule H_ser
+         ↓
+    serial final state
+
+Compare:
+
+    state(H_con)
+         ≡
+    state(H_ser)
+
+Core concepts:
+
+- [[WriteCheck/11 Write-Specific Serializability (WSS)]]
+- [[WriteCheck/14 FCRFS Serial Pattern]]
+- [[WriteCheck/22 Submitted Order vs Actual Schedule]]
+- [[WriteCheck/26 Final-State Comparison]]
 
 ## Shared pattern
 
-    construct two things
+    construct two executions
     that should be equivalent
              ↓
          execute both
@@ -66,12 +83,26 @@ The detailed WriteCheck concept graph will be added next.
 
 See [[Shared/04 Equivalence-Based Testing]].
 
+## What each paper manufactures
+
+| Paper | What it constructs as the reference |
+|---|---|
+| CODDTest | Folded query F |
+| DDLCheck | Directly synthesized database db_syn |
+| WriteCheck | FCRFS serial schedule H_ser |
+
 ## Progression through the DBMS
 
     expression semantics
             ↓
-       schema state
+       schema history
             ↓
     transaction behavior
 
-This progression is the main narrative connecting the three papers in the presentation.
+That progression is the main narrative connecting the three papers in the presentation.
+
+## Reproduction note
+
+Our three MySQL demonstrations all use MySQL 8.0.32.
+
+For WriteCheck, the executable project replay uses Troc's testcase and MVCC oracle, so it should be presented as a **representative transaction-bug replay**, not as a direct rerun of WriteCheck.

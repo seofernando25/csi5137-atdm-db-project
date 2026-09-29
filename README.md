@@ -195,4 +195,5 @@ It contains:
 - Concepts/Shared/ for reusable testing ideas such as test oracles, equivalence-based testing, stateful generation, and reduction;
 - a decomposed CODDTest concept graph;
 - a decomposed DDLCheck concept graph covering schema evolution, hidden schema-related information, sequence generation/synthesis, equivalent databases, DSTGs, bug taxonomy, evaluation, and the reproduced MySQL #114904 case;
+- a decomposed WriteCheck concept graph covering transaction schedules, WSS, tx-WSS/stmt-WSS, FCRFS, conflict assumptions, actual scheduling, locking semantics, evaluation, and the Troc-based MySQL #104833 project replay;
 - a cross-paper map tying the three testing levels together.

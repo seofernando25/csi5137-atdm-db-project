@@ -10,14 +10,14 @@
 .env.*
 
 # Upstream dependencies recreated by scripts/setup.sh
-.deps/
-Troc/
-WriteCheck/
-sqlancer/
-coddtest-sqlancer/
+/.deps/
+/Troc/
+/WriteCheck/
+/sqlancer/
+/coddtest-sqlancer/
 
 # Generated investigation notes
-notes/
+/notes/
 
 # Build/log output
 **/target/

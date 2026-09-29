@@ -48,7 +48,7 @@ Mismatch = logic-bug candidate
 ## Implementation and comparisons
 
 - [[Concepts/Shared/10 Algorithmic Sketch|Algorithmic Sketch]]
-- [[14 SQLancer]]
+- [[Concepts/Shared/11 SQLancer|SQLancer]]
 - [[15 Abstract Syntax Tree (AST)]]
 - [[16 Existing Oracles - TLP NoREC PQS DQE]]
   - [[16A TLP - Ternary Logic Partitioning]]

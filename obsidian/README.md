@@ -12,6 +12,7 @@ Start at [[00 Home]].
       Shared/
       CODDTest/
       DDLCheck/
+      WriteCheck/
     Papers/
       01 CODDTest.md
       02 DDLCheck.md
@@ -34,3 +35,5 @@ Most follow this pattern:
 5. links to the next concept.
 
 Shared ideas live in Concepts/Shared instead of being redefined for each paper.
+
+All three papers now have their own concept maps and decomposed study paths.

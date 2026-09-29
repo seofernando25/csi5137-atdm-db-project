@@ -68,7 +68,7 @@ Mismatch = potential DBMS bug
 
 ## Implementation layer
 
-[[14 SQLancer]] provides the framework.
+[[Concepts/Shared/11 SQLancer|SQLancer]] provides the framework.
 
 [[15 Abstract Syntax Tree (AST)|ASTs]] help represent and transform generated queries.
 

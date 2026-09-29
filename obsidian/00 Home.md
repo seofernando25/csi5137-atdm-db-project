@@ -35,13 +35,11 @@ Focus:
 
 ### 3. WriteCheck
 
-[[Papers/03 WriteCheck|Paper note]] · [[PDFs/WriteCheck_PVLDB2025.pdf|PDF]]
+[[Papers/03 WriteCheck|Paper note]] · [[PDFs/WriteCheck_PVLDB2025.pdf|PDF]] · [[Concepts/WriteCheck/00 Concept Map|Concept map]]
 
 Focus:
 
-> Compare concurrent transaction behavior with an appropriate execution/state oracle.
-
-A full WriteCheck concept decomposition is the next notebook pass.
+> Observe the real concurrent schedule, infer an FCRFS serial execution, and compare final database states.
 
 ## Shared project question
 
@@ -77,6 +75,24 @@ A full WriteCheck concept decomposition is the next notebook pass.
 9. [[Concepts/DDLCheck/16 Database Schema Transition Graph (DSTG)]]
 10. [[Concepts/DDLCheck/24 MySQL 114904 Walkthrough]]
 11. [[Concepts/DDLCheck/26 How DDLCheck Fits Together]]
+
+
+## Recommended WriteCheck path
+
+1. [[Concepts/WriteCheck/01 Transactions and ACID]]
+2. [[Concepts/WriteCheck/04 Transaction Schedules]]
+3. [[Concepts/WriteCheck/05 Concurrent and Serial Schedules]]
+4. [[Concepts/WriteCheck/08 Isolation Levels]]
+5. [[Concepts/WriteCheck/10 Write-Write Conflicts]]
+6. [[Concepts/WriteCheck/11 Write-Specific Serializability (WSS)]]
+7. [[Concepts/WriteCheck/12 Transaction-Level and Statement-Level WSS]]
+8. [[Concepts/WriteCheck/14 FCRFS Serial Pattern]]
+9. [[Concepts/WriteCheck/16 WSS Correctness Assumption]]
+10. [[Concepts/WriteCheck/22 Submitted Order vs Actual Schedule]]
+11. [[Concepts/WriteCheck/25 Inferring the Serial Oracle]]
+12. [[Concepts/WriteCheck/26 Final-State Comparison]]
+13. [[Concepts/WriteCheck/32 Project Reproduction - MySQL 104833]]
+14. [[Concepts/WriteCheck/34 How WriteCheck Fits Together]]
 
 ## Repository resources
 

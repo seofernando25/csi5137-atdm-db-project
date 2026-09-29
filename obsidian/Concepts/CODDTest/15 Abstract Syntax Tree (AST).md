@@ -26,4 +26,4 @@ ASTs are implementation detail, not the main research idea.
 
 For the presentation, mention ASTs only if explaining how SQLancer performs the transformation internally.
 
-Related: [[14 SQLancer]]
+Related: [[Concepts/Shared/11 SQLancer|SQLancer]]
