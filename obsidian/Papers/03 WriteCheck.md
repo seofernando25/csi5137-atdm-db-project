@@ -9,6 +9,8 @@ tags: [paper, writecheck, transactions, serializability, dbms-testing]
 
 # WriteCheck — Simple Testing Can Expose Most Critical Transaction Bugs
 
+[[Guides/03 Understanding WriteCheck|Narrative guide]]
+
 **Full title:** Simple Testing Can Expose Most Critical Transaction Bugs: Understanding and Detecting Write-Specific Serializability Violations in Database Systems
 
 **PDF:** [[PDFs/WriteCheck_PVLDB2025.pdf]]

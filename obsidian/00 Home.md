@@ -15,6 +15,18 @@ This vault decomposes the three class-project papers into small, linked study no
 2. [[Concepts/Shared/00 Shared Concepts]]
 3. Choose a paper concept map.
 
+## Read as a narrative series
+
+If you want to learn the papers front-to-back rather than browse individual concepts:
+
+1. [[Guides/00 The Three-Paper Story]]
+2. [[Guides/01 Understanding CODDTest]]
+3. [[Guides/02 Understanding DDLCheck]]
+4. [[Guides/03 Understanding WriteCheck]]
+5. [[Guides/04 Three Papers, One Testing Idea]]
+
+The guides are continuous explanations. Important terminology links out to the smaller concept notes when you want more detail.
+
 ## Papers
 
 ### 1. CODDTest

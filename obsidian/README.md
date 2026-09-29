@@ -7,6 +7,12 @@ Start at [[00 Home]].
 ## Structure
 
     00 Home.md
+    Guides/
+      00 The Three-Paper Story.md
+      01 Understanding CODDTest.md
+      02 Understanding DDLCheck.md
+      03 Understanding WriteCheck.md
+      04 Three Papers, One Testing Idea.md
     Concepts/
       00 Cross-Paper Map.md
       Shared/
@@ -37,3 +43,10 @@ Most follow this pattern:
 Shared ideas live in Concepts/Shared instead of being redefined for each paper.
 
 All three papers now have their own concept maps and decomposed study paths.
+
+## Reading modes
+
+- Guides/ — read front-to-back like a tutorial series.
+- Concepts/ — short, atomic explanations and examples.
+- Papers/ — paper-level reference sheets, results, and reading pointers.
+- PDFs/ — original papers.

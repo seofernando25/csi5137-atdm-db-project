@@ -9,6 +9,8 @@ tags: [paper, coddtest, metamorphic-testing, dbms-testing]
 
 # CODDTest — Constant Optimization Driven Database System Testing
 
+[[Guides/01 Understanding CODDTest|Narrative guide]]
+
 **PDF:** [[PDFs/CODDTest_SIGMOD2025.pdf]]  
 **Preprint:** https://arxiv.org/abs/2501.11252  
 **DOI:** https://doi.org/10.1145/3709674

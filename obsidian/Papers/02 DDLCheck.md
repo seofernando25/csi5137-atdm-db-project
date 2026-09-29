@@ -9,6 +9,8 @@ tags: [paper, ddlcheck, schema-evolution, dbms-testing]
 
 # DDLCheck — Detecting Schema-Related Logic Bugs via Equivalent Database Construction
 
+[[Guides/02 Understanding DDLCheck|Narrative guide]]
+
 **PDF:** [[PDFs/DDLCheck_PVLDB2025.pdf]]
 **Venue:** PVLDB 18(7), 2025
 **Public PDF:** https://www.vldb.org/pvldb/vol18/p2281-song.pdf
