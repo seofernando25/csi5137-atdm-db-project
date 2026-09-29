@@ -1,45 +1,28 @@
-# Existing Oracles — TLP, NoREC, PQS, DQE
+# Existing Test Oracles
 
-CODDTest compares itself with several existing DBMS-testing approaches.
+CODDTest compares against several earlier DBMS-testing approaches.
 
-The important thing is to understand the **oracle idea** behind each technique, not memorize every implementation detail.
+Use this page as the index.
 
-## TLP — Ternary Logic Partitioning
+| Technique | Core oracle idea |
+|---|---|
+| [[16A TLP - Ternary Logic Partitioning|TLP]] | Partition by p, NOT p, and p IS NULL |
+| [[16B NoREC - No Rewriting Required|NoREC]] | Compare equivalent predicate computation through a rewritten form |
+| [[16C PQS - Pivoted Query Synthesis|PQS]] | Generate a query that should contain a known pivot row |
+| [[16D DQE - Differential Query Execution|DQE]] | Compare predicate behavior across SQL statement contexts |
 
-Partition the data using:
+## Why this matters
 
-- predicate p;
-- NOT p;
-- p IS NULL.
+All four techniques address the same high-level [[01 Test Oracle|oracle problem]].
 
-The partitions should reconstruct the result of the original unpartitioned query.
+CODDTest's distinctive transformation is:
 
-TLP exploits SQL's [[08 Predicates and Three-Valued Logic|three-valued logic]].
+> evaluate an expression, then substitute its result.
 
-## NoREC — No Rewriting Required
+That lets it test cases that do not fit naturally into the other oracles.
 
-NoREC reformulates predicate evaluation so two logically equivalent computations can be compared, often using aggregate counts.
+## Continue
 
-Its goal is to reveal wrong-result bugs associated with query optimization.
-
-## PQS — Pivoted Query Synthesis
-
-PQS selects a known **pivot row** and generates a query that should contain that row according to an internal expression evaluator.
-
-Unlike a pure equality comparison between complete query results, PQS manufactures a known expected property.
-
-## DQE — Differential Query Execution
-
-DQE checks whether a predicate behaves consistently across different statement contexts, such as SELECT, UPDATE, and DELETE.
-
-## CODDTest's difference
-
-CODDTest evaluates an expression and substitutes its result to construct the follow-up query.
-
-The authors argue this allows CODDTest to reach language features and bug patterns that the compared oracles cannot easily expose.
-
-## Presentation sentence
-
-> All of these techniques solve the test-oracle problem differently; CODDTest's novelty is using constant optimization as the metamorphic transformation.
+Read the four child notes, then return to [[17 How CODDTest Fits Together]].
 
 Paper comparison section: [[PDFs/CODDTest_SIGMOD2025.pdf#page=15]]

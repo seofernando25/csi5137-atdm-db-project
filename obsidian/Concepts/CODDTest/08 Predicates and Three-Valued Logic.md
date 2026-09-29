@@ -1,29 +1,26 @@
 # Predicates and Three-Valued Logic
 
-A SQL **predicate** is an expression used as a condition.
+These concepts are related but distinct.
 
-Examples include:
+## Predicate
 
-- x > 10
-- name IS NULL
-- a IN (1, 2, 3)
+A [[08A Predicates|predicate]] is a SQL condition such as x > 10 or name IS NULL.
 
-Predicates are used in WHERE, JOIN ... ON, HAVING, and other clauses.
+## Three-valued logic
 
-## SQL is not ordinary Boolean logic
-
-A SQL predicate can evaluate to:
+[[08B SQL Three-Valued Logic|SQL three-valued logic]] means predicates can evaluate to:
 
 - TRUE
 - FALSE
-- NULL / UNKNOWN
+- UNKNOWN / NULL
 
-For example, NULL = NULL does not evaluate to TRUE; it evaluates to UNKNOWN.
+## Why they belong together in CODDTest
 
-## Why CODDTest cares
+CODDTest frequently embeds generated expressions inside predicates.
 
-CODDTest often places generated expressions inside predicates and then substitutes folded values.
+To preserve semantics when folding and propagating those expressions, it must respect SQL's NULL/UNKNOWN behavior.
 
-The transformation must preserve SQL's three-valued semantics. Otherwise the testing method itself could change the query's meaning and produce a false alarm.
+## Continue
 
-Related: [[18 False Positives and Floating Point]]
+- [[08A Predicates]]
+- [[08B SQL Three-Valued Logic]]

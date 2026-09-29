@@ -1,21 +1,49 @@
 # Metamorphic Testing
 
-**Metamorphic testing** is useful when the exact expected output is unknown, but a relationship between multiple executions is known.
+## In one sentence
 
-Original input I → output O  
-Follow-up input I' → output O'
+**Metamorphic testing** tests software by transforming an input into a related input whose output should have a known relationship to the original output.
 
-The test checks a known relationship between O and O' instead of comparing against a precomputed correct answer.
+## Tiny example
 
-## CODDTest
+Suppose we cannot calculate the correct answer for input I.
 
-CODDTest constructs an original query O and a folded query F. Under the same database state, they should return identical results.
+We can still do:
 
-This directly addresses the [[01 Test Oracle|oracle problem]].
+    input I  → output O
+    input I' → output O'
 
-## Why the word metamorphic?
+if we know how O and O' should relate.
 
-The original input is transformed into a related follow-up input while preserving some expected semantic property.
+## Why CODDTest cares
 
-Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=4]]  
-Next: [[03 Metamorphic Relation]]
+CODDTest does not know the correct answer to an arbitrary SQL query.
+
+Instead it creates:
+
+- original query O;
+- transformed, folded query F.
+
+The two queries should return the same result.
+
+So the test becomes:
+
+    result(O) ?= result(F)
+
+## The key term
+
+The expected relationship between the two outputs is called a [[03 Metamorphic Relation|metamorphic relation]].
+
+## Don't confuse it with
+
+**Differential testing** often compares different implementations running the same input.
+
+Metamorphic testing can test **one implementation** by comparing related inputs.
+
+## Related
+
+- [[01 Test Oracle]]
+- [[03 Metamorphic Relation]]
+- [[16 Existing Oracles - TLP NoREC PQS DQE]]
+
+Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=4]]

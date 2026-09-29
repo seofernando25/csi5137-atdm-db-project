@@ -1,38 +1,33 @@
 # Independent and Dependent Expressions
 
-This is the main technical complication after the basic CODDTest idea.
+This page is the comparison. Read the two child notes for the details.
 
-## Independent expression
+| | [[07A Independent Expressions|Independent]] | [[07B Dependent Expressions|Dependent]] |
+|---|---|---|
+| Uses outer-row columns? | No | Yes |
+| Result | One constant or constant list | May differ per row |
+| Folding | Evaluate once | Evaluate for each relevant row/context |
+| Propagation | Direct constant replacement | Row-to-result mapping |
+| Common example | Non-correlated subquery | Correlated subquery |
 
-An expression is **independent** when it does not depend on values from an outer query row.
+## Quick test
 
-Examples:
+Ask:
 
-- LENGTH('abc') > 5
-- a non-correlated subquery such as SELECT MIN(c0) FROM t0
+> Can I evaluate φ without knowing the current outer row?
 
-Under a fixed database state, one constant or constant list can represent the result.
+If **yes**, φ is independent.
 
-## Dependent expression
+If **no**, φ is dependent.
 
-A **dependent expression** references outer-context columns and can evaluate differently for each row.
+## Why this split matters
 
-Example: c0 + c1 > 0.
+The basic CODDTest idea is easy for independent expressions.
 
-| c0 | c1 | result |
-|---:|---:|---|
-| -1 | 1 | false |
-| 1 | 2 | true |
+Dependent expressions are where the technique becomes more interesting because one global constant is not enough.
 
-One global constant is not enough. CODDTest therefore builds a row-to-result mapping and represents it using [[10 SQL CASE and Row Mapping|CASE]].
+## Continue
 
-## How Algorithm 1 classifies them
-
-The generated expression comes with the set of referenced outer columns.
-
-- no referenced outer columns → independent;
-- one or more referenced outer columns → dependent.
-
-Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=6]]  
-Independent expressions: [[PDFs/CODDTest_SIGMOD2025.pdf#page=7]]  
-Dependent expressions: [[PDFs/CODDTest_SIGMOD2025.pdf#page=8]]
+- [[07A Independent Expressions]]
+- [[07B Dependent Expressions]]
+- [[10 SQL CASE and Row Mapping]]

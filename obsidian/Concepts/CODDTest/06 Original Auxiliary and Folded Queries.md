@@ -1,32 +1,53 @@
 # Original, Auxiliary, and Folded Queries
 
-CODDTest uses three query roles.
+## In one sentence
+
+CODDTest uses three query roles: **A evaluates the expression, O contains the original expression, and F contains the evaluated replacement**.
 
 ## A — Auxiliary query
 
-Purpose: evaluate selected expression φ.
+Purpose: compute the selected expression φ.
 
-Example: SELECT MIN(c0) FROM t0.
+Example:
 
-Suppose the result is 1.
+    SELECT MIN(c0) FROM t0
+
+Suppose A returns 1.
 
 ## O — Original query
 
-Contains φ in its original form, for example a predicate containing the MIN subquery.
+O contains φ in its original form.
+
+Conceptually:
+
+    SELECT ...
+    WHERE x IN (SELECT MIN(c0) FROM t0)
 
 ## F — Folded query
 
-Contains the evaluated result Rφ instead of φ.
+F replaces φ with the evaluated result Rφ.
 
-## Flow
+Conceptually:
 
-A → evaluate φ → Rφ
+    SELECT ...
+    WHERE x IN (1)
 
-O contains φ → result O  
-F contains Rφ → result F
+## Why CODDTest cares
 
-Expected relation: result O = result F.
+The entire oracle becomes:
 
-If they disagree, [[03 Metamorphic Relation|the metamorphic relation]] is violated.
+    A computes Rφ
+           ↓
+    O contains φ      F contains Rφ
+           ↓                 ↓
+       result O     ?=    result F
+
+If O and F disagree, [[03 Metamorphic Relation|the metamorphic relation]] is violated.
+
+## Don't confuse them
+
+- A is not compared against O.
+- A exists to compute the replacement value.
+- O and F are the two queries whose results are compared.
 
 Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=5]]

@@ -1,29 +1,43 @@
 # Constant Folding
 
-**Constant folding** evaluates an expression whose result can already be determined.
+## In one sentence
 
-Classic compiler example:
+**Constant folding** means evaluating an expression when its value is already knowable.
 
-3 + 5 → 8
+## Tiny compiler example
 
-CODDTest applies the same idea to SQL under a fixed database state.
+    3 + 5  →  8
+
+## SQL example
 
 Suppose:
 
-SELECT MIN(c0) FROM t0
+    SELECT MIN(c0) FROM t0
 
-returns 1. CODDTest treats 1 as the folded value Rφ for that state.
+returns:
 
-## Important nuance
+    1
 
-CODDTest is not primarily checking whether the optimizer itself performs constant folding. Folding is used as a test transformation.
+Under the current database state, CODDTest can treat 1 as the evaluated result of that expression.
 
-In the paper:
+## Why CODDTest cares
 
-Rφ = E_s(A[φ])
+CODDTest selects an expression φ and uses an auxiliary query A to compute its result Rφ.
 
-The auxiliary query A evaluates φ.
+In the paper's notation:
 
-Then [[05 Constant Propagation|constant propagation]] substitutes Rφ into a query.
+    Rφ = E_s(A[φ])
+
+That evaluation step is the "folding" part.
+
+## Don't confuse it with
+
+CODDTest is **not mainly testing whether MySQL's optimizer performs constant folding**.
+
+The researchers borrow constant folding as a way to create a second, equivalent test query.
+
+## Next concept
+
+Once CODDTest knows Rφ, it uses [[05 Constant Propagation|constant propagation]] to substitute the value into the query.
 
 Paper: [[PDFs/CODDTest_SIGMOD2025.pdf#page=5]]

@@ -40,7 +40,7 @@ If φ is independent, one constant is enough.
 
 If φ depends on outer-row values, compute a row-to-result mapping.
 
-See [[07 Independent and Dependent Expressions]] and [[10 SQL CASE and Row Mapping]].
+See [[07 Independent and Dependent Expressions]], [[07A Independent Expressions]], [[07B Dependent Expressions]], and [[10 SQL CASE and Row Mapping]].
 
 ## Step 8 — Compare
 
@@ -74,6 +74,6 @@ Mismatch = potential DBMS bug
 
 ## Comparison layer
 
-See [[16 Existing Oracles - TLP NoREC PQS DQE]].
+See [[16 Existing Oracles - TLP NoREC PQS DQE]] and its TLP, NoREC, PQS, and DQE child notes.
 
 Return to [[Papers/01 CODDTest]].

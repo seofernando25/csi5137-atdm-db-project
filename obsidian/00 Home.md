@@ -29,8 +29,12 @@ Recommended order:
 5. [[Concepts/CODDTest/05 Constant Propagation]]
 6. [[Concepts/CODDTest/06 Original Auxiliary and Folded Queries]]
 7. [[Concepts/CODDTest/07 Independent and Dependent Expressions]]
-8. [[Concepts/CODDTest/13 Algorithmic Sketch]]
-9. [[Concepts/CODDTest/17 How CODDTest Fits Together]]
+8. [[Concepts/CODDTest/07A Independent Expressions]]
+9. [[Concepts/CODDTest/07B Dependent Expressions]]
+10. [[Concepts/CODDTest/08A Predicates]]
+11. [[Concepts/CODDTest/08B SQL Three-Valued Logic]]
+12. [[Concepts/CODDTest/13 Algorithmic Sketch]]
+13. [[Concepts/CODDTest/17 How CODDTest Fits Together]]
 
 ## Shared project question
 
