@@ -1,200 +1,62 @@
 # CSI 5137 — ATDM Database Testing Project
 
-**Course:** CSI 5137 — Advanced Topics in Databases and Data Management (ATDM)
+Class project for **CSI 5137 — Advanced Topics in Databases and Data Management**.
 
-Class project repository for a 20–30 minute presentation on three recent database-testing papers, with reproducible MySQL bug demonstrations.
+The project studies three recent DBMS testing papers and reproduces representative bugs on **MySQL 8.0.32**.
 
-The common idea is:
+## Papers
 
-> Construct two executions that should be semantically equivalent, then treat disagreement as evidence of a DBMS bug.
+| Paper | Main idea | Reproduction |
+|---|---|---|
+| **CODDTest** — *Constant Optimization Driven Database System Testing* (SIGMOD/PACMMOD 2025) | Replace an expression with its evaluated value and compare the results | MySQL [#111241](https://bugs.mysql.com/bug.php?id=111241) |
+| **DDLCheck** — *Detecting Schema-Related Logic Bugs in Relational DBMSs via Equivalent Database Construction* (PVLDB 2025) | Build the same schema through different DDL histories and compare later behavior | MySQL [#114904](https://bugs.mysql.com/bug.php?id=114904) |
+| **WriteCheck** — *Simple Testing Can Expose Most Critical Transaction Bugs* (PVLDB 2025) | Compare concurrent transaction behavior with a serial/oracle execution | MySQL [#104833](https://bugs.mysql.com/bug.php?id=104833) |
 
-All three representative bugs below reproduce on the same baseline: **MySQL 8.0.32**.
+The #104833 demo uses Troc's published testcase and MVCC oracle. It is a representative transaction-bug replay, not a direct execution of WriteCheck.
 
-## Papers and reproduced bugs
+## Run
 
-| Paper | Venue | Oracle idea | MySQL bug | Status on 8.0.32 |
-|---|---|---|---|---|
-| CODDTest — *Constant Optimization Driven Database System Testing* | PACMMOD / SIGMOD 2025 | Replace an expression/subquery with its computed constant; results should agree | [#111241](https://bugs.mysql.com/bug.php?id=111241) | ✅ Reproduced |
-| DDLCheck — *Detecting Schema-Related Logic Bugs in Relational DBMSs via Equivalent Database Construction* | PVLDB 2025 | Equivalent final schemas built through different DDL histories should behave the same | [#114904](https://bugs.mysql.com/bug.php?id=114904) | ✅ Reproduced |
-| WriteCheck — *Simple Testing Can Expose Most Critical Transaction Bugs* | PVLDB 2025 | Concurrent execution should agree with the appropriate serial/MVCC oracle on final state | [#104833](https://bugs.mysql.com/bug.php?id=104833) | ✅ Reproduced |
-
-An additional CODDTest MySQL bug, [#111421](https://bugs.mysql.com/bug.php?id=111421), also reproduces on 8.0.32 but is not required by the main three-paper demo.
-
-## One-command reproduction
-
-Prerequisites:
+Requirements:
 
 - Docker
 - Git
-- On macOS, Docker Desktop or Colima
+- Docker Desktop or Colima on macOS
 
-Then run:
+Run all three reproductions:
 
 ```bash
 ./scripts/run_all.sh
 ```
 
-`run_all.sh` will:
-
-1. start/pick up a `mysql:8.0.32` container;
-2. verify that the server really reports MySQL 8.0.32;
-3. fetch the pinned Troc dependency needed for the WriteCheck testcase;
-4. build Troc in a Maven container;
-5. run the representative CODDTest, DDLCheck, and WriteCheck reproductions;
-6. fail if any expected mismatch is not observed.
-
-Expected final line:
+Expected final output:
 
 ```text
 PASS: 3/3 representative MySQL bugs reproduced on MySQL 8.0.32.
 ```
 
-## Reproduction details
-
-### CODDTest — MySQL #111241
-
-The testcase evaluates a scalar subquery to `1`, then compares:
-
-- the form using the constant `1`, which returns row `1`;
-- the semantically equivalent form using the scalar subquery, which returns no row.
-
-That disagreement is the CODDTest oracle violation.
-
-Runner:
+Individual runners:
 
 ```bash
 ./repro/coddtest_111241.sh
-```
-
-### DDLCheck — MySQL #114904
-
-The evolved schema renames parent table `t0` to `t2`. Visible schema metadata says the foreign key points to `t2`, but an insert fails and the error still references stale table `t0`.
-
-A directly-created equivalent schema succeeds.
-
-Runner:
-
-```bash
 ./repro/ddlcheck_114904.sh
-```
-
-### WriteCheck — MySQL #104833
-
-The exact upstream testcase uses two `READ COMMITTED` transactions with schedule:
-
-```text
-1-1-2-2-1-2
-```
-
-The observed concurrent final state is:
-
-```text
-[10, 1, 10, 20, 10, 20]
-```
-
-The MVCC oracle final state is:
-
-```text
-[10, 20, 10, 20, 10, 20]
-```
-
-Troc reports:
-
-```text
-Error: Inconsistent final database state
-```
-
-Runner:
-
-```bash
 ./repro/writecheck_104833.sh
 ```
 
-The exact case file is committed as `repro/writecheck_104833.case.txt`.
+See [repro/README.md](repro/README.md) for the test cases, expected results, and Troc pin.
 
-## Repository layout
+## Project files
 
-```text
-.
-├── README.md
-├── AGENTS.md
-├── compose.yaml
-├── scripts/
-│   ├── setup.sh
-│   └── run_all.sh
-├── repro/
-│   ├── coddtest_111241.sh
-│   ├── coddtest_111421.sh
-│   ├── ddlcheck_114904.sh
-│   ├── writecheck_104833.sh
-│   └── writecheck_104833.case.txt
-├── results/
-│   └── captured reference outputs
-└── papers/
-    └── README.md
-```
+- [papers/](papers/) — PDFs of the three papers
+- [obsidian/](obsidian/) — study notes, concept pages, and reading guides
+- [presentation/](presentation/) — PowerPoint, speaker notes, and rehearsal material
+- [repro/](repro/) — MySQL reproduction scripts and test cases
+- [results/](results/) — captured reference outputs
+- [scripts/](scripts/) — setup and all-in-one runner
 
-## Dependency pinning
-
-WriteCheck's exact MySQL #104833 testcase is replayed using the Troc artifact at pinned commit:
-
-```text
-a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5
-```
-
-The upstream clone is created under `.deps/Troc` and is intentionally not committed.
-
-## What is intentionally not committed
-
-.gitignore excludes:
-
-- cloned upstream repositories (Troc/, WriteCheck/, sqlancer/, coddtest-sqlancer/);
-- .deps/ generated by setup;
-- Maven build outputs and logs;
-- .DS_Store and editor files.
-
-The three class-project paper PDFs are intentionally committed under both papers/ and the self-contained obsidian/PDFs/ vault folder.
-
-## Primary sources
+## Sources
 
 - CODDTest: https://doi.org/10.1145/3709674
 - CODDTest preprint: https://arxiv.org/abs/2501.11252
 - DDLCheck: https://www.vldb.org/pvldb/vol18/p2281-song.pdf
 - WriteCheck: https://www.vldb.org/pvldb/vol18/p2547-cui.pdf
-- Troc artifact: https://github.com/criszy/Troc
-
-## Presentation takeaway
-
-The point is not that MySQL is uniquely buggy. The useful research pattern is:
-
-```text
-construct equivalent executions
-          ↓
-run both
-          ↓
-compare observable behavior
-          ↓
-difference => potential DBMS bug
-```
-
-For the presentation, one minimized deterministic testcase per paper is much clearer than rerunning the original long fuzzing campaigns.
-
-
-## Presentation (visual redesign)
-
-The [presentation/v2](presentation/v2/README.md) folder contains the 32-slide main deck, 6 backups, embedded notes, a full delivery script, a cue sheet, and a timing audit. Our transaction replay uses Troc; the deck explicitly distinguishes it from rerunning the WriteCheck implementation.
-
-## Obsidian study notebook
-
-The obsidian directory is an Obsidian vault for studying the three papers. Open that directory as a vault and start from 00 Home.md.
-
-It contains:
-
-- local copies of all three PDFs;
-- one note for each paper;
-- Concepts/Shared/ for reusable testing ideas such as test oracles, equivalence-based testing, stateful generation, and reduction;
-- a decomposed CODDTest concept graph;
-- a decomposed DDLCheck concept graph covering schema evolution, hidden schema-related information, sequence generation/synthesis, equivalent databases, DSTGs, bug taxonomy, evaluation, and the reproduced MySQL #114904 case;
-- a decomposed WriteCheck concept graph covering transaction schedules, WSS, tx-WSS/stmt-WSS, FCRFS, conflict assumptions, actual scheduling, locking semantics, evaluation, and the Troc-based MySQL #104833 project replay;
-- a five-part narrative guide series that can be read front-to-back, with links into the atomic concept notes;
-- a cross-paper map tying the three testing levels together.
+- Troc: https://github.com/criszy/Troc
