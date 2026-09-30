@@ -77,6 +77,8 @@ repro/writecheck_104833.case.txt
 
 The replay uses the upstream **Troc** testcase and Troc's MVCC-based oracle. This is not a direct execution of the WriteCheck implementation.
 
+Upstream testcase: https://github.com/criszy/Troc/blob/a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5/cases/mysql104833.txt
+
 Submitted schedule:
 
 ```text

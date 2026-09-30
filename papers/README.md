@@ -29,6 +29,7 @@ The three papers used for the class project are included in this folder for conv
 
 - Local: `WriteCheck_PVLDB2025.pdf`
 - Public PDF: https://www.vldb.org/pvldb/vol18/p2547-cui.pdf
-- MySQL reproduction used in this repo: https://bugs.mysql.com/bug.php?id=104833
+- MySQL bug ID: #104833 (the tracker entry is currently access-restricted)
+- Public testcase: https://github.com/criszy/Troc/blob/a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5/cases/mysql104833.txt
 
 The PDFs here were downloaded from the public sources above.

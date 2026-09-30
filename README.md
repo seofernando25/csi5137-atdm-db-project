@@ -10,9 +10,9 @@ The project studies three recent DBMS testing papers and reproduces representati
 |---|---|---|
 | **CODDTest** — *Constant Optimization Driven Database System Testing* (SIGMOD/PACMMOD 2025) | Replace an expression with its evaluated value and compare the results | MySQL [#111241](https://bugs.mysql.com/bug.php?id=111241) |
 | **DDLCheck** — *Detecting Schema-Related Logic Bugs in Relational DBMSs via Equivalent Database Construction* (PVLDB 2025) | Build the same schema through different DDL histories and compare later behavior | MySQL [#114904](https://bugs.mysql.com/bug.php?id=114904) |
-| **WriteCheck** — *Simple Testing Can Expose Most Critical Transaction Bugs* (PVLDB 2025) | Compare concurrent transaction behavior with a serial/oracle execution | MySQL [#104833](https://bugs.mysql.com/bug.php?id=104833) |
+| **WriteCheck** — *Simple Testing Can Expose Most Critical Transaction Bugs* (PVLDB 2025) | Compare concurrent transaction behavior with a serial/oracle execution | MySQL #104833 — [Troc testcase](https://github.com/criszy/Troc/blob/a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5/cases/mysql104833.txt) |
 
-The #104833 demo uses Troc's published testcase and MVCC oracle. It is a representative transaction-bug replay, not a direct execution of WriteCheck.
+The MySQL tracker entry for #104833 is currently restricted. The demo links to Troc's public testcase and uses Troc's MVCC oracle; it is not a direct execution of WriteCheck.
 
 ## Run
 
