@@ -11,6 +11,7 @@ tests=(
   "coddtest_111241.sh"
   "ddlcheck_114904.sh"
   "writecheck_104833.sh"
+  "radar_110125.sh"
 )
 
 passed=0

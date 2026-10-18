@@ -1,6 +1,6 @@
 # Reproductions
 
-All three main cases run against **MySQL 8.0.32**.
+All four main cases run against **MySQL 8.0.32**.
 
 Run setup first if needed:
 
@@ -60,6 +60,35 @@ Expected final line:
 ```text
 PASS: MySQL #114904 reproduced.
 ```
+
+## Radar — MySQL #110125
+
+Runner:
+
+```bash
+./repro/radar_110125.sh
+```
+
+Radar compares two databases that hold the same data but different metadata. The testcase uses two copies of one table: `t0` with an index on `c0`, and the raw copy without it. Both hold the same single row and receive the same query text.
+
+Indexed copy and raw copy must return the same result. They do not:
+
+```text
+SELECT COUNT(*) FROM t0 WHERE (IFNULL(-1123870957, '')) IN (t0.c0);
+```
+
+Expected result:
+
+```text
+version=8.0.32
+indexed_rows=1
+raw_rows=0
+PASS: MySQL #110125 reproduced.
+```
+
+The raw copy returns no rows, which is correct, because no column value equals the negative constant. The indexed copy returns the row: the index range scan treats the out-of-range comparison as possible instead of impossible. MySQL confirmed the bug as S1 (Critical) and only fixed it in 26.7.0, so every 8.0.x release, including the pinned 8.0.32, is affected.
+
+`DOUBLE ZEROFILL` is deprecated since MySQL 8.0.17, which is part of why the report stayed open for years. The reproduction keeps it because the paper's testcase uses it; the underlying fault is the indexed unsigned `DOUBLE` compared against a negative string-typed constant.
 
 ## Transaction replay — MySQL #104833
 

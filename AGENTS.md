@@ -10,13 +10,14 @@ Work only inside:
 
 This is the class project repository for **CSI 5137 — Advanced Topics in Databases and Data Management (ATDM)**.
 
-It reproduces one MySQL bug for each of three database-testing papers:
+It reproduces one MySQL bug for each of four database-testing papers:
 
 - CODDTest / MySQL #111241
 - DDLCheck / MySQL #114904
 - WriteCheck / MySQL #104833
+- Radar / MySQL #110125
 
-All three are verified on **MySQL 8.0.32**.
+All four are verified on **MySQL 8.0.32**.
 
 ## Reproduction contract
 
@@ -29,7 +30,7 @@ Primary command:
 A successful run must end with:
 
 ```text
-PASS: 3/3 representative MySQL bugs reproduced on MySQL 8.0.32.
+PASS: 4/4 representative MySQL bugs reproduced on MySQL 8.0.32.
 ```
 
 Do not claim success from build completion alone. Each runner must assert the bug-specific mismatch.
@@ -108,6 +109,19 @@ Expected detector message:
 ```text
 Error: Inconsistent final database state
 ```
+
+### Radar #110125
+
+Two databases hold the same data with different metadata: the indexed copy has `CREATE INDEX i0 ON t0 (c0 DESC)`, the raw copy does not. Data and query text are identical.
+
+Expected:
+
+```text
+indexed_rows=1
+raw_rows=0
+```
+
+The raw copy's empty result is correct; the indexed copy's single row is the bug. `DOUBLE ZEROFILL` is deprecated since 8.0.17 and MySQL only fixed the defect in 26.7.0, so all 8.0.x releases are affected.
 
 ## Repository hygiene
 
