@@ -1,103 +1,86 @@
-\documentclass[tikz,border=4pt]{standalone}
-\usepackage[T1]{fontenc}
-\usepackage{newtxtext}
-\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric,calc}
-
-\definecolor{garnet}{HTML}{8F001A}
-\definecolor{blue}{HTML}{2B6CB0}
-\definecolor{orange}{HTML}{D9822B}
-\definecolor{green}{HTML}{2F855A}
-\definecolor{ink}{HTML}{2D2D2C}
+\documentclass[tikz,border=6pt]{standalone}
+\input{tikzstyle.tex}
 
 \begin{document}
 \begin{tikzpicture}[
-  >={Stealth[length=2mm]},
-  ink/.style={text=ink},
-  panel/.style={rounded corners=5pt, draw=black!15, line width=0.4pt, minimum height=4.7cm, minimum width=4.9cm},
-  dbox/.style={rounded corners=3pt, dashed, draw=ink, line width=0.5pt},
-  ttl/.style={font=\footnotesize\bfseries, text=ink},
-  sql/.style={font=\ttfamily\footnotesize, text=ink, anchor=west},
-  capt/.style={font=\footnotesize\itshape, text=ink, align=center},
-  flow/.style={-{Stealth[length=2mm]}, line width=0.8pt, draw=orange},
+  dbox/.style={rounded corners=3pt,dashed,draw=ink,line width=.5pt},
+  sql/.style={font=\ttfamily\footnotesize,text=ink,anchor=west},
+  ttl/.style={font=\footnotesize\bfseries,text=ink,anchor=north west},
+  hdr/.style={font=\footnotesize\bfseries,text=ink},
+  cell/.style={font=\footnotesize,text=ink},
+  capt/.style={font=\scriptsize\itshape,text=ink,align=center},
+  ovbox/.style={box,fill=pgrey,minimum width=4cm},
 ]
 
-% Panel 1: original query
-\node[panel, fill=black!5] at (2.45,4.65) {};
-\node[ttl] at (2.45,6.7) {Original query};
-\node[dbox, minimum width=4.4cm, minimum height=2.0cm] at (2.45,5.3) {};
-\node[sql] at (0.4,6.0) {SELECT id FROM Product};
-\node[sql] at (0.4,5.65) {WHERE quantity >};
-\node[rounded corners=3pt, draw=orange, line width=1pt, fill=orange!18, minimum width=4.1cm, minimum height=0.85cm] at (2.45,4.87) {};
-\node[sql] at (0.5,5.05) {(SELECT AVG(quantity)};
-\node[sql] at (0.5,4.7) {\phantom{(}\,FROM Product)};
-\node[capt] at (2.45,4.02) {highlighted: scalar subquery};
+% Panels (5.1 cm wide, 0.6 cm gaps, total 16.5 cm)
+\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=pgrey] (P1) at (0,2.3) {};
+\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=pblue] (P2) at (5.7,2.3) {};
+\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=porange] (P3) at (11.4,2.3) {};
+\draw[arr] (P1.east) -- (P2.west);
+\draw[arr] (P2.east) -- (P3.west);
 
-% Stored rows used by the example
-\draw[ink, line width=0.4pt] (0.35,2.7) rectangle (4.55,3.75);
-\draw[ink, line width=0.4pt] (0.35,3.4) -- (4.55,3.4);
-\draw[ink, line width=0.4pt] (0.35,3.05) -- (4.55,3.05);
-\draw[ink, line width=0.4pt] (1.6,2.7) -- (1.6,3.75);
-\draw[ink, line width=0.4pt] (3.0,2.7) -- (3.0,3.75);
-\node[ttl] at (0.975,3.575) {id};
-\node[ttl] at (2.3,3.575) {quantity};
-\node[ttl] at (3.775,3.575) {reserved};
-\node[ink] at (0.975,3.225) {1};
-\node[ink] at (2.3,3.225) {8};
-\node[ink] at (3.775,3.225) {3};
-\node[ink] at (0.975,2.875) {2};
-\node[ink] at (2.3,2.875) {4};
-\node[ink] at (3.775,2.875) {4};
-\node[capt] at (2.45,2.5) {Product rows};
+% Panel 1: original query
+\node[ttl] at (0.4,7.6) {Original query};
+\node[dbox,minimum width=4.3cm,minimum height=2.15cm] at (2.55,5.875) {};
+\node[sql] at (0.6,6.6) {SELECT id FROM Product};
+\node[sql] at (0.6,6.22) {WHERE quantity >};
+\node[rounded corners=3pt,draw=orange,line width=1pt,fill=orange!18,minimum width=3.9cm,minimum height=0.92cm] at (2.55,5.45) {};
+\node[sql] at (0.8,5.62) {(SELECT AVG(quantity)};
+\node[sql] at (1.0,5.22) {FROM Product)};
+\node[capt] at (2.55,4.5) {highlighted: scalar subquery};
+\draw[ink,line width=.4pt] (0.4,3.13) rectangle (4.7,4.15);
+\draw[ink,line width=.4pt] (0.4,3.81) -- (4.7,3.81);
+\draw[ink,line width=.4pt] (0.4,3.47) -- (4.7,3.47);
+\draw[ink,line width=.4pt] (1.9,3.13) -- (1.9,4.15);
+\draw[ink,line width=.4pt] (3.3,3.13) -- (3.3,4.15);
+\node[hdr] at (1.15,3.98) {id};
+\node[hdr] at (2.6,3.98) {quantity};
+\node[hdr] at (4.0,3.98) {reserved};
+\node[cell] at (1.15,3.64) {1};
+\node[cell] at (2.6,3.64) {8};
+\node[cell] at (4.0,3.64) {3};
+\node[cell] at (1.15,3.30) {2};
+\node[cell] at (2.6,3.30) {4};
+\node[cell] at (4.0,3.30) {4};
+\node[capt] at (2.55,2.85) {Product rows};
 
 % Panel 2: auxiliary query
-\node[panel, fill=blue!8] at (8.15,4.65) {};
-\node[ttl] at (8.15,6.7) {Auxiliary query};
-\node[dbox, minimum width=4.5cm, minimum height=1.0cm] at (8.15,5.8) {};
-\node[sql] at (6.05,6.0) {SELECT AVG(quantity)};
-\node[sql] at (6.05,5.6) {FROM Product;};
-\draw[flow] (8.15,5.25) -- (8.15,4.87);
-\draw[ink, fill=white, line width=0.4pt] (7.4,4.2) rectangle (8.9,4.8);
-\draw[ink, line width=0.4pt] (7.4,4.5) -- (8.9,4.5);
-\node[ttl] at (8.15,4.65) {AVG};
-\node[ink] at (8.15,4.35) {6};
-% magnifier glyph
-\draw[blue, line width=0.8pt] (6.45,4.6) circle (0.17);
-\draw[blue, line width=1.3pt] (6.58,4.47) -- (6.8,4.25);
-\node[capt] at (8.15,3.85) {evaluates the highlighted expression};
-\node[capt] at (8.15,3.5) {on the same snapshot};
-\node[capt] at (8.15,3.15) {value 6 is fixed for this snapshot};
+\node[ttl] at (6.1,7.6) {Auxiliary query};
+\node[dbox,minimum width=4.3cm,minimum height=1.5cm] (aux) at (8.25,6.25) {};
+\node[sql] at (6.3,6.6) {SELECT AVG(quantity)};
+\node[sql] at (6.3,6.2) {FROM Product;};
+\node[draw=ink,fill=white,line width=.4pt,minimum width=1.8cm,minimum height=0.9cm,inner sep=0] (avg) at (8.25,4.5) {};
+\draw[arr] (aux.south) -- (avg.north);
+\draw[ink,line width=.4pt] (7.35,4.5) -- (9.15,4.5);
+\node[hdr] at (8.25,4.725) {AVG};
+\node[cell] at (8.25,4.275) {6};
+\draw[blue,line width=.8pt] (6.7,4.5) circle (0.16);
+\draw[blue,line width=1.3pt] (6.82,4.38) -- (7.0,4.2);
+\node[capt,text width=4.2cm,anchor=north] at (8.25,3.75) {evaluates the highlighted expression\\on the same snapshot\\value 6 is fixed for this snapshot};
 
 % Panel 3: folded query
-\node[panel, fill=orange!12] at (13.85,4.65) {};
-\node[ttl] at (13.85,6.7) {Folded query};
-\node[dbox, minimum width=4.3cm, minimum height=2.0cm] at (13.85,5.3) {};
-\node[sql] at (11.85,6.0) {SELECT id FROM Product};
-\node[sql] at (11.85,5.6) {WHERE quantity >};
-\node[rounded corners=2pt, fill=orange!45, inner sep=1.5pt, font=\ttfamily\footnotesize, text=ink] at (14.55,5.6) {6};
-\node[capt] at (13.85,4.05) {subquery replaced by its value};
-\node[rounded corners=3pt, dashed, draw=ink, line width=0.5pt, minimum width=4.3cm, minimum height=0.8cm] at (13.85,3.1) {};
-\node[capt] at (13.85,3.25) {Row-dependent expression:};
-\node[capt] at (13.85,2.95) {CASE maps row context to value};
+\node[ttl] at (11.8,7.6) {Folded query};
+\node[dbox,minimum width=4.3cm,minimum height=2.05cm] at (13.95,5.925) {};
+\node[sql] at (12.0,6.6) {SELECT id FROM Product};
+\node[sql] at (12.0,6.22) {WHERE quantity >};
+\node[rounded corners=2pt,fill=orange!45,inner sep=1.5pt,font=\ttfamily\footnotesize,text=ink] at (14.75,6.22) {6};
+\node[capt] at (13.95,4.55) {subquery replaced by its value};
+\node[dbox,minimum width=4.3cm,minimum height=1.15cm] at (13.95,3.275) {};
+\node[capt] at (13.95,3.42) {Row-dependent expression:};
+\node[capt] at (13.95,3.13) {CASE maps row context to value};
 
-% Flow arrows between panels
-\draw[flow] (4.95,4.9) -- (5.65,4.9);
-\draw[flow] (10.65,4.9) -- (11.35,4.9);
+% Oracle frame
+\node[rounded corners=5pt,draw=ink,line width=.6pt,fill=white,anchor=south west,minimum width=16.5cm,minimum height=1.7cm] at (0,0) {};
+\node[font=\footnotesize\bfseries,anchor=west] at (0.4,1.42) {Oracle: compare the two results};
+\node[ovbox] at (2.6,0.7) {Original: \{id = 1\}};
+\node[font=\footnotesize\bfseries] at (5.4,0.7) {=?};
+\node[ovbox] at (8.2,0.7) {Folded: \{id = 1\}};
+\node[font=\footnotesize\bfseries,text=cgreen,anchor=west] at (11.0,1.0) {equal $\rightarrow$ ok (no bug)};
+\node[font=\footnotesize\bfseries,text=garnet,anchor=west] at (11.0,0.4) {differ $\rightarrow$ bug};
 
-% Oracle box
-\draw[ink, rounded corners=5pt, line width=0.6pt, fill=white] (0,0.15) rectangle (11.2,1.85);
-\node[ttl, anchor=west] at (0.3,1.6) {Oracle: compare the two results};
-\node[rounded corners=3pt, draw=ink, fill=black!5, minimum width=2.5cm, minimum height=0.6cm, font=\footnotesize, text=ink] at (1.9,0.9) {Original: \{id = 1\}};
-\node[font=\footnotesize\bfseries, text=ink] at (4.0,0.9) {=?};
-\node[rounded corners=3pt, draw=ink, fill=black!5, minimum width=2.5cm, minimum height=0.6cm, font=\footnotesize, text=ink] at (6.1,0.9) {Folded: \{id = 1\}};
-\node[font=\footnotesize\bfseries, text=green, anchor=west] at (7.7,1.15) {equal $\rightarrow$ ok (no bug)};
-\node[font=\footnotesize\bfseries, text=garnet, anchor=west] at (7.7,0.6) {differ $\rightarrow$ bug};
-
-% Garnet callout from the MySQL reproduction
-\node[rounded corners=5pt, draw=garnet, line width=0.8pt, fill=garnet!8, minimum width=4.7cm, minimum height=1.7cm] at (13.95,1.0) {};
-\node[font=\footnotesize, text=ink, anchor=west, align=left, text width=4.4cm] at (11.8,1.0) {%
-  \textbf{\textcolor{garnet}{MySQL \#111241 (8.0.32)}}\\[2pt]
-  constant form returns row 1;\\
-  scalar-subquery form returns empty.};
+% Garnet callout (MySQL reproduction)
+\node[rounded corners=5pt,draw=garnet,line width=.8pt,fill=pgarnet,anchor=south west,minimum width=16.5cm,minimum height=1.1cm] at (0,-1.6) {};
+\node[anchor=center,align=left,text width=15.5cm,font=\footnotesize,text=ink] at (8.25,-1.05) {\textbf{\textcolor{garnet}{MySQL \#111241 (8.0.32)}}\\[2pt]constant form returns row 1; scalar-subquery form returns empty.};
 
 \end{tikzpicture}
 \end{document}

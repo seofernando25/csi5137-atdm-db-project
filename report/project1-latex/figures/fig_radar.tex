@@ -1,82 +1,63 @@
-\documentclass[tikz,border=4pt]{standalone}
-\usepackage{newtxtext}
-\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric,calc}
-
-\definecolor{garnet}{HTML}{8F001A}
-\definecolor{blue}{HTML}{2B6CB0}
-\definecolor{orange}{HTML}{D9822B}
-\definecolor{green}{HTML}{2F855A}
-\definecolor{greyfill}{HTML}{F2F2F2}
-\definecolor{greyline}{HTML}{D9D9D9}
-\definecolor{dark}{HTML}{2D2D2C}
-\definecolor{panelblue}{HTML}{EAF2FB}
-\definecolor{panelgreen}{HTML}{EAF5EE}
-\definecolor{paneloran}{HTML}{FCEEDF}
+\documentclass[tikz,border=6pt]{standalone}
+\input{tikzstyle.tex}
 
 \begin{document}
-\begin{tikzpicture}[
-  font=\small, text=dark,
-  panel/.style={rounded corners=6pt, draw=greyline, line width=0.6pt},
-  ptitle/.style={font=\small\bfseries},
-  inner/.style={rounded corners=3pt, draw=dark!55, dashed, line width=0.5pt},
-  tag/.style={rounded corners=2pt, draw=orange, line width=0.8pt, fill=white, font=\footnotesize, inner sep=2.5pt},
-  capt/.style={font=\footnotesize\itshape, text=dark!80},
-  chip/.style={rounded corners=3pt, line width=0.8pt, font=\footnotesize\bfseries, inner sep=3pt},
-  flow/.style={-{Stealth[length=2.2mm]}, line width=1.1pt, orange},
-]
+\begin{tikzpicture}[x=1cm,y=1cm]
 
-% ---- Left panel: database with metadata
-\fill[panelblue, panel] (0,0) rectangle (4.9,-4.05);
-\node[ptitle] at (2.45,-0.3) {Database with metadata};
-\node[tag] (idx) at (2.45,-0.95) {index i0 on c0 DESC};
-\node[cylinder, shape aspect=0.35, draw=dark!70, fill=white, line width=0.7pt,
-      minimum width=2.0cm, minimum height=0.9cm, inner sep=0pt] (t0L) at (2.45,-2.15) {t0};
-\draw[orange, line width=0.8pt, dashed] (idx.south) -- (2.45,-1.72);
-\node[capt] at (2.45,-3.35) {rows: c0 = 0};
-\node[chip, draw=garnet, text=garnet, fill=white] at (2.45,-3.72) {result: 1 row};
+% ---- Left panel: database with metadata (x 0 .. 5 cm)
+\node[panel, fill=pblue, anchor=north west, minimum width=5cm, minimum height=5.2cm] at (0,0) {};
+\node[title] at (0.4,-0.4) {Database with metadata};
+\node[box, draw=orange, fill=white] (idx) at (2.5,-1.2) {index i0 on c0 DESC};
+\node[cylinder, shape aspect=0.35, draw=ink!70, fill=white, line width=0.7pt,
+      minimum width=2cm, minimum height=0.9cm, inner sep=0pt] (t0L) at (2.5,-2.8) {t0};
+\draw[orange, line width=0.8pt, dashed] (idx.south) -- (t0L.north);
+\node[font=\footnotesize, text=ink!80] at (2.5,-3.95) {rows: c0 = 0};
+\node[bug, font=\footnotesize\bfseries, fill=white] (resL) at (2.5,-4.5) {result: 1 row};
 
-% ---- Middle panel: raw database construction
-\fill[greyfill, panel] (5.8,0) rectangle (10.7,-4.05);
-\node[ptitle] at (8.25,-0.3) {Raw database construction};
-\draw[inner] (6.1,-0.7) rectangle (10.4,-1.75);
-\node[tag, draw=dark!45, text=dark!55] (idxm) at (7.35,-1.22) {index i0};
-\draw[garnet, line width=0.9pt] (8.85,-1.07) -- (9.1,-1.37);
-\draw[garnet, line width=0.9pt] (8.85,-1.37) -- (9.1,-1.07);
-\node[font=\footnotesize] at (9.8,-1.22) {removed};
-\draw[inner] (6.1,-2.0) rectangle (10.4,-3.05);
-\draw[dark!60, fill=white] (6.4,-2.3) rectangle (7.4,-2.78);
-\draw[dark!60] (6.4,-2.54) -- (7.4,-2.54);
-\node[font=\footnotesize] at (6.9,-2.42) {c0};
-\node[font=\footnotesize] at (6.9,-2.66) {0};
-\draw[green, line width=1pt] (8.45,-2.52) -- (8.6,-2.67) -- (8.85,-2.35);
-\node[font=\footnotesize, anchor=west] at (9.0,-2.52) {kept};
-\node[capt] at (8.25,-3.72) {same query $Q$ on both};
+% ---- Middle panel: raw database construction (x 5.6 .. 10.9 cm)
+\node[panel, fill=pgrey, anchor=north west, minimum width=5.3cm, minimum height=5.2cm] at (5.6,0) {};
+\node[title] at (6.0,-0.4) {Raw database construction};
+\node[draw=ink!60, dashed, rounded corners=3pt, anchor=north west,
+      minimum width=4.5cm, minimum height=1.1cm] (inA) at (6.0,-0.9) {};
+\node[box, draw=ink!45, text=ink!55, font=\footnotesize] (idxm) at (6.85,-1.45) {index i0};
+\draw[garnet, line width=0.9pt] (8.28,-1.33) -- (8.52,-1.57);
+\draw[garnet, line width=0.9pt] (8.28,-1.57) -- (8.52,-1.33);
+\node[font=\footnotesize, anchor=west] at (8.65,-1.45) {removed};
+\node[draw=ink!60, dashed, rounded corners=3pt, anchor=north west,
+      minimum width=4.5cm, minimum height=1.2cm] (inB) at (6.0,-2.2) {};
+\draw[ink!60, fill=white] (6.3,-2.45) rectangle (7.5,-3.15);
+\draw[ink!60] (6.3,-2.8) -- (7.5,-2.8);
+\node[font=\footnotesize] at (6.9,-2.62) {c0};
+\node[font=\footnotesize] at (6.9,-2.98) {0};
+\draw[cgreen, line width=1pt] (8.2,-2.8) -- (8.35,-2.95) -- (8.6,-2.6);
+\node[font=\footnotesize, anchor=west] at (8.72,-2.8) {kept};
+\node[font=\footnotesize, text=ink!80] at (8.25,-4.5) {same query $Q$ on both};
 
-% ---- Right panel: raw database
-\fill[panelgreen, panel] (11.6,0) rectangle (16.5,-4.05);
-\node[ptitle] at (14.05,-0.3) {Raw database};
-\node[cylinder, shape aspect=0.35, draw=dark!70, fill=white, line width=0.7pt,
-      minimum width=2.0cm, minimum height=0.9cm, inner sep=0pt] (t0R) at (14.05,-2.15) {t0};
-\node[capt] at (14.05,-3.35) {no index; rows: c0 = 0};
-\node[chip, draw=green, text=green, fill=white] at (14.05,-3.72) {result: 0 rows};
+% ---- Right panel: raw database (x 11.5 .. 16.5 cm)
+\node[panel, fill=pgreen, anchor=north west, minimum width=5cm, minimum height=5.2cm] at (11.5,0) {};
+\node[title] at (11.9,-0.4) {Raw database};
+\node[cylinder, shape aspect=0.35, draw=ink!70, fill=white, line width=0.7pt,
+      minimum width=2cm, minimum height=0.9cm, inner sep=0pt] (t0R) at (14.0,-2.8) {t0};
+\node[font=\footnotesize, text=ink!80] at (14.0,-3.95) {no index; rows: c0 = 0};
+\node[ok, font=\footnotesize\bfseries, fill=white, text=cgreen] (resR) at (14.0,-4.5) {result: 0 rows};
 
-% ---- Flows between panels
-\draw[flow] (4.95,-2.0) -- (5.75,-2.0);
-\draw[flow] (10.75,-2.0) -- (11.55,-2.0);
+% ---- Flows between node anchors
+\draw[arr] (t0L.east) -- (inB.west);
+\draw[arr] (inB.east) -- (t0R.west);
 
 % ---- Oracle
-\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (2.45,-4.1) -- (2.45,-4.45);
-\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (14.05,-4.1) -- (14.05,-4.45);
-\fill[paneloran] (0,-4.5) rectangle (16.5,-5.85);
-\draw[orange, line width=1.1pt, rounded corners=6pt] (0,-4.5) rectangle (16.5,-5.85);
-\node[font=\small\bfseries] at (8.25,-4.8) {Oracle: compare row counts of $Q$ on both databases};
-\node[font=\small] at (8.25,-5.15) {equal $\Rightarrow$ no bug \qquad differ $\Rightarrow$ bug};
-\node[font=\footnotesize, text=dark!85] at (8.25,-5.5)
+\node[draw=orange, line width=1.1pt, fill=porange, rounded corners=6pt, anchor=north west,
+      minimum width=16.5cm, minimum height=1.8cm] (orc) at (0,-5.7) {};
+\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (resL.south) -- (2.5,-5.7);
+\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (resR.south) -- (14.0,-5.7);
+\node[font=\small\bfseries] at (8.25,-6.15) {Oracle: compare row counts of $Q$ on both databases};
+\node[font=\small] at (8.25,-6.55) {equal $\Rightarrow$ no bug \qquad differ $\Rightarrow$ bug};
+\node[font=\footnotesize, text=ink!85] at (8.25,-7.0)
   {\texttt{SELECT COUNT(*) FROM t0 WHERE (IFNULL(-1123870957, '')) IN (t0.c0);}};
 
 % ---- Garnet callout from reproduction
-\draw[garnet, line width=1pt, fill=white, rounded corners=4pt] (0,-6.15) rectangle (16.5,-7.05);
-\node[text width=15.6cm, align=left, font=\footnotesize, anchor=west] at (0.45,-6.6)
+\node[draw=garnet, line width=1pt, fill=white, rounded corners=4pt, inner sep=6pt,
+      text width=15.4cm, align=left, font=\footnotesize] (call) at (8.25,-8.5)
   {\textbf{\textcolor{garnet}{Our reproduction, MySQL \#110125 (8.0.32):}} DOUBLE ZEROFILL column c0.
    Indexed copy returns 1 row, raw copy 0 rows. The raw count is correct; the indexed result is the bug.};
 

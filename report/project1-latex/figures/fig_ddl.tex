@@ -1,81 +1,65 @@
-\documentclass[tikz,border=4pt]{standalone}
-\usepackage{newtxtext}
-\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric,calc}
-
-\definecolor{garnet}{HTML}{8F001A}
-\definecolor{blue}{HTML}{2B6CB0}
-\definecolor{orange}{HTML}{D9822B}
-\definecolor{green}{HTML}{2F855A}
-\definecolor{lgrey}{HTML}{F2F2F2}
-\definecolor{mgrey}{HTML}{D9D9D9}
-\definecolor{ink}{HTML}{2D2D2C}
-\definecolor{pblue}{HTML}{E6EFF9}
-\definecolor{pgreen}{HTML}{E6F3EB}
+\documentclass[tikz,border=6pt]{standalone}
+\input{tikzstyle.tex}
 
 \begin{document}
 \begin{tikzpicture}[
-  font=\footnotesize, text=ink,
-  tstep/.style={draw=mgrey, fill=white, rounded corners=2pt, line width=0.5pt,
-               align=left, inner sep=3pt, text width=4.25cm},
-  arr/.style={-{Stealth[length=2mm]}, line width=0.8pt, draw=orange},
-  dbox/.style={draw=mgrey, dashed, rounded corners=3pt, line width=0.6pt},
-  capt/.style={font=\footnotesize\itshape, align=center},
-  db/.style={cylinder, shape border rotate=90, aspect=0.35, draw=blue, fill=white,
-             minimum width=1.7cm, minimum height=0.95cm, inner sep=1pt, line width=0.7pt},
+  tstp/.style={box, text width=3.95cm, align=left},
+  schema/.style={box, text width=3.0cm, align=left},
+  wl/.style={box, draw=corange, dashed, text width=2.9cm, align=center},
+  pan/.style={fill=#1, rounded corners=4pt},
+  capn/.style={text width=3.8cm, align=center, font=\footnotesize\itshape},
+  db/.style={cylinder, shape border rotate=90, aspect=0.35, draw=cblue, fill=white,
+             minimum width=1.9cm, minimum height=0.95cm, inner sep=1pt, line width=0.7pt},
 ]
 
-% Panels
-\path[fill=pblue, rounded corners=4pt] (0,2.2) rectangle (6.0,7.0);
-\path[fill=lgrey, rounded corners=4pt] (6.8,2.2) rectangle (10.3,7.0);
-\path[fill=pgreen, rounded corners=4pt] (11.1,2.2) rectangle (16.5,7.0);
-\node[font=\small\bfseries] at (3.0,6.65) {Evolved database};
-\node[font=\small\bfseries] at (8.55,6.65) {Introspect schema};
-\node[font=\small\bfseries] at (13.8,6.65) {Directly built database};
+% Panels: 0.4 cm gaps between panels, 0.4 cm padding to contents
+\path[pan=pblue]  (0,-1.2)    rectangle (5.8,8.4);
+\path[pan=pgrey]  (6.2,-1.2)  rectangle (10.5,8.4);
+\path[pan=pgreen] (10.9,-1.2) rectangle (16.5,8.4);
+\node[title] at (0.4,8.0)  {Evolved database};
+\node[title] at (6.6,8.0)  {Introspect schema};
+\node[title] at (11.3,8.0) {Directly built database};
 
 % Left: DDL history as a step timeline
-\draw[dbox] (0.35,3.55) rectangle (5.85,6.3);
-\draw[line width=0.6pt, draw=blue] (0.9,5.9) -- (0.9,4.1);
-\foreach \y/\n in {5.9/1, 5.0/2, 4.1/3} {
-  \node[circle, fill=blue, text=white, inner sep=0.8pt, minimum size=4mm,
-        font=\scriptsize\bfseries] at (0.9,\y) {\n};
+\draw[line width=0.6pt, draw=cblue] (0.6,7.0) -- (0.6,4.3);
+\foreach \y/\n in {7.0/1, 5.65/2, 4.3/3} {
+  \node[circle, fill=cblue, text=white, inner sep=0pt, minimum size=4mm,
+        font=\scriptsize\bfseries] at (0.6,\y) {\n};
 }
-\node[tstep] at (3.55,5.9) {\textbf{CREATE TABLE t0}\\ c2 FLOAT8, PRIMARY KEY};
-\node[tstep] at (3.55,5.0) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE, FK c1 $\rightarrow$ t0};
-\node[tstep] at (3.55,4.1) {\textbf{ALTER TABLE t0}\\ RENAME TO t2};
-\node[db] (cL) at (2.0,2.85) {Evolved DB};
-\draw[arr] (2.0,3.72) -- (2.0,3.38);
+\node[tstp] (st1) at (3.25,7.0)  {\textbf{CREATE TABLE t0}\\ c2 FLOAT8, PRIMARY KEY};
+\node[tstp] (st2) at (3.25,5.65) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE,\\ FK c1 $\rightarrow$ t0};
+\node[tstp] (st3) at (3.25,4.3)  {\textbf{ALTER TABLE t0}\\ RENAME TO t2};
+\node[db] (cL) at (3.25,3.0) {Evolved DB};
+\draw[arr] (st3.south) -- (cL.north);
 
 % Middle: introspection of the final schema
-\node[draw=mgrey, fill=white, rounded corners=2pt, align=left, inner sep=4pt,
-      text width=3.15cm] (schema) at (8.55,5.45)
+\node[schema] (schema) at (8.35,3.0)
   {\textbf{Final schema}\\[2pt] t2: c2 FLOAT8, PK\\ t1: c1 FLOAT8, UNIQUE\\ FK c1 $\rightarrow$ t2(c2)};
-\node[capt] at (8.55,3.95) {SHOW CREATE TABLE\\ on evolved database};
-\draw[arr] (6.0,5.5) -- (7.1,5.5);
-\node[font=\scriptsize\itshape] at (6.55,5.85) {extract};
-\draw[arr] (10.0,5.5) -- (11.5,5.5);
-\node[font=\scriptsize\itshape] at (10.75,5.85) {build};
+\node[capn] at (8.35,4.75) {SHOW CREATE TABLE\\ on evolved database};
+\draw[arr] (cL.east) -- (schema.west);
+\node[lab] at (5.25,3.35) {extract};
 
-% Shared workload W feeding both databases
-\node[draw=orange, dashed, fill=white, rounded corners=2pt, align=left, inner sep=3pt,
-      text width=2.7cm] (W) at (8.55,2.9)
+% Shared workload W feeding both databases, routed below the Final schema box
+\node[wl] (W) at (8.35,0.9)
   {\textbf{Shared workload W}\\ INSERT t2 (1)\\ INSERT t1 (1)};
-\draw[arr] (7.2,2.9) -- (2.9,2.9);
+\draw[arr] (W.west) -| (cL.south);
 
 % Right: directly built schema
-\draw[dbox] (11.5,3.55) rectangle (16.2,6.3);
-\node[tstep] at (13.85,5.6) {\textbf{CREATE TABLE t2}\\ c2 FLOAT8, PRIMARY KEY};
-\node[tstep] at (13.85,4.5) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE, FK c1 $\rightarrow$ t2};
-\node[db] (cR) at (13.85,2.85) {Direct DB};
-\draw[arr] (13.85,4.12) -- (13.85,3.38);
-\draw[arr] (9.9,2.9) -- (13.0,2.9);
+\node[tstp] (st4) at (13.7,7.0)  {\textbf{CREATE TABLE t2}\\ c2 FLOAT8, PRIMARY KEY};
+\node[tstp] (st5) at (13.7,5.65) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE,\\ FK c1 $\rightarrow$ t2};
+\node[db] (cR) at (13.7,3.0) {Direct DB};
+\draw[arr] (st5.south) -- (cR.north);
+\draw[arr] (schema.east) -- (cR.west);
+\node[lab] at (11.38,3.35) {build};
+\draw[arr] (W.east) -| (cR.south);
 
-% Observed outcomes
-\node[capt, text=garnet] at (2.0,1.7) {Insert t1 (1): ERROR 1452\\ FK cites stale t0};
-\node[capt, text=green] at (13.85,1.7) {Insert t1 (1): accepted\\ value 1 stored};
+% Observed outcomes, below each database and above the workload route's lower edge
+\node[bug, text width=4.6cm] at (2.9,-0.35) {Insert t1 (1): ERROR 1452\\ FK cites stale t0};
+\node[ok, text width=4.6cm, text=cgreen] at (13.7,-0.35) {Insert t1 (1): accepted\\ value 1 stored};
 
 % Oracle
 \node[draw=garnet, line width=1pt, fill=white, rounded corners=3pt, align=center,
-      inner sep=5pt, text width=15.4cm] (O) at (8.25,0.6)
+      inner sep=5pt, text width=15.4cm] (O) at (8.25,-2.6)
   {\textbf{Oracle: compare the two observations}\\
    Equal outcomes: no bug. Different outcomes: bug.\\[2pt]
    {\color{garnet}\textbf{MySQL \#114904: evolved schema shows REFERENCES t2, insert fails citing stale t0; direct schema accepts the insert.}}};

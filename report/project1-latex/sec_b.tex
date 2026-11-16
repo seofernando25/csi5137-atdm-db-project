@@ -7,11 +7,13 @@ This section reviews the experiments the original authors report. The studies us
 
 Table~\ref{tab:env} lists the published conditions. CODDTest ran on a 64-core machine, the other three studies on 8-core, 32 GB setups. Hardware, DBMS versions, and budgets differ enough that we compare only within a study and keep each paper's own denominators. CODDTest's SQLite performance run, for example, cannot be set beside Radar's cross-DBMS query rates. 
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Published experimental conditions. Versions describe the study, not current releases; several papers updated versions during discovery.}
+\label{tab:env}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule
-Study & Environment and versions & Budget and controls\\
+\textbf{Study} & \textbf{Environment and versions} & \textbf{Budget and controls} \\
 \midrule
 CODDTest \cite{coddtest} & 64 cores; SQLite 3.42.0.0 (performance study) & 10 threads, 24 h per configuration; default MaxDepth 3; discovery ran intermittently for four months\\
 DDLCheck \cite{ddlcheck} & MySQL 8.0.36, PostgreSQL 16.2, SQLite 3.43.0, MariaDB 11.3.2, CockroachDB 23.2, TiDB 8.0.0 & 24 h rounds; 5,000 statements per database pair\\
@@ -19,8 +21,6 @@ Radar \cite{radar} & MySQL 8.0.32, SQLite 3.41.0, MariaDB 11.0.3, CockroachDB 22
 WriteCheck \cite{writecheck} & MySQL 8.0.32, PostgreSQL 15.2, SQLite 3.36.0, MariaDB 10.11.2, CockroachDB 22.2.5, TiDB 6.6.0 & Five rounds of about 24 h; separate 12 h baseline comparison\\
 \bottomrule
 \end{tabularx}
-\caption{Published experimental conditions. Versions describe the study, not current releases; several papers updated versions during discovery.}
-\label{tab:env}
 \end{table}
 
 \subsection{Datasets and generated workloads}
@@ -29,11 +29,13 @@ The studies use two kinds of evidence. Generated SQL workloads test whether an o
 
 The generators are bounded; Table~\ref{tab:work} gives the defaults. These are upper bounds, not claims that every test reaches them.
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Workload construction and main bounds, as reported by each paper.}
+\label{tab:work}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}lXX@{}}
 \toprule
-Study & Construction & Bounds\\
+\textbf{Study} & \textbf{Construction} & \textbf{Bounds} \\
 \midrule
 CODDTest & SQLancer schemas, data, expressions, subqueries & MaxDepth 3 by default; sweep over depths 1 to 15\\
 DDLCheck & Generated DDL history, directly built equivalent schema, shared workload & 5,000 statements per pair\\
@@ -41,15 +43,13 @@ Radar & Typed columns, constraints, indexes, random data; raw copy & 3 tables, 3
 WriteCheck & Small typed tables, explicit and autocommit transactions & 5 transactions, 5 statements, 2 s wait\\
 \bottomrule
 \end{tabularx}
-\caption{Workload construction and main bounds, as reported by each paper.}
-\label{tab:work}
 \end{table}
 
 WriteCheck's historical dataset starts from 140 real transaction bugs reported between January 2018 and December 2022. Of these, 35 can produce incorrect database states and form the study set. Figure~\ref{fig:trigger} shows what those cases look like: most are small, and 96.9\% use one initial table. Small generated states are a reasonable starting point for this bug class. The figure says nothing about larger states or longer histories.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.56\linewidth]{fig1.png}
-\caption{Triggering conditions of the 35 historical WriteCheck cases (table, row, transaction, and statement counts). Re-plot of \cite[Fig.~2]{writecheck} by the authors from values read off the published figure; segment values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig1}
+\caption{Triggering conditions of the 35 historical WriteCheck cases: share of cases by number of tables, rows, transactions and statements (stacked bars). Most cases are small; 96.9\% use one initial table. Re-plot of \cite[Fig.~2]{writecheck} from values read off the published figure; segment values are approximate.}
 \label{fig:trigger}
 \end{figure}
 
@@ -67,35 +67,35 @@ CODDTest reports 45 previously unknown bugs across five DBMSs: 24 logic bugs, 14
 
 Table~\ref{tab:codd} gives the 24-hour efficiency run. CODDTest completes about 4.2 times fewer tests than NoREC yet reaches 2,577,603 unique plans against 172,808, while branch coverage stays near 63\%. Throughput understates what the oracle explores, and coverage alone would hide the difference. Among the CODDTest variants, expression-only testing finishes the most tests but sees only 7,399 plans, so cheap tests are not the ones that reach the widest plan space.
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Selected 24-hour efficiency values from \cite[Table~3]{coddtest} (tests converted from thousands to millions). Plan and coverage figures come from separate runs with matching configurations.}
+\label{tab:codd}
 \centering\small
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Configuration & Tests (24 h) & Unique plans & Branch cov.\\
+\textbf{Configuration} & \textbf{Tests (24 h, millions)} & \textbf{Unique plans} & \textbf{Branch cov.} \\
 \midrule
-NoREC & 2,086,646k & 172,808 & 63.18\%\\
-TLP & 976,216k & 137,743 & 63.63\%\\
-DQE & 441,350k & 486 & 46.71\%\\
-CODDTest (full) & 497,092k & 2,577,603 & 63.06\%\\
-CODDTest, expressions only & 1,423,068k & 7,399 & ---\\
-CODDTest, subqueries only & 423,310k & 2,755,619 & ---\\
+NoREC & 2,086.6 & 172,808 & 63.18\%\\
+TLP & 976.2 & 137,743 & 63.63\%\\
+DQE & 441.4 & 486 & 46.71\%\\
+CODDTest (full) & 497.1 & 2,577,603 & 63.06\%\\
+CODDTest, expressions only & 1,423.1 & 7,399 & ---\\
+CODDTest, subqueries only & 423.3 & 2,755,619 & ---\\
 \bottomrule
 \end{tabular}
-\caption{Selected 24-hour efficiency values from \cite[Table~3]{coddtest} (``k'' means thousands). Plan and coverage figures come from separate runs with matching configurations.}
-\label{tab:codd}
 \end{table}
 
 Figure~\ref{fig:depth} shows the depth sweep. Raising MaxDepth from 1 to 15 in the expression-only configuration multiplies time per query by 9.91 and cuts completed tests by 89.4\%. The left panel rises as the right panel falls: deeper expressions cost more under a fixed budget. Figure~\ref{fig:plans} shows unique plans falling too. That is odd at first, but fewer completed tests mean fewer plans seen in a fixed window, and the curve does not isolate plans per test.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.7\linewidth]{fig2.png}
-\caption{CODDTest expression-depth experiment. Left: execution time per query. Right: completed tests. Re-plot of \cite[Fig.~2]{coddtest} by the authors from values read off the published figure; curve values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig2}
+\caption{CODDTest expression-depth sweep, MaxDepth 1 to 15. Left: execution time per query; right: completed tests. Deeper expressions cost more time and finish fewer tests under a fixed budget. Re-plot of \cite[Fig.~2]{coddtest} from values read off the published figure; curve values are approximate.}
 \label{fig:depth}
 \end{figure}
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.32\linewidth]{fig3.png}
-\caption{Unique query plans against MaxDepth in the fixed-budget expression-only run. Re-plot of \cite[Fig.~3]{coddtest} by the authors from values read off the published figure; curve values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig3}
+\caption{Unique query plans against MaxDepth in the fixed-budget expression-only run. Plans fall with depth, mostly because fewer tests complete. Re-plot of \cite[Fig.~3]{coddtest} from values read off the published figure; curve values are approximate.}
 \label{fig:plans}
 \end{figure}
 
@@ -109,25 +109,25 @@ DDLCheck submits 34 bugs, of which 29 are confirmed as new: 21 schema-related lo
 
 Figure~\ref{fig:ddlstatements} shows which statement reveals each bug. The aggregate bar holds 23 SELECT cases and six revealed by CREATE TABLE, ALTER TABLE, INSERT, or REPLACE. SELECT dominating is consistent with schema histories creating states that later reads expose. The six other cases show that a query-only comparison cannot cover the scope. The counts name the revealing statement, not the faulty component.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.58\linewidth]{fig4.png}
-\caption{Bug-revealing statement types per DBMS; the last row aggregates all 29 confirmed bugs, crashes included. Re-plot of \cite[Fig.~6]{ddlcheck} by the authors from values read off the published figure; segment values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig4}
+\caption{Bug-revealing statement types per DBMS (stacked bars); the last row aggregates all 29 confirmed bugs, crashes included. SELECT reveals 23 of them. Re-plot of \cite[Fig.~6]{ddlcheck} from values read off the published figure; segment values are approximate.}
 \label{fig:ddlstatements}
 \end{figure}
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{24-hour-per-DBMS ablation from \cite[Table~3]{ddlcheck}, summed over six DBMSs. These are not the discovery-campaign totals.}
+\label{tab:ddl}
 \centering\small
 \begin{tabular}{@{}lrr@{}}
 \toprule
-DDLCheck variant & Unique DDL sequences & Unique bugs\\
+\textbf{DDLCheck variant} & \textbf{Unique DDL sequences} & \textbf{Unique bugs} \\
 \midrule
 Original & 20,468 & 8\\
 Random & 14,994 & 5\\
 Strict & 17,967 & 4\\
 \bottomrule
 \end{tabular}
-\caption{24-hour-per-DBMS ablation from \cite[Table~3]{ddlcheck}, summed over six DBMSs. These are not the discovery-campaign totals.}
-\label{tab:ddl}
 \end{table}
 
 Table~\ref{tab:ddl} compares the diversity filter variants. The original strategy produces about 36.5\% more unique sequences than the random variant and finds eight unique bugs against five. The original and strict variants both log nine bug occurrences, but the strict one finds four unique bugs, so raw failure volume would hide the difference. No analysed NoREC transformation reaches any of the 21 logic bugs.
@@ -140,19 +140,21 @@ Radar reduces 1,663 generated reports to 42 submissions. Developers confirm 38 n
 
 Figure~\ref{fig:radarablation} shows the TiDB ablation. The metadata-guided curve climbs earlier and ends at 19 unique bugs against 12 for the unguided variant after 12 hours. The gap opens early and persists. It does not show the same gain for another generator or a patched DBMS.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.36\linewidth]{fig5.png}
-\caption{Unique bugs found over time on TiDB, with and without metadata-oriented optimization. Re-plot of \cite[Fig.~7]{radar} by the authors from values read off the published figure; curve values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig5}
+\caption{Cumulative unique bugs on TiDB over 12 hours, with and without metadata-oriented optimization. The guided run ends at 19 bugs against 12. Re-plot of \cite[Fig.~7]{radar} from values read off the published figure; curve values are approximate.}
 \label{fig:radarablation}
 \end{figure}
 
 Table~\ref{tab:cap} gives the capability and end-to-end comparisons. On supplied metadata bugs, no other oracle exposes more than 13 of 30. In the end-to-end run Radar finds twenty of the 21 bugs found by all tools together, fifteen exclusively. Capability on supplied cases and realised discovery therefore differ inside one study. Code coverage barely moves, so it understates the effect of guidance.
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Oracle comparisons from \cite[Sect.~4.2]{coddtest} and \cite[Tables~4 and~5]{radar}.}
+\label{tab:cap}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}lX@{}}
 \toprule
-Comparison & Reported values\\
+\textbf{Comparison} & \textbf{Reported values} \\
 \midrule
 CODDTest, SQLite 3.30.0, 24 h: unique bugs (exclusive) & NoREC 27 (3); TLP 27 (2); EET 6 (3); CODDTest 25 (4)\\
 Radar, 30 supplied metadata bugs exposed & DQE 8; NoREC 13; TLP 3; MutaSQL 5\\
@@ -160,8 +162,6 @@ Radar, 12 h end-to-end & all tools 21 metadata bugs; Radar 20, of which 15 exclu
 Radar, MySQL function coverage & 20.3\% with guidance; 19.7\% without\\
 \bottomrule
 \end{tabularx}
-\caption{Oracle comparisons from \cite[Sect.~4.2]{coddtest} and \cite[Tables~4 and~5]{radar}.}
-\label{tab:cap}
 \end{table}
 
 \textbf{Sufficiency.} Sufficient for the claim that metadata-aware raw-database comparison finds bugs other oracles miss, and that guidance helps on these systems. Insufficient for the size of the benefit: the ablation uses 12-hour runs and reports no variance, and the end-to-end comparison excludes unsupported tool and DBMS pairs.
@@ -174,11 +174,13 @@ In discovery, WriteCheck flags 101 violations that group into 22 unique cases. T
 
 Table~\ref{tab:wc} separates two evaluations that should not be merged. Given the relevant cases, WriteCheck exposes all 29 known critical bugs, against 23 for DT\textsuperscript{2}, 14 for Troc, and 16 for TxCheck. In 12 hours of end-to-end generation, it finds four critical bugs against two, two, and one, with five false positives. The five false positives stem from semi-consistent reads and missing gap locks: at lower isolation levels a surprising final state alone does not prove a defect.
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Known-case capability and 12-hour end-to-end comparison from \cite[Tables~3 and~4]{writecheck}. Tools run on their supported DBMSs.}
+\label{tab:wc}
 \centering\small
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Approach & Known cases (of 29) & Critical bugs, 12 h & False positives, 12 h\\
+\textbf{Approach} & \textbf{Known cases (of 29)} & \textbf{Critical bugs, 12 h} & \textbf{False positives, 12 h} \\
 \midrule
 WriteCheck & 29 & 4 & 5\\
 DT\textsuperscript{2} & 23 & 2 & 24\\
@@ -186,8 +188,6 @@ Troc & 14 & 2 & 4\\
 TxCheck & 16 & 1 & 4\\
 \bottomrule
 \end{tabular}
-\caption{Known-case capability and 12-hour end-to-end comparison from \cite[Tables~3 and~4]{writecheck}. Tools run on their supported DBMSs.}
-\label{tab:wc}
 \end{table}
 
 \textbf{Sufficiency.} Sufficient to show practical value of WSS as an oracle for restricted write workloads. Not sufficient to claim that FCRFS holds under every isolation implementation or application transaction, and the false positives mean a WSS mismatch is not an unconditional defect. The 12-hour tool comparison is only suggestive, because the counts are small.
@@ -198,9 +198,9 @@ Separately from this review, we replayed one reported MySQL 8.0.32 bug per paper
 
 For Project~2 we also re-ran CODDTest's expression-depth sweep (Figure~\ref{fig:repro}). The setup matches the paper's (SQLite 3.42.0.0, 10 threads, expression-only, depths 1 to 15) except the budget: 40 s per depth instead of 24 h. Besides counters, the only tool changes were a fix to the CASE-mapping visitor and pinning sqlite-jdbc to the paper's SQLite version. Our run uses three seeds; the figure overlays their mean, with min-max bars, on the published curves. From depth 1 to 15, completed tests fell 88.6\% on average (88.3 to 88.9 across seeds; published: 89.4\%) and time per query rose 5.58 times (5.48 to 5.78; published: 9.91 times). Fitting the curves relative to depth 1 shows that time per query follows a constant plus an exponential in depth, with a growth rate of 0.24 per level for our run and 0.26 for the published curve; the amplitude is smaller in ours, which accounts for the weaker rise. The test count falls almost linearly in both (about $-0.06$ per level). PySR, run on the same eight points, returned the same exponential-plus-constant form and a straight line, and its more complex equations only overfit. With eight points per curve, this is evidence for the shape and not a measured scaling law.  Details are in \texttt{../project2-reproduction/graph-reproduction/README.md} and \texttt{fits.md}.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=0.7\linewidth]{fig_repro.png}
-\caption{Our SQLite 3.42.0.0 re-run of the depth sweep (mean of three seeds, min-max bars) over the published read-off curves of \cite[Fig.~2]{coddtest}. Published values are approximate.}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\linewidth]{fig_repro}
+\caption{Our SQLite 3.42.0.0 re-run of the depth sweep (time per query and completed tests against MaxDepth; mean of three seeds, min-max bars) over the published curves of \cite[Fig.~2]{coddtest}. Our run reproduces the fall in completed tests but a weaker rise in time. Published values are read off the figure and approximate.}
 \label{fig:repro}
 \end{figure}
 
@@ -211,11 +211,13 @@ For Project~2 we also re-ran CODDTest's expression-depth sweep (Figure~\ref{fig:
 
 Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. The columns keep different reporting stages and are not a ranking. The studies show that each method exposes real defects in mature systems. They do not allow adding the counts, because versions and periods differ, overlap across the four campaigns is unknown, and confirmation and fix counts are snapshots from publication.
 
-\begin{table}[!htb]
+\begin{table}[!tb]
+\caption{Publication-time discovery results. Reporting stages differ across rows; this is not a performance ranking.}
+\label{tab:summary}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}lXXX@{}}
 \toprule
-Study & Submitted or reported & Confirmed new bugs & Target category\\
+\textbf{Study} & \textbf{Submitted or reported} & \textbf{Confirmed new bugs} & \textbf{Target category} \\
 \midrule
 CODDTest \cite{coddtest} & 45 unique new bugs & 45 (verified or fixed) & 24 logic bugs\\
 DDLCheck \cite{ddlcheck} & 34 submissions & 29 & 21 schema-related logic bugs\\
@@ -223,8 +225,6 @@ Radar \cite{radar} & 42 submissions & 38 & 30 metadata-related bugs\\
 WriteCheck \cite{writecheck} & 22 unique WSS violations & 11 & 13 confirmed critical bugs, 2 already known\\
 \bottomrule
 \end{tabularx}
-\caption{Publication-time discovery results. Reporting stages differ across rows; this is not a performance ranking.}
-\label{tab:summary}
 \end{table}
 
 \textbf{Internal and construct validity.} The main internal threat is that the paired executions may not satisfy the oracle's preconditions. Nondeterminism, errors, type conversion, or incomplete reconstruction can break the relation without exposing a defect. Reduction can change execution plans, so a reduced case needs re-checking. Developer confirmation helps, but projects apply different severity labels. On construct validity, a unique query plan is not necessarily a unique semantic path, high coverage can coexist with undetected faults, and a fast tester can repeat equivalent cases. Bug counts also depend on how hard the authors reduced and deduplicated. The most persuasive evidence combines confirmed cases, within-study ablations, and an explanation of why the oracle exposes the failure.

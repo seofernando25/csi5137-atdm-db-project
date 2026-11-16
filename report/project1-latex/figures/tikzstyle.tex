@@ -1,0 +1,24 @@
+% Shared standard for all TikZ explainer figures (include after \documentclass[tikz,border=6pt]{standalone}).
+% Rules: final width 16.5 cm (= \linewidth, scale 1.0); body text 8 pt, labels >= 7 pt, never smaller;
+% every arrow starts/ends on a node anchor (never floats over text); edge labels use `fill=white` or sit
+% above/below the arrow with at least 2 mm clearance; every box has inner sep >= 4 pt and its text fits
+% inside (use text width / align=left / manual line breaks, then check the render); >= 5 mm gap between boxes;
+% >= 4 mm padding between content and panel border; one accent colour per meaning (garnet = mismatch/bug).
+\usepackage{newtxtext}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc,shapes.geometric,shapes.symbols,decorations.pathreplacing}
+\definecolor{garnet}{HTML}{8F001A}\definecolor{ink}{HTML}{2D2D2C}
+\definecolor{cblue}{HTML}{2B6CB0}\definecolor{corange}{HTML}{D9822B}\definecolor{cgreen}{HTML}{2F855A}
+\definecolor{pblue}{HTML}{EAF1FA}\definecolor{porange}{HTML}{FCEFE1}\definecolor{pgreen}{HTML}{E6F3EC}
+\definecolor{pgrey}{HTML}{F2F2F2}\definecolor{pgarnet}{HTML}{F7E6E9}\definecolor{rule}{HTML}{B8B8B8}
+\tikzset{
+  every node/.style={font=\footnotesize,text=ink},
+  small/.style={font=\scriptsize},
+  panel/.style={rounded corners=5pt,draw=rule,line width=.4pt,inner sep=7pt},
+  box/.style={rounded corners=3pt,draw=ink!60,fill=white,line width=.5pt,inner sep=4.5pt,align=center,minimum height=6mm},
+  bug/.style={box,draw=garnet,fill=pgarnet,text=garnet,line width=.8pt},
+  ok/.style={box,draw=cgreen,fill=pgreen},
+  arr/.style={-{Stealth[length=2.2mm,width=1.8mm]},line width=.7pt,draw=corange},
+  lab/.style={font=\scriptsize\itshape,fill=white,inner sep=1.5pt,text=ink!80},
+  title/.style={font=\footnotesize\bfseries,anchor=north west},
+}

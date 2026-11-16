@@ -1,80 +1,69 @@
-\documentclass[tikz,border=4pt]{standalone}
-\usepackage{newtxtext}
-\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric,calc}
+\documentclass[tikz,border=6pt]{standalone}
+\input{tikzstyle.tex}
 
-\definecolor{garnet}{HTML}{8F001A}
-\definecolor{blue}{HTML}{2B6CB0}
-\definecolor{orange}{HTML}{D9822B}
-\definecolor{green}{HTML}{2F855A}
-\definecolor{lgrey}{HTML}{F2F2F2}
-\definecolor{mgrey}{HTML}{D9D9D9}
-\definecolor{ink}{HTML}{2D2D2C}
-\definecolor{paleblue}{HTML}{E4EEF8}
-\definecolor{paleorange}{HTML}{FCEEDF}
-\definecolor{palegreen}{HTML}{E5F3EA}
-
-\tikzset{
-  panel/.style={rounded corners=4pt, draw=mgrey, line width=0.4pt},
-  row/.style={rounded corners=2pt, draw=mgrey, dashed, line width=0.4pt, fill=white,
-    minimum width=3.5cm, minimum height=0.66cm, text width=3.3cm, inner xsep=0.08cm,
-    inner ysep=0.03cm, align=left, font=\fontsize{7.5}{9}\selectfont},
-  capt/.style={font=\itshape\fontsize{7.5}{9}\selectfont, align=center, text width=3.5cm},
-}
-
-% #1 x offset, #2 panel fill, #3 title, #4 subtitle, #5 changed, #6 kept,
-% #7 compared, #8 caption, #9 caption colour
-\newcommand{\Panel}[9]{%
-  \begin{scope}[shift={(#1,2.4)}]
-    \node[panel, fill=#2, minimum width=3.85cm, minimum height=4.5cm,
-      anchor=south west, inner sep=0pt] at (0,0) {};
-    \node[anchor=north west, font=\bfseries\fontsize{9}{11}\selectfont] at (0.15,4.38) {#3};
-    \node[anchor=north west, font=\fontsize{7.5}{9}\selectfont, text=ink!70] at (0.15,4.08) {#4};
-    \node[row] at (1.925,3.05) {\textbf{Changed:} #5};
-    \node[row] at (1.925,2.10) {\textbf{Kept:} #6};
-    \node[row] at (1.925,1.15) {\textbf{Compared:} #7};
-    \node[capt, text=#9] at (1.925,0.45) {#8};
-  \end{scope}
+% Card geometry (cm): four cards, width 3.75, gap 0.5, total 16.5.
+% Cards span y = 3.0 to 10.4. Inner text width 2.95 gives 4 mm padding per side.
+\newcommand{\Card}[8]{%
+  % #1 left x, #2 fill, #3 node name, #4 title, #5 subtitle (2 lines), #6 changed, #7 stays, #8 compared
+  \node[panel, fill=#2, minimum width=3.75cm, minimum height=7.4cm,
+    anchor=south west, inner sep=0pt] (#3) at (#1,3.0) {};
+  \node[anchor=north west, inner sep=0pt, font=\bfseries\fontsize{9}{11}\selectfont]
+    at (#1+0.4,10.05) {#4};
+  \node[anchor=north west, align=left, text width=2.95cm, inner sep=0pt,
+    font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!70] at (#1+0.4,9.6) {#5};
+  \node[anchor=north west, align=left, text width=2.95cm, inner sep=0pt,
+    font=\fontsize{7.5}{9}\selectfont] at (#1+0.4,8.5)
+    {\textbf{Changed:} #6};
+  \node[anchor=north west, align=left, text width=2.95cm, inner sep=0pt,
+    font=\fontsize{7.5}{9}\selectfont] at (#1+0.4,7.0)
+    {\textbf{Stays equivalent:} #7};
+  \node[anchor=north west, align=left, text width=2.95cm, inner sep=0pt,
+    font=\fontsize{7.5}{9}\selectfont] at (#1+0.4,5.6)
+    {\textbf{Compared:} #8};
 }
 
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  \Panel{0}{lgrey}{CODDTest}{MySQL \#111241 \,$\cdot$\, expression}
+  \Card{0}{pgrey}{cA}{CODDTest}{MySQL \#111241\\expression}
     {expression replaced by its evaluated value}
     {query meaning and database state}
     {result rows of both query forms}
-    {constant: row 1; subquery: empty}{garnet}
+  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
+    font=\fontsize{7.5}{9}\selectfont] at (0.4,3.4) {constant: row 1;\\subquery: empty};
 
-  \Panel{4.15}{paleblue}{DDLCheck}{MySQL \#114904 \,$\cdot$\, schema history}
+  \Card{4.25}{pblue}{cB}{DDLCheck}{MySQL \#114904\\schema history}
     {schema reached by evolution (t0 renamed to t2)}
     {final visible schema and table data}
     {INSERT into the child table}
-    {evolved: error cites t0; direct: accepted}{garnet}
+  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
+    font=\fontsize{7.5}{9}\selectfont] at (4.65,3.4) {evolved: error cites t0;\\direct: accepted};
 
-  \Panel{8.3}{paleorange}{WriteCheck}{MySQL \#104833 \,$\cdot$\, transactions}
+  \Card{8.5}{porange}{cC}{WriteCheck}{MySQL \#104833\\transactions}
     {two transactions run concurrently}
     {same transactions in inferred serial order}
     {final table state}
-    {observed state $\neq$ oracle state}{garnet}
+  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
+    font=\fontsize{7.5}{9}\selectfont] at (8.9,3.4) {observed state $\neq$\\oracle state};
 
-  \Panel{12.45}{palegreen}{Radar}{MySQL \#110125 \,$\cdot$\, metadata}
+  \Card{12.75}{pgreen}{cD}{Radar}{MySQL \#110125\\metadata}
     {index i0 (c0 DESC) removed in raw copy}
     {same data and identical query text}
     {query rows, indexed vs raw copy}
-    {raw empty is correct; indexed row is bug}{garnet}
+  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
+    font=\fontsize{7.5}{9}\selectfont] at (13.15,3.4) {raw empty is correct;\\indexed row is bug};
 
-  % converging arrows
-  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (1.925,2.4) -- (5.35,1.5);
-  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (6.075,2.4) -- (7.22,1.5);
-  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (10.225,2.4) -- (9.08,1.5);
-  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (14.375,2.4) -- (10.95,1.5);
+  % four converging arrows: card bottom (y = 3.0) to oracle top edge (y = 1.8)
+  \draw[arr] (cA.south) -- (5.35,1.8);
+  \draw[arr] (cB.south) -- (7.25,1.8);
+  \draw[arr] (cC.south) -- (9.25,1.8);
+  \draw[arr] (cD.south) -- (11.15,1.8);
 
-  % shared oracle box
+  % shared oracle box, full width, y = 0 to 1.8
   \node[rounded corners=4pt, draw=garnet, line width=0.8pt, fill=white,
-    minimum width=16.3cm, minimum height=1.5cm, inner sep=0pt] at (8.15,0.75) {};
-  \draw[ink, line width=0.8pt] (1.1,0.85) circle (0.22);
-  \draw[ink, line width=1.2pt] (1.27,0.68) -- (1.5,0.45);
-  \node[font=\itshape\fontsize{8.5}{10}\selectfont] at (8.15,1.12) {different execution + same expected semantics};
-  \node[font=\bfseries\fontsize{8.5}{10}\selectfont] at (8.15,0.5)
-    {compare observations: \textcolor{green}{equal $\rightarrow$ fine}, \textcolor{garnet}{differ $\rightarrow$ candidate bug}};
+    minimum width=16.5cm, minimum height=1.8cm, inner sep=0pt] (oracle) at (8.25,0.9) {};
+  \node[font=\itshape\fontsize{8.5}{10}\selectfont] at (8.25,1.3)
+    {different execution + same expected semantics};
+  \node[font=\bfseries\fontsize{8.5}{10}\selectfont] at (8.25,0.5)
+    {compare observations: \textcolor{cgreen}{equal $\rightarrow$ fine}; \textcolor{garnet}{differ $\rightarrow$ candidate bug}};
 \end{tikzpicture}
 \end{document}

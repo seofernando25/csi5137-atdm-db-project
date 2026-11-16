@@ -1,21 +1,11 @@
 % sec_a.tex: Abstract, Introduction, Problem definition, Motivation, Related work
-\begin{abstract}
-Logic bugs make a relational database return a wrong answer or keep a wrong state without crashing, so nothing signals the failure. This report reviews four papers from 2024--2025: CODDTest, DDLCheck, WriteCheck and Radar. Each detects such bugs by running two executions that should agree and flagging a mismatch, but they vary different things: expression evaluation, schema construction history, optional metadata, and transaction schedules. We compare their test oracles, equivalence assumptions, supported features and published experiments. The evaluations show that every method finds real bugs. Differences in workloads, DBMS versions, time budgets and confirmation procedures still rule out a ranking by bug count, so we compare the methods by the validity of their oracles and by what each one can and cannot reach.
-\end{abstract}
 
 \section{Introduction}
 Testing the correctness of database management systems (DBMSs) is a part of data management that checks whether the engines holding an organization's data return and store what the SQL semantics promise.
 
 A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behaviour depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
 
-The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} summarizes the shared idea. We claim no new experimental results. All measurements come from the four papers, and the formal model and running example are our own explanatory analysis.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{fig_overview.pdf}
-\caption{Four oracles, one idea. Each method runs two executions of the same data, here a table Product(id, quantity, reserved), that should give the same observable result: a folded expression versus the original query (CODDTest), a table built through ALTER statements versus built directly (DDLCheck), a concurrent schedule versus a serial one (WriteCheck), and a database with an index versus one without (Radar). A mismatch between the two observations is a candidate bug to be validated.}
-\label{fig:overview}
-\end{figure}
+The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. We claim no new experimental results. All measurements come from the four papers, and the formal model and running example are our own explanatory analysis.
 
 Section~2 defines the problem and Section~3 motivates it. Section~4 groups and compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.5)~\cite{norec,tlp}.
 
@@ -44,7 +34,7 @@ For statements that change data, equal query output is not enough, because two I
 \subsection{Pseudoalgorithm}
 Algorithm~\ref{alg:oracle} gives the generic loop shared by the four methods.
 
-\begin{algorithm}[t]
+\begin{algorithm}[!tb]
 \caption{Generic metamorphic logic-bug search}
 \label{alg:oracle}
 \begin{algorithmic}[1]
@@ -105,18 +95,18 @@ We group the papers by how each builds its reference execution. The first group 
 
 In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by a CASE that yields 5 for the first row and 0 for the second (Figure~\ref{fig:codd}). The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behaviour.
 
-\begin{figure}[t]
+\begin{figure}[!tb]
 \centering
-\includegraphics[width=\linewidth]{fig_codd.pdf}
+\includegraphics[width=\linewidth]{fig_codd}
 \caption{CODDTest on the table Product(id, quantity, reserved). An auxiliary query first evaluates \mbox{$\mathrm{quantity}-\mathrm{reserved}$} on the stored rows (availability 5 and 0). The result is substituted into the original query as a constant or a CASE expression. The original and the folded query should select the same products. A difference is a candidate logic bug to be validated.}
 \label{fig:codd}
 \end{figure}
 
 \paragraph{Radar.} The method builds a raw copy of the database without optional metadata such as indexes and constraints, keeps the data a query needs, and compares the query's result on both~\cite{radar}. Its relation is $E(D,Q)\equiv E(\mathrm{raw}(D),Q)$ for a read query $Q$. The validity condition is that the data and type semantics carry over (a generated column keeps its computed values) and that $Q$ does not depend on the removed metadata. It excludes queries that name an index, ask for a default value, or use identity or nondeterministic functions~\cite[Sec.~3.2.2]{radar}. An index on \texttt{quantity} may change how a read query finds available products, but the answer must match the one on the raw copy (Figure~\ref{fig:radar}). Extending the relation to updates needs its own validity argument, because removing a UNIQUE constraint can change whether an INSERT succeeds. The paper reports three false positives, so a mismatch still needs triage.
 
-\begin{figure}[t]
+\begin{figure}[!tb]
 \centering
-\includegraphics[width=\linewidth]{fig_radar.pdf}
+\includegraphics[width=\linewidth]{fig_radar}
 \caption{Radar on the table Product(id, quantity, reserved). The same rows are stored twice: once with an index on \texttt{quantity} and once without optional metadata (the raw copy). The same deterministic read query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated.}
 \label{fig:radar}
 \end{figure}
@@ -126,9 +116,9 @@ In Product, one row has availability 5 and the other 0, so the predicate on \mbo
 
 The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck} (Figure~\ref{fig:ddl}). The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
-\begin{figure}[t]
+\begin{figure}[!tb]
 \centering
-\includegraphics[width=\linewidth]{fig_ddl.pdf}
+\includegraphics[width=\linewidth]{fig_ddl}
 \caption{DDLCheck on a table such as Product(id, quantity, reserved) that evolved through schema changes. The left database is built by a history of CREATE, ALTER and DROP statements. The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved table fails or behaves differently while the direct one succeeds, as in MariaDB MDEV\#35122 where a dropped BLOB column persists as a hidden column, the construction history is the likely cause.}
 \label{fig:ddl}
 \end{figure}
@@ -138,22 +128,21 @@ The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB c
 
 The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviours such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Its reference construction is relatively simple, but each mismatch needs semantic qualification against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
 
-\begin{figure}[t]
+\begin{figure}[!tb]
 \centering
-\includegraphics[width=\linewidth]{fig_write.pdf}
+\includegraphics[width=\linewidth]{fig_write}
 \caption{WriteCheck on the table Product(id, quantity, reserved). Two overlapping transactions update product quantities. The tool infers a serial order from the order in which they actually complete (First Commit/Rollback First Scheduled) and replays them serially from the same initial state. If the concurrent final table differs from the serial final table, the run is a candidate defect, pending the checks in Section~2.}
 \label{fig:write}
 \end{figure}
 
 \subsection{Comparison and earlier methods}
-\begin{table}[t]
-\centering
-\small
+\begin{table}[!tb]
+\centering\small
 \caption{Qualitative comparison of the four oracles, grouped by what changes between the two executions. Conditions are summaries, not full implementation specifications.}
 \label{tab:compare}
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule
-Method & Changed element & Observation & Validity condition & Main limitation \\
+\textbf{Method} & \textbf{Changed element} & \textbf{Observation} & \textbf{Validity condition} & \textbf{Main limitation} \\
 \midrule
 CODDTest~\cite{coddtest} & Expression or subquery representation & Original versus folded query result & Stable state; faithful replacement & Same-DBMS reference; no history or concurrency \\
 Radar~\cite{radar} & Optional metadata & Read-query result & Data preserved; query independent of removed metadata & Read-only; shared bugs hidden \\
