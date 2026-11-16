@@ -1,0 +1,152 @@
+{
+ "ours_time": {
+  "best": "exp(x0*0.24658604)*0.11552955 + 0.9194042",
+  "pareto": [
+   {
+    "complexity": 1,
+    "loss": 2.1830273,
+    "equation": "2.389695"
+   },
+   {
+    "complexity": 2,
+    "loss": 1.3916446,
+    "equation": "log(x0)"
+   },
+   {
+    "complexity": 3,
+    "loss": 0.38494796,
+    "equation": "x0 / 3.3643022"
+   },
+   {
+    "complexity": 4,
+    "loss": 0.20804107,
+    "equation": "exp(x0 * 0.10544447)"
+   },
+   {
+    "complexity": 6,
+    "loss": 0.012096501,
+    "equation": "exp((x0 * x0) * 0.0077192965)"
+   },
+   {
+    "complexity": 7,
+    "loss": 0.007616744,
+    "equation": "exp(exp(x0 * 0.07041752) - 1.1633105)"
+   },
+   {
+    "complexity": 8,
+    "loss": 0.001842341,
+    "equation": "(exp(x0 * 0.24658604) * 0.11552955) + 0.9194042"
+   }
+  ]
+ },
+ "pub_time": {
+  "best": "exp(x0*0.2677819)*0.18243988 + 0.78825396",
+  "pareto": [
+   {
+    "complexity": 1,
+    "loss": 10.449961,
+    "equation": "3.7984254"
+   },
+   {
+    "complexity": 3,
+    "loss": 2.4570084,
+    "equation": "x0 * 0.5135953"
+   },
+   {
+    "complexity": 4,
+    "loss": 0.66939056,
+    "equation": "exp(x0 * 0.15176451)"
+   },
+   {
+    "complexity": 5,
+    "loss": 0.24098489,
+    "equation": "24.341429 / (17.185556 - x0)"
+   },
+   {
+    "complexity": 6,
+    "loss": 0.044641756,
+    "equation": "2.1471121 / (2.9030406 - log(x0))"
+   },
+   {
+    "complexity": 7,
+    "loss": 0.010072924,
+    "equation": "exp(exp(x0 * 0.08245929)) * 0.35124555"
+   },
+   {
+    "complexity": 8,
+    "loss": 0.00044186693,
+    "equation": "(exp(x0 * 0.2677819) * 0.18243988) + 0.78825396"
+   }
+  ]
+ },
+ "ours_tests": {
+  "best": "x0*(-0.061123956) + exp(0.056205817/x0)",
+  "pareto": [
+   {
+    "complexity": 1,
+    "loss": 0.085515305,
+    "equation": "0.5246914"
+   },
+   {
+    "complexity": 4,
+    "loss": 0.0070270323,
+    "equation": "exp(x0 * -0.09578806)"
+   },
+   {
+    "complexity": 5,
+    "loss": 0.00046822405,
+    "equation": "(x0 * -0.06363844) + 1.0337924"
+   },
+   {
+    "complexity": 7,
+    "loss": 0.0004682034,
+    "equation": "(x0 + 1.0337927) + (x0 * -1.0636384)"
+   },
+   {
+    "complexity": 8,
+    "loss": 0.0002898187,
+    "equation": "(x0 * -0.061123956) + exp(0.056205817 / x0)"
+   },
+   {
+    "complexity": 9,
+    "loss": 0.00028127583,
+    "equation": "(x0 * -0.060166825) + ((0.07135087 / x0) + 0.98798776)"
+   }
+  ]
+ },
+ "pub_tests": {
+  "best": "exp(x0/(x0 - 1*19.67666)) - 1*(-0.046736628)",
+  "pareto": [
+   {
+    "complexity": 1,
+    "loss": 0.09230505,
+    "equation": "0.5424239"
+   },
+   {
+    "complexity": 4,
+    "loss": 0.010329953,
+    "equation": "exp(x0 / -10.9494705)"
+   },
+   {
+    "complexity": 5,
+    "loss": 0.00027151388,
+    "equation": "(x0 * -0.06620089) + 1.0719988"
+   },
+   {
+    "complexity": 7,
+    "loss": 0.00027150087,
+    "equation": "((x0 + 1.1479982) * 0.9337998) - x0"
+   },
+   {
+    "complexity": 8,
+    "loss": 7.488379e-05,
+    "equation": "exp(x0 / (x0 - 19.67666)) - -0.046736628"
+   },
+   {
+    "complexity": 9,
+    "loss": 5.1676052e-05,
+    "equation": "exp((-0.29116648 / exp(x0 * -0.1464516)) + 0.32835972)"
+   }
+  ]
+ }
+}

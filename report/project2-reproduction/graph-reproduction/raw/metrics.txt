@@ -1,8 +1,0 @@
-depth=1 METRICS attempts=200078 completed=75 queries=200226 query_nanos=22141020240 mismatches=7
-depth=3 METRICS attempts=200200 completed=90 queries=160993 query_nanos=19615307869 mismatches=9
-depth=5 METRICS attempts=300453 completed=95 queries=180251 query_nanos=23457811571 mismatches=2
-depth=7 METRICS attempts=200267 completed=37 queries=96445 query_nanos=13456565138 mismatches=7
-depth=9 METRICS attempts=1487 completed=124 queries=1527 query_nanos=1000264510 mismatches=7
-depth=11 METRICS attempts=201554 completed=121 queries=83576 query_nanos=11226994418 mismatches=3
-depth=13 METRICS attempts=530 completed=44 queries=488 query_nanos=308944395 mismatches=7
-depth=15 METRICS attempts=100474 completed=42 queries=40742 query_nanos=5571494842 mismatches=7

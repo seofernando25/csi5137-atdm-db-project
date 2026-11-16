@@ -16,33 +16,37 @@ Project 2 asks for one paper from Project 1 and at least one reproduced graph. O
 | WriteCheck | #104833 | final state `[10, 1, 10, 20, 10, 20]` vs oracle `[10, 20, 10, 20, 10, 20]` | reproduced with **Troc**, not WriteCheck's own tool |
 | Radar | #110125 | indexed copy returns 1 row, raw copy returns 0 | reproduced |
 
-**Extent of success: partial for the graph, full for the bug cases.** The Figure 2 sweep reproduces the published *shape* with a heavily reduced budget (40 s per depth instead of 24 h). The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/`; we did not measure run-to-run stability). We did not rerun any paper's full fuzzing campaign, and we did not attempt Figure 3. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §7.
+**Extent of success: partial for the graph, full for the bug cases.** The Figure 2 sweep reproduces the published *shape* with a heavily reduced budget (40 s per depth instead of 24 h, three seeds). The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/`; we did not measure run-to-run stability). We did not rerun any paper's full fuzzing campaign, and we did not attempt Figure 3. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §7.
 
 ## 2 Graph reproduction: CODDTest Figure 2
 
 **Target.** Figure 2 of Zhang and Rigger (2025): expression-only CODDTest, no subqueries, `MaxDepth` from 1 to 15, average query execution time and completed tests. The paper ran SQLite 3.42.0.0 with 10 threads for 24 hours per depth. It reports that time per query rises 9.91 times and completed tests fall 89.4% from depth 1 to 15.
 
-**What we ran.** The CODDTest SQLancer fork behind [sqlancer PR 1054](https://github.com/sqlancer/sqlancer/pull/1054) (commit `3045badb`), SQLite 3.42.0.0, 10 threads, `MaxDepth` in {1, 3, …, 15}, **40 seconds per depth**, one seed, one run per depth. Full commands, patches and raw output are in [graph-reproduction/](graph-reproduction/README.md).
+**What we ran.** The CODDTest SQLancer fork behind [sqlancer PR 1054](https://github.com/sqlancer/sqlancer/pull/1054) (commit `3045badb`), SQLite 3.42.0.0, 10 threads, `MaxDepth` in {1, 3, …, 15}, **40 seconds per depth**, three seeds. Commands, patches and raw output are in [graph-reproduction/](graph-reproduction/README.md).
 
-**Changes to the upstream code (all in `metrics.patch`).**
-- The tool does not report completed tests or time per query for this oracle, so we added counters.
-- On SQLite the oracle completed 0 tests: the CASE-mapping visitor printed typed debug text such as `(INT) 1`, which SQLite rejects. Calling `visit(constant)` instead fixed it (214,462 tests in a 10 s check afterwards).
-- We pinned `sqlite-jdbc` to 3.42.0.0 and disabled `failOnWarning` so the build passes.
+**Does the setup match the paper's?** Yes, except for the budget. The clone defaulted to sqlite-jdbc 3.47.2.0; we pinned 3.42.0.0, and `SELECT sqlite_version()` on the run's classpath returns 3.42.0. The paper's exact SQLancer snapshot is unknown. Two other changes do not alter behaviour in intent: `failOnWarning` set to false so the build passes, and counters for completed tests and query time (the tool does not report them for this oracle). One change is a bug fix: on SQLite the CASE-mapping visitor printed typed debug text such as `(INT) 1`, SQLite rejected it, and 0 tests completed. Calling `visit(constant)` fixed it. All changes are in `metrics.patch`.
 
 **Result.**
 
 ![Reproduced vs published Figure 2](graph-reproduction/fig2_reproduction.png)
 
-| Depth 1 → 15 | Reproduced | Published |
+| Depth 1 → 15 | Reproduced (mean of 3 seeds; range) | Published |
 |---|---|---|
-| Completed tests | −88.9% (1,088,539 → 120,348) | −89.4% |
-| Time per query | ×5.78 (98.6 → 569.4 µs) | ×9.91 (read-off curve about ×10.9) |
+| Completed tests | −88.6% (−88.3 to −88.9) | −89.4% |
+| Time per query | ×5.58 (×5.48 to ×5.78) | ×9.91 (read-off curve about ×10.9) |
 
-Both curves have the published shape: tests fall monotonically and time per query rises monotonically. The test-count decline is almost the same as published. The rise in time per query is weaker. Likely reasons, none of which we tested: different hardware, a 40 s budget, and our measure (wall time of the oracle's own queries, including result fetching, summed over threads). Absolute numbers are not comparable with the paper's 24-hour counts.
+Both curves have the published shape. The decline in tests is within about one point of the paper. The rise in time per query is about 55% of the published factor. Likely causes, none tested: hardware, the 40 s budget, and our measure (wall time of the oracle's own queries, including result fetching, summed over threads). Absolute numbers are not comparable with the paper's 24-hour counts.
 
-**Supplementary run.** An earlier pass on MySQL 8.0.32 (1 thread, 35 s per depth) was noisy and does not show the trend (completed tests −44%, non-monotonic; two outlier depths we did not investigate). It is the grey dashed series in the plot and is not part of the claim.
+**Scaling laws.** We fit five forms (linear, power, exponential, exponential plus constant, quadratic) to each curve relative to depth 1, and ran PySR on the same eight points (`fits.md`, `pysr_log.txt`, `fig_scaling.png`).
 
-**Verdict.** Partial reproduction: the qualitative claim (deeper expressions cost more time per query and complete fewer tests under a fixed budget) holds in our run, and the magnitude of the test decline matches. Run-to-run variance is unmeasured, so this is a trend check, not a statistical result.
+| Curve | Best form | Ours | Published |
+|---|---|---|---|
+| Time per query | constant + exponential, rate per depth level | 0.241 (PySR 0.247) | 0.263 (PySR 0.268) |
+| Completed tests | near-linear, slope per depth level | −0.058 (PySR −0.064) | −0.062 (PySR −0.066) |
+
+The growth rates agree within 10%; ours has a smaller exponential part, which is the missing factor in the rise. For the test count the data cannot separate linear, quadratic and exponential-plus-constant (within about 6 AIC). With eight points per curve, and published values read off a figure, this supports the *shape* of the dependence and is not a measured scaling law.
+
+**Verdict.** Partial reproduction. The qualitative claim holds in our run (deeper expressions cost more time per query and complete fewer tests under a fixed budget), and the test decline matches in magnitude. The time-per-query magnitude does not. We did not attempt Figure 3 or count oracle mismatches on SQLite.
 
 ## 3 Common method
 
@@ -151,7 +155,7 @@ This section uses only evidence in the repository (`git log`, captured results).
 
 ## 7 Limitations and open gap
 
-- Figure 2 was reproduced with 40 s per depth, one seed and one run per depth. Variance is unmeasured. Figure 3 (unique query plans) was not attempted.
+- Figure 2 was reproduced with 40 s per depth and three seeds; seed spread is small, but a 24-hour run was not attempted. Figure 3 (unique query plans) was not attempted.
 - The SQLite fix and counters change the upstream tool; the PR snapshot may differ from the code the paper used.
 - WriteCheck is replayed with Troc, not WriteCheck's own tool.
 - Results come from one pinned image (`mysql:8.0.32`); we did not vary versions or platforms.

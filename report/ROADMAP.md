@@ -8,7 +8,7 @@ Presentation slot: **Wed 9 Dec 2026, 20:25–20:50** (25 min), per the course sc
 
 | # | Deliverable | Folder | Status |
 |---|---|---|---|
-| 1 | Report of Project 1 (literature review, 10–20 pp.) | [project1-logic-bugs-report/](project1-logic-bugs-report/) | Markdown version complete; figures 1–5 redrawn |
+| 1 | Report of Project 1 (literature review, 10–20 pp.) | [project1-latex/](project1-latex/) (LaTeX, 16 pp.), [project1-logic-bugs-report/](project1-logic-bugs-report/) (Markdown) | LaTeX rewrite done; guide gaps fixed; five explainer diagrams |
 | 2 | Project presentation (25 min) | [project-presentation/](project-presentation/) | 3-paper deck existed; Radar section added |
 | 3 | Report of Project 2 (reproduction) | [project2-reproduction/](project2-reproduction/) | Fig. 2 reproduced (SQLite 3.42.0.0, reduced budget); bug replays done |
 

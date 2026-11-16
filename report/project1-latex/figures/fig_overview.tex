@@ -1,0 +1,80 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{newtxtext}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,shapes.geometric,calc}
+
+\definecolor{garnet}{HTML}{8F001A}
+\definecolor{blue}{HTML}{2B6CB0}
+\definecolor{orange}{HTML}{D9822B}
+\definecolor{green}{HTML}{2F855A}
+\definecolor{lgrey}{HTML}{F2F2F2}
+\definecolor{mgrey}{HTML}{D9D9D9}
+\definecolor{ink}{HTML}{2D2D2C}
+\definecolor{paleblue}{HTML}{E4EEF8}
+\definecolor{paleorange}{HTML}{FCEEDF}
+\definecolor{palegreen}{HTML}{E5F3EA}
+
+\tikzset{
+  panel/.style={rounded corners=4pt, draw=mgrey, line width=0.4pt},
+  row/.style={rounded corners=2pt, draw=mgrey, dashed, line width=0.4pt, fill=white,
+    minimum width=3.5cm, minimum height=0.66cm, text width=3.3cm, inner xsep=0.08cm,
+    inner ysep=0.03cm, align=left, font=\fontsize{7.5}{9}\selectfont},
+  capt/.style={font=\itshape\fontsize{7.5}{9}\selectfont, align=center, text width=3.5cm},
+}
+
+% #1 x offset, #2 panel fill, #3 title, #4 subtitle, #5 changed, #6 kept,
+% #7 compared, #8 caption, #9 caption colour
+\newcommand{\Panel}[9]{%
+  \begin{scope}[shift={(#1,2.4)}]
+    \node[panel, fill=#2, minimum width=3.85cm, minimum height=4.5cm,
+      anchor=south west, inner sep=0pt] at (0,0) {};
+    \node[anchor=north west, font=\bfseries\fontsize{9}{11}\selectfont] at (0.15,4.38) {#3};
+    \node[anchor=north west, font=\fontsize{7.5}{9}\selectfont, text=ink!70] at (0.15,4.08) {#4};
+    \node[row] at (1.925,3.05) {\textbf{Changed:} #5};
+    \node[row] at (1.925,2.10) {\textbf{Kept:} #6};
+    \node[row] at (1.925,1.15) {\textbf{Compared:} #7};
+    \node[capt, text=#9] at (1.925,0.45) {#8};
+  \end{scope}
+}
+
+\begin{document}
+\begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
+  \Panel{0}{lgrey}{CODDTest}{MySQL \#111241 \,$\cdot$\, expression}
+    {expression replaced by its evaluated value}
+    {query meaning and database state}
+    {result rows of both query forms}
+    {constant: row 1; subquery: empty}{garnet}
+
+  \Panel{4.15}{paleblue}{DDLCheck}{MySQL \#114904 \,$\cdot$\, schema history}
+    {schema reached by evolution (t0 renamed to t2)}
+    {final visible schema and table data}
+    {INSERT into the child table}
+    {evolved: error cites t0; direct: accepted}{garnet}
+
+  \Panel{8.3}{paleorange}{WriteCheck}{MySQL \#104833 \,$\cdot$\, transactions}
+    {two transactions run concurrently}
+    {same transactions in inferred serial order}
+    {final table state}
+    {observed state $\neq$ oracle state}{garnet}
+
+  \Panel{12.45}{palegreen}{Radar}{MySQL \#110125 \,$\cdot$\, metadata}
+    {index i0 (c0 DESC) removed in raw copy}
+    {same data and identical query text}
+    {query rows, indexed vs raw copy}
+    {raw empty is correct; indexed row is bug}{garnet}
+
+  % converging arrows
+  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (1.925,2.4) -- (5.35,1.5);
+  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (6.075,2.4) -- (7.22,1.5);
+  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (10.225,2.4) -- (9.08,1.5);
+  \draw[-{Stealth[length=2.2mm]}, orange, line width=1.2pt] (14.375,2.4) -- (10.95,1.5);
+
+  % shared oracle box
+  \node[rounded corners=4pt, draw=garnet, line width=0.8pt, fill=white,
+    minimum width=16.3cm, minimum height=1.5cm, inner sep=0pt] at (8.15,0.75) {};
+  \draw[ink, line width=0.8pt] (1.1,0.85) circle (0.22);
+  \draw[ink, line width=1.2pt] (1.27,0.68) -- (1.5,0.45);
+  \node[font=\itshape\fontsize{8.5}{10}\selectfont] at (8.15,1.12) {different execution + same expected semantics};
+  \node[font=\bfseries\fontsize{8.5}{10}\selectfont] at (8.15,0.5)
+    {compare observations: \textcolor{green}{equal $\rightarrow$ fine}, \textcolor{garnet}{differ $\rightarrow$ candidate bug}};
+\end{tikzpicture}
+\end{document}
