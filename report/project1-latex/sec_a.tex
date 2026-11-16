@@ -93,12 +93,12 @@ We group the papers by how each builds its reference execution. The first group 
 \subsection{Query consistency through expression and metadata transformation}
 \paragraph{CODDTest.} The method applies constant folding and propagation (replacing an expression by its value) to testing~\cite[Sec.~3]{coddtest}. It evaluates a generated expression through an auxiliary query and substitutes the result into the larger query. An expression independent of outer columns becomes a constant. A row-dependent one becomes a SQL CASE expression mapping outer-column values to results, since one scalar would invalidate the test. The tool extends SQLancer, a DBMS testing framework, and studies five DBMSs. The validity condition is that the replacement was computed on the same unchanged state.
 
-In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by a CASE that yields 5 for the first row and 0 for the second (Figure~\ref{fig:codd}). The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behaviour.
+In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by its value (a constant in Figure~\ref{fig:codd}) or, because availability differs between the two rows, by a CASE that yields 5 for the first row and 0 for the second. The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behaviour.
 
 \begin{figure}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_codd}
-\caption{CODDTest on the table Product(id, quantity, reserved). An auxiliary query first evaluates \mbox{$\mathrm{quantity}-\mathrm{reserved}$} on the stored rows (availability 5 and 0). The result is substituted into the original query as a constant or a CASE expression. The original and the folded query should select the same products. A difference is a candidate logic bug to be validated.}
+\caption{CODDTest on a Product table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated, as in our MySQL \#111241 replay.}
 \label{fig:codd}
 \end{figure}
 
@@ -107,7 +107,7 @@ In Product, one row has availability 5 and the other 0, so the predicate on \mbo
 \begin{figure}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_radar}
-\caption{Radar on the table Product(id, quantity, reserved). The same rows are stored twice: once with an index on \texttt{quantity} and once without optional metadata (the raw copy). The same deterministic read query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated.}
+\caption{Radar. The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated. In our MySQL \#110125 replay the indexed copy returns one row and the raw copy none; the raw result is the correct one.}
 \label{fig:radar}
 \end{figure}
 
@@ -119,7 +119,7 @@ The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB c
 \begin{figure}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_ddl}
-\caption{DDLCheck on a table such as Product(id, quantity, reserved) that evolved through schema changes. The left database is built by a history of CREATE, ALTER and DROP statements. The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved table fails or behaves differently while the direct one succeeds, as in MariaDB MDEV\#35122 where a dropped BLOB column persists as a hidden column, the construction history is the likely cause.}
+\caption{DDLCheck. The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause. In our MySQL \#114904 replay the evolved schema shows a reference to \texttt{t2}, yet the insert fails citing the stale \texttt{t0}.}
 \label{fig:ddl}
 \end{figure}
 
@@ -131,7 +131,7 @@ The validity condition is that FCRFS fits the DBMS's conflict handling. It is no
 \begin{figure}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
-\caption{WriteCheck on the table Product(id, quantity, reserved). Two overlapping transactions update product quantities. The tool infers a serial order from the order in which they actually complete (First Commit/Rollback First Scheduled) and replays them serially from the same initial state. If the concurrent final table differs from the serial final table, the run is a candidate defect, pending the checks in Section~2.}
+\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. In our Troc-based replay of MySQL \#104833 the observed state is $[10,1,10,20,10,20]$ and the reference state is $[10,20,10,20,10,20]$.}
 \label{fig:write}
 \end{figure}
 
