@@ -265,7 +265,7 @@ for i,d in enumerate(SLIDES,1):
   for j,n in enumerate([2,3,4]):
    y=3.0+j*.79
    for k in range(n):rect(s,7.45+k*1.14,y,.83,.37,'g' if k==n-1 else 'rule')
-  text(s,'same end state',1.03,5.72,4.7,.4,20,'gray');text(s,'different end states',7.44,5.72,4.75,.4,20,'gray')
+  text(s,'same end state',1.03,5.6,4.7,.4,20,'gray');text(s,'different end states',7.44,5.6,4.75,.4,20,'gray')
   band(s,'Vary the histories—not just their length.')
  elif i in [17,18]:s=base(i,title,sec,src);fk(s,i==18)
  elif i==19:

@@ -107,12 +107,12 @@ On SQLite 3.30.0, a separate 24-hour comparison counts unique bugs per oracle (T
 
 DDLCheck submits 34 bugs, of which 29 are confirmed as new: 21 schema-related logic bugs and eight crashes \cite{ddlcheck}. Seven of the 21 logic bugs did not change query results (four altered stored state, three the schema), so a SELECT-only oracle would not see them directly.
 
-Figure~\ref{fig:ddl} shows which statement reveals each bug. The aggregate bar holds 23 SELECT cases and six revealed by CREATE TABLE, ALTER TABLE, INSERT, or REPLACE. SELECT dominating is consistent with schema histories creating states that later reads expose. The six other cases show that a query-only comparison cannot cover the scope. The counts name the revealing statement, not the faulty component.
+Figure~\ref{fig:ddlstatements} shows which statement reveals each bug. The aggregate bar holds 23 SELECT cases and six revealed by CREATE TABLE, ALTER TABLE, INSERT, or REPLACE. SELECT dominating is consistent with schema histories creating states that later reads expose. The six other cases show that a query-only comparison cannot cover the scope. The counts name the revealing statement, not the faulty component.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.58\linewidth]{fig4.png}
 \caption{Bug-revealing statement types per DBMS; the last row aggregates all 29 confirmed bugs, crashes included. Re-plot of \cite[Fig.~6]{ddlcheck} by the authors from values read off the published figure; segment values are approximate.}
-\label{fig:ddl}
+\label{fig:ddlstatements}
 \end{figure}
 
 \begin{table}[!htb]
@@ -138,12 +138,12 @@ Table~\ref{tab:ddl} compares the diversity filter variants. The original strateg
 
 Radar reduces 1,663 generated reports to 42 submissions. Developers confirm 38 new bugs, 30 metadata-related and eight other, with one duplicate and three false positives \cite{radar}. The 42 is neither the confirmed count nor the count of target defects.
 
-Figure~\ref{fig:radar} shows the TiDB ablation. The metadata-guided curve climbs earlier and ends at 19 unique bugs against 12 for the unguided variant after 12 hours. The gap opens early and persists. It does not show the same gain for another generator or a patched DBMS.
+Figure~\ref{fig:radarablation} shows the TiDB ablation. The metadata-guided curve climbs earlier and ends at 19 unique bugs against 12 for the unguided variant after 12 hours. The gap opens early and persists. It does not show the same gain for another generator or a patched DBMS.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.36\linewidth]{fig5.png}
 \caption{Unique bugs found over time on TiDB, with and without metadata-oriented optimization. Re-plot of \cite[Fig.~7]{radar} by the authors from values read off the published figure; curve values are approximate.}
-\label{fig:radar}
+\label{fig:radarablation}
 \end{figure}
 
 Table~\ref{tab:cap} gives the capability and end-to-end comparisons. On supplied metadata bugs, no other oracle exposes more than 13 of 30. In the end-to-end run Radar finds twenty of the 21 bugs found by all tools together, fifteen exclusively. Capability on supplied cases and realised discovery therefore differ inside one study. Code coverage barely moves, so it understates the effect of guidance.

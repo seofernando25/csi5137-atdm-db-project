@@ -7,7 +7,7 @@ tags: [atdm, database-testing, papers]
 
 # CSI 5137 — ATDM Paper Notebook
 
-This vault decomposes the three class-project papers into small, linked study notes.
+This vault decomposes the four class-project papers (Radar is covered in the cross-paper map) into small, linked study notes.
 
 ## Start here
 

@@ -42,7 +42,7 @@ Most follow this pattern:
 
 Shared ideas live in Concepts/Shared instead of being redefined for each paper.
 
-All three papers now have their own concept maps and decomposed study paths.
+CODDTest, DDLCheck and WriteCheck have their own concept maps and decomposed study paths; Radar is covered in the cross-paper map.
 
 ## Reading modes
 
