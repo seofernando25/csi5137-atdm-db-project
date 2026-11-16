@@ -21,7 +21,7 @@ These notes are used by more than one paper in the project.
 
 ## Why this folder exists
 
-The three papers use different mechanisms, but they repeatedly return to the same ideas:
+The four papers use different mechanisms, but they repeatedly return to the same ideas:
 
 1. generate executions that should obey a known relation;
 2. run the DBMS;

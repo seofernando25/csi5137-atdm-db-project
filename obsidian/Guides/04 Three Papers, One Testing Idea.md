@@ -11,15 +11,16 @@ This is the synthesis guide for:
 
 - [[Guides/01 Understanding CODDTest|CODDTest]];
 - [[Guides/02 Understanding DDLCheck|DDLCheck]];
-- [[Guides/03 Understanding WriteCheck|WriteCheck]].
+- [[Guides/03 Understanding WriteCheck|WriteCheck]];
+- Radar (metadata removal; MySQL #110125: indexed_rows=1 vs raw_rows=0). No dedicated guide yet.
 
 The goal is not to repeat each paper.
 
-The goal is to understand why these three papers belong in one presentation.
+The goal is to understand why these four papers belong in one presentation.
 
 # 1. Start with the oracle problem
 
-All three papers test DBMS behavior that can fail silently.
+All four papers test DBMS behavior that can fail silently.
 
 A query can return the wrong rows.
 
@@ -284,7 +285,7 @@ The tester must:
 - track aborts and commits;
 - infer a valid serial ordering.
 
-The three papers therefore solve increasingly difficult oracle-construction problems while preserving the same high-level philosophy.
+The papers therefore solve increasingly difficult oracle-construction problems while preserving the same high-level philosophy.
 
 # 8. Every oracle has assumptions
 
@@ -333,7 +334,7 @@ The general lesson is:
 
 > An oracle can judge correctness only relative to a semantic contract.
 
-# 9. All three also need good test generation
+# 9. All four also need good test generation
 
 An oracle does not help if the tester never generates interesting inputs.
 

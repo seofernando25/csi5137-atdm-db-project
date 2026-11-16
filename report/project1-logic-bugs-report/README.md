@@ -4,3 +4,4 @@
 - [figures/](figures/) — Figures 1–5 redrawn with matplotlib (`make_figures.py`).
 
 Papers: CODDTest, DDLCheck, WriteCheck, Radar. The report claims no new experimental results.
+- [report.pdf](report.pdf) — rendered PDF of report.md (19 pages, Letter, 11pt Times-compatible serif, figures embedded; built from HTML with headless Chromium).

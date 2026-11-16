@@ -1,8 +1,8 @@
 # Cross-Paper Concept Map
 
-## One problem, three levels
+## One problem, four levels
 
-All three papers need a [[Shared/01 Test Oracle|test oracle]] for DBMS behavior that may look valid even when it is wrong.
+All four papers need a [[Shared/01 Test Oracle|test oracle]] for DBMS behavior that may look valid even when it is wrong.
 
 Their common strategy is to construct a second execution whose behavior is constrained by semantics.
 
@@ -70,6 +70,17 @@ Core concepts:
 - [[WriteCheck/22 Submitted Order vs Actual Schedule]]
 - [[WriteCheck/26 Final-State Comparison]]
 
+## Radar — metadata level
+
+    indexed database (CREATE INDEX i0 ON t0 (c0 DESC))
+    raw database (same data, no index)
+         ↓
+    identical data and query text
+         ↓
+    compare result rows
+
+Expected: raw_rows=0 (correct); indexed_rows=1 is the MySQL #110125 bug.
+
 ## Shared pattern
 
     construct two executions
@@ -90,6 +101,7 @@ See [[Shared/04 Equivalence-Based Testing]].
 | CODDTest | Folded query F |
 | DDLCheck | Directly synthesized database db_syn |
 | WriteCheck | FCRFS serial schedule H_ser |
+| Radar | Raw database without the index metadata |
 
 ## Progression through the DBMS
 
@@ -98,11 +110,13 @@ See [[Shared/04 Equivalence-Based Testing]].
        schema history
             ↓
     transaction behavior
+         ↓
+     index metadata
 
-That progression is the main narrative connecting the three papers in the presentation.
+That progression is the main narrative connecting the four papers in the presentation.
 
 ## Reproduction note
 
-Our three MySQL demonstrations all use MySQL 8.0.32.
+Our four MySQL demonstrations all use MySQL 8.0.32.
 
 For WriteCheck, the executable project replay uses Troc's testcase and MVCC oracle, so it should be presented as a **representative transaction-bug replay**, not as a direct rerun of WriteCheck.

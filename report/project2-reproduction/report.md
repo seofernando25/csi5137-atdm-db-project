@@ -3,11 +3,11 @@
 CSI 5137 A00 — Advanced Topics in Databases and Data Management
 Group 12: Fernando Berti Cruz Nogueira, Saatvik Paul, Haekwon Ahn
 
-Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Public URL: **TODO — add before submission**.
+Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Remote: <https://github.com/seofernando25/csi5137-atdm-db-project>. The deck's source notes list this repository as private, so grant the instructor access or make it public before submission.
 
 ## 1 Scope and honest summary
 
-Project 2 asks for one paper from Project 1 and at least one reproduced graph. We took a different, smaller route: for each of the four Project 1 papers we replayed **one minimized, already-reported bug** and asserted the bug-specific mismatch on **MySQL 8.0.32** (Docker image `mysql:8.0.32`, linux/amd64).
+Project 2 asks for one paper from Project 1 and at least one reproduced graph. Our declaration fixes the target: **CODDTest, Figure 2** (execution time per query and number of completed tests against `MaxDepth`). §2 reports that reproduction. Separately, as supplementary evidence about all four papers, we replayed **one minimized, already-reported bug** and asserted the bug-specific mismatch on **MySQL 8.0.32** (Docker image `mysql:8.0.32`, linux/amd64).
 
 | Paper | MySQL bug | Mismatch asserted by the runner | Outcome |
 |---|---|---|---|
@@ -16,9 +16,35 @@ Project 2 asks for one paper from Project 1 and at least one reproduced graph. W
 | WriteCheck | #104833 | final state `[10, 1, 10, 20, 10, 20]` vs oracle `[10, 20, 10, 20, 10, 20]` | reproduced with **Troc**, not WriteCheck's own tool |
 | Radar | #110125 | indexed copy returns 1 row, raw copy returns 0 | reproduced |
 
-**Extent of success: partial.** The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/`; we did not measure run-to-run stability). We did **not** reproduce any published experimental graph, and we did not rerun any paper's fuzzing campaign. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §6.
+**Extent of success: partial for the graph, full for the bug cases.** The Figure 2 sweep reproduces the published *shape* with a heavily reduced budget (40 s per depth instead of 24 h). The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/`; we did not measure run-to-run stability). We did not rerun any paper's full fuzzing campaign, and we did not attempt Figure 3. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §7.
 
-## 2 Common method
+## 2 Graph reproduction: CODDTest Figure 2
+
+**Target.** Figure 2 of Zhang and Rigger (2025): expression-only CODDTest, no subqueries, `MaxDepth` from 1 to 15, average query execution time and completed tests. The paper ran SQLite 3.42.0.0 with 10 threads for 24 hours per depth. It reports that time per query rises 9.91 times and completed tests fall 89.4% from depth 1 to 15.
+
+**What we ran.** The CODDTest SQLancer fork behind [sqlancer PR 1054](https://github.com/sqlancer/sqlancer/pull/1054) (commit `3045badb`), SQLite 3.42.0.0, 10 threads, `MaxDepth` in {1, 3, …, 15}, **40 seconds per depth**, one seed, one run per depth. Full commands, patches and raw output are in [graph-reproduction/](graph-reproduction/README.md).
+
+**Changes to the upstream code (all in `metrics.patch`).**
+- The tool does not report completed tests or time per query for this oracle, so we added counters.
+- On SQLite the oracle completed 0 tests: the CASE-mapping visitor printed typed debug text such as `(INT) 1`, which SQLite rejects. Calling `visit(constant)` instead fixed it (214,462 tests in a 10 s check afterwards).
+- We pinned `sqlite-jdbc` to 3.42.0.0 and disabled `failOnWarning` so the build passes.
+
+**Result.**
+
+![Reproduced vs published Figure 2](graph-reproduction/fig2_reproduction.png)
+
+| Depth 1 → 15 | Reproduced | Published |
+|---|---|---|
+| Completed tests | −88.9% (1,088,539 → 120,348) | −89.4% |
+| Time per query | ×5.78 (98.6 → 569.4 µs) | ×9.91 (read-off curve about ×10.9) |
+
+Both curves have the published shape: tests fall monotonically and time per query rises monotonically. The test-count decline is almost the same as published. The rise in time per query is weaker. Likely reasons, none of which we tested: different hardware, a 40 s budget, and our measure (wall time of the oracle's own queries, including result fetching, summed over threads). Absolute numbers are not comparable with the paper's 24-hour counts.
+
+**Supplementary run.** An earlier pass on MySQL 8.0.32 (1 thread, 35 s per depth) was noisy and does not show the trend (completed tests −44%, non-monotonic; two outlier depths we did not investigate). It is the grey dashed series in the plot and is not part of the claim.
+
+**Verdict.** Partial reproduction: the qualitative claim (deeper expressions cost more time per query and complete fewer tests under a fixed budget) holds in our run, and the magnitude of the test decline matches. Run-to-run variance is unmeasured, so this is a trend check, not a statistical result.
+
+## 3 Common method
 
 All four papers share one idea: two executions with the same expected semantics must agree, and a mismatch is a bug oracle.
 
@@ -38,11 +64,11 @@ PASS: 4/4 representative MySQL bugs reproduced on MySQL 8.0.32.
 
 Build completion alone is not accepted as success.
 
-## 3 The four reproductions
+## 4 The four bug-case reproductions
 
 Observed values below are copied from `artifacts/results/`.
 
-### 3.1 CODDTest — MySQL #111241
+### 4.1 CODDTest — MySQL #111241
 
 *Paper idea.* Evaluate an expression with an auxiliary query, substitute the value (constant folding/propagation), and compare the original and substituted queries.
 
@@ -59,7 +85,7 @@ PASS: MySQL #111241 reproduced.
 
 *Reading.* The value is 1 in both forms, so the queries are equivalent. MySQL returns a row for one and none for the other. The mismatch is the bug.
 
-### 3.2 DDLCheck — MySQL #114904
+### 4.2 DDLCheck — MySQL #114904
 
 *Paper idea.* Build the same final schema through different DDL histories and compare later behavior.
 
@@ -69,7 +95,7 @@ PASS: MySQL #111241 reproduced.
 
 *Reading.* The visible schema and the enforced constraint disagree after the rename. Query-only testing would not reach this state.
 
-### 3.3 WriteCheck — MySQL #104833 (Troc replay)
+### 4.3 WriteCheck — MySQL #104833 (Troc replay)
 
 *Paper idea.* Run restricted concurrent write transactions and compare the final state with a serial/oracle execution.
 
@@ -87,7 +113,7 @@ Error: Inconsistent final database state
 
 *Reading.* The second transaction's blocked update should apply to the first row once `a` becomes 10. MySQL leaves `b = 1` there.
 
-### 3.4 Radar — MySQL #110125
+### 4.4 Radar — MySQL #110125
 
 *Paper idea.* Keep the data, drop the metadata, and compare one query on both databases.
 
@@ -103,7 +129,7 @@ PASS: MySQL #110125 reproduced.
 
 *Reading.* The raw copy's empty result is correct; the indexed copy's single row is the bug. `DOUBLE ZEROFILL` is deprecated since 8.0.17, and the repository notes that all 8.0.x releases are affected.
 
-## 4 Reproduction journey
+## 5 Reproduction journey
 
 This section uses only evidence in the repository (`git log`, captured results). Anything not recorded in the repository is marked as such.
 
@@ -112,9 +138,10 @@ This section uses only evidence in the repository (`git log`, captured results).
 3. **Presentation and notes** were built on the three cases (commits `f58d555` onward).
 4. **Public source for #104833 (commit `5faf652`).** Because the MySQL tracker entry is restricted, the README and `papers/README.md` were changed to cite Troc's public testcase and to state that the replay is Troc-based.
 5. **Radar added (commit `2f6659e`).** A fourth runner and result were added for #110125, and `run_all.sh` now ends with the 4/4 line.
-6. **Author or upstream communication:** none is recorded in the repository. **TODO: add if any occurred.**
+6. **Author or upstream communication:** none. No emails, issues or comments to the paper authors or MySQL are recorded in the repository, and none were sent for this report.
+7. **Re-run for this report (2026-11-16).** `./scripts/setup.sh` rebuilt the pinned Troc and `./scripts/run_all.sh` ran all four runners. It ended with `PASS: 4/4 representative MySQL bugs reproduced on MySQL 8.0.32.` (exit 0). The WriteCheck run again printed `Error: Inconsistent final database state` with final states `[10, 1, 10, 20, 10, 20]` (MySQL) and `[10, 20, 10, 20, 10, 20]` (oracle).
 
-## 5 Lessons about the papers and about reporting
+## 6 Lessons about the papers and about reporting
 
 - **Minimized cases carry the lesson; papers rarely do.** Each bug needed only a few SQL statements, but the papers describe the *method*. We located the concrete cases through bug trackers and artifacts, not the papers.
 - **Restricted trackers weaken reproducibility.** #104833 was reachable only through Troc's public copy. The oracle in Troc is related to, but not the same as, WriteCheck's.
@@ -122,15 +149,16 @@ This section uses only evidence in the repository (`git log`, captured results).
 - **Version pinning matters.** #111421 failed on the pinned 8.0.32 image. Papers should state the exact version a bug was observed on.
 - **One case is not the campaign.** These cases show that each oracle can detect a known bug. They say nothing about detection rates or about MySQL relative to other DBMSs, and we make no such claim.
 
-## 6 Limitations and open gap
+## 7 Limitations and open gap
 
-- The course guide (*ATDM Guide for Project Report 2*) expects at least one **reproduced graph**. We reproduced bug-triggering cases only. A candidate graph for follow-up is the CODDTest MaxDepth sweep or Radar's TiDB ablation (unique bugs over 12 hours); both need the authors' generators and long runs.
+- Figure 2 was reproduced with 40 s per depth, one seed and one run per depth. Variance is unmeasured. Figure 3 (unique query plans) was not attempted.
+- The SQLite fix and counters change the upstream tool; the PR snapshot may differ from the code the paper used.
 - WriteCheck is replayed with Troc, not WriteCheck's own tool.
 - Results come from one pinned image (`mysql:8.0.32`); we did not vary versions or platforms.
-- The Docker runs were **not repeated when this report was written**. Observed values are the captured outputs in `artifacts/results/`. The copied `artifacts/` layout has not been run from that location; run from the repository root.
-- #111421 remains unreproduced and unexplained.
+- The captured outputs in `artifacts/results/` come from earlier runs; the 2026-11-16 re-run (§5, item 7) matched them. The copied `artifacts/` layout has not been run from that location; run from the repository root.
+- #111421 remains unreproduced and its cause is unexplained. The captured output is `ERROR 3813` on MySQL 8.0.32; we did not test other versions.
 
-## 7 Reproducing this work
+## 8 Reproducing this work
 
 From the repository root:
 
@@ -141,6 +169,6 @@ From the repository root:
 
 Requirements: Docker, Git. The container is `csi5137-atdm-mysql8032` on host port 3307 (`root`/`root`). See `artifacts/README.md` for the copied layout.
 
-## 8 Acknowledgment of LLM use
+## 9 Acknowledgment of LLM use
 
 Claude Code (Anthropic) assisted with the reproduction scripts, the study notes, and the drafting of this report. It was used to write and revise the shell runners, to summarize the papers, and to draft text from repository evidence. The authors ran the reproductions and checked the observed values against `artifacts/results/`. This report was drafted with LLM assistance and checked against those files; it has not been independently proofread by all authors.
