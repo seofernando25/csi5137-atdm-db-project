@@ -25,23 +25,23 @@ Use natural pauses and meaningful gestures rather than acting every instruction.
 
 ## Main-route checkpoints
 
-- End of Opening: **02:37** (model).
-- End of Coddtest: **08:04** (model).
-- End of Ddlcheck: **13:50** (model).
-- End of Writecheck: **20:02** (model).
-- End of Radar: **22:16** (model).
-- End of Synthesis: **24:47** (model).
+- End of Opening: **02:14** (model).
+- End of Coddtest: **07:03** (model).
+- End of Ddlcheck: **11:59** (model).
+- End of Writecheck: **17:34** (model).
+- End of Radar: **19:47** (model).
+- End of Synthesis: **22:11** (model).
 
-**Main-route total: 2,708 spoken words + 98s explicit silence + 35s transitions = 24:47 at 120 wpm.**
-**Remaining to 25:00: 00:13.** This is contingency, not a promise of exact delivery.
+**Main-route total: 2,396 spoken words + 98s explicit silence + 35s transitions = 22:11 at 120 wpm.**
+**Remaining to 25:00: 02:49.** This is contingency, not a promise of exact delivery.
 
 | Assumed speaking rate | Model duration |
 |---|---|
-| 110 wpm | 26:50 |
-| 115 wpm | 25:46 |
-| 120 wpm | 24:47 |
-| 125 wpm | 23:53 |
-| 130 wpm | 23:03 |
+| 110 wpm | 24:00 |
+| 115 wpm | 23:03 |
+| 120 wpm | 22:11 |
+| 125 wpm | 21:23 |
+| 130 wpm | 20:39 |
 
 If the 25 minutes must include a full question period, shorten the main route further. The current reserve is not a five-minute Q&A allocation.
 
@@ -72,7 +72,7 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 
 ### 02 · A plausible answer is not an answer key
 
-**00:37–01:16 · 69 spoken words · 3s silent hold**
+**00:37–01:08 · 54 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Wrong answers can look normal.
 
@@ -81,11 +81,11 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] SHOW the large number. LOOK at the audience while asking the question. Hold the silence; do not answer immediately.
 
-Imagine that a query returns forty two. A crash would be obvious. The automated tester needs a rule for deciding whether the result is correct. That rule is called a test oracle.
+Imagine that a query returns forty two. The automated tester needs a rule for deciding whether the result is correct. That rule is called a test oracle.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-Maintaining a second, fully independent implementation of every SQL feature is expensive. These papers instead look for consistency relations that can be checked using the database itself. That is both their attraction and a source of limitations.
+Maintaining a second, fully independent implementation of every SQL feature is expensive. These papers instead look for consistency relations that can be checked using the database itself.
 
 **[NEXT]** Advance once.
 
@@ -94,7 +94,7 @@ Sources: [C], [D], [W]. See the reference list below.
 
 ### 03 · Compare executions, not guesses
 
-**01:16–01:56 · 76 spoken words · 2s silent hold**
+**01:08–01:38 · 55 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A consistency oracle is not a proof of correctness.
 
@@ -103,11 +103,11 @@ Sources: [C], [D], [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Trace the upper path once, then the lower path with an open hand. Return your gaze to the room before explaining the comparison.
 
-Start with an execution and a result. Now construct a related execution, changing one aspect while preserving the semantics that matter. Run both and compare their observations. A disagreement is a candidate bug because the relation says those observations should match.
+Construct a related execution, changing one aspect while preserving the semantics that matter. Run both and compare their observations. A disagreement is a candidate bug because the relation says those observations should match.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-Agreement does not prove correctness: both executions might make the same mistake. And a disagreement can come from a bad equivalence assumption. We will return to them when transaction isolation makes the comparison more subtle.
+Agreement does not prove correctness: both executions might make the same mistake. And a disagreement can come from a bad equivalence assumption.
 
 **[NEXT]** Advance once.
 
@@ -116,7 +116,7 @@ Sources: [C], [D], [W]. See the reference list below.
 
 ### 04 · One question, four layers
 
-**01:56–02:37 · 75 spoken words · 2s silent hold**
+**01:38–02:14 · 66 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Expression → schema history → transaction schedule.
 
@@ -129,7 +129,7 @@ The four papers change different objects. CODDTest changes an expression using v
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-This is our organising question: what changes, what must stay equivalent, and what do we compare? The methods are related, but not interchangeable. Each reaches a different part of the database implementation.
+This is our organising question: what changes, what must stay equivalent, and what do we compare? The methods are related, but not interchangeable.
 
 **[NEXT]** Advance once.
 
@@ -138,7 +138,7 @@ Sources: [C], [D], [W]. See the reference list below.
 
 ### 05 · Evaluate. Substitute. Compare.
 
-**02:37–03:14 · 68 spoken words · 2s silent hold**
+**02:14–02:50 · 65 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A compiler transformation becomes a test oracle.
 
@@ -151,7 +151,7 @@ CODDTest, by Chi Zhang and Manuel Rigger, appeared in the twenty twenty five SIG
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-The method evaluates an expression through an auxiliary query, constructs a version using its value, and checks whether the original and transformed queries agree. Subqueries are especially useful here because they exercise behaviour that earlier predicate based oracles can miss.
+The method evaluates an expression through an auxiliary query, constructs a version using its value, and checks whether the original and transformed queries agree. Subqueries are especially useful here because earlier predicate based oracles can miss them.
 
 **[NEXT]** Advance once.
 
@@ -160,7 +160,7 @@ Sources: [C]. See the reference list below.
 
 ### 06 · 1 / Begin with the original query
 
-**03:14–03:56 · 75 spoken words · 3s silent hold**
+**02:50–03:26 · 65 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Toy example; the highlighted expression is the transformation target.
 
@@ -173,7 +173,7 @@ Here is an illustrative example, not a bug report. Table t contains ten, thirty,
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-This matters: the tester is not comparing arbitrary rewrites. It constructs a particular relation between an expression and the value obtained by evaluating it against the current database state.
+The tester is not comparing arbitrary rewrites. It relates an expression to its value in the current database state.
 
 **[NEXT]** Advance once.
 
@@ -182,7 +182,7 @@ Sources: [C]. See the reference list below.
 
 ### 07 · 2 / Ask the database for its value
 
-**03:56–04:38 · 79 spoken words · 2s silent hold**
+**03:26–04:02 · 64 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The auxiliary query supplies the substitution value.
 
@@ -191,11 +191,11 @@ Sources: [C]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Keep your position. POINT from s to twenty, then face the audience. Let the stable layout carry the transition.
 
-The auxiliary query evaluates the average. Ten and thirty average to twenty. In this example the subquery is independent of the current row in t, so a single value can represent it throughout the original query.
+The auxiliary query evaluates the average. Ten and thirty average to twenty. The subquery is independent of the current row in t, so a single value can represent it throughout the original query.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-Notice what we did not build: a separate SQL interpreter. We used the system under test to obtain the value. That makes the approach practical, although it means the comparison relies on executing the computation in sufficiently different contexts to expose inconsistent behaviour.
+Notice what we did not build: a separate SQL interpreter. We used the system under test to obtain the value. The comparison then relies on running the computation in different contexts.
 
 **[NEXT]** Advance once.
 
@@ -204,7 +204,7 @@ Sources: [C]. See the reference list below.
 
 ### 08 · 3 / Substitute and compare
 
-**04:38–05:17 · 70 spoken words · 3s silent hold**
+**04:02–04:32 · 52 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same state + valid substitution → equal result.
 
@@ -213,11 +213,11 @@ Sources: [C]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Open your palms toward the two result columns. Pause before saying that this example agrees. NEXT only after the final sentence.
 
-Now replace the subquery with twenty. Both versions should return thirty and sixty. CODDTest repeatedly generates such comparisons, varying expressions, subqueries, and the SQL contexts in which they occur.
+Now replace the subquery with twenty. Both versions should return thirty and sixty. CODDTest repeatedly generates such comparisons.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. With these conditions, a mismatch becomes a focused report: one expression has behaved inconsistently across the two executions.
+The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. Then a mismatch is a focused report: one expression behaved inconsistently.
 
 **[NEXT]** Advance once.
 
@@ -226,7 +226,7 @@ Sources: [C]. See the reference list below.
 
 ### 09 · A row-dependent value is not one constant
 
-**05:17–06:00 · 79 spoken words · 3s silent hold**
+**04:32–05:15 · 79 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Dependent expressions need a mapping, not a global constant.
 
@@ -248,7 +248,7 @@ Sources: [C]. See the reference list below.
 
 ### 10 · The real bug: the value is still 1
 
-**06:00–06:39 · 69 spoken words · 3s silent hold**
+**05:15–05:48 · 59 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The highlighted fragment is not a standalone bug trigger.
 
@@ -261,7 +261,7 @@ Our real example is MySQL bug one one one two four one. The table contains a sin
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-I am showing only the changing fragment here. The complete test also contains a surrounding regular expression, a like comparison, and a case expression; those remain unchanged. The simple membership fragment alone is not the reproducer.
+The complete test also contains a surrounding regular expression, a like comparison, and a case expression, all unchanged. The membership fragment alone is not the reproducer.
 
 **[NEXT]** Advance once.
 
@@ -270,7 +270,7 @@ Sources: [C], [R]. See the reference list below.
 
 ### 11 · Equivalent value. Different answer.
 
-**06:39–07:23 · 78 spoken words · 4s silent hold**
+**05:48–06:26 · 65 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Our replay demonstrates one concrete oracle violation.
 
@@ -279,11 +279,11 @@ Sources: [C], [R]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] SHOW the empty result first, then the row. Hold four seconds for visual comparison. LOOK back at the audience before interpreting it.
 
-On our MySQL eight point zero point thirty two instance, the original subquery form returns no row. The constant form returns the row containing one. That is the discrepancy captured by our script.
+On our MySQL eight point zero point thirty two instance, the original subquery form returns no row. The constant form returns the row containing one.
 
 **[PAUSE 4s]** Let the audience read or compare the visual.
 
-This is a strong illustration of the paper’s oracle: changing the evaluation context reveals inconsistent query behaviour. It is still a reproduction of a selected historical test case, not a rerun of the authors’ entire experiment or a claim that we independently discovered the bug.
+This illustrates the paper’s oracle: changing the evaluation context reveals inconsistent behaviour. It is still a reproduction of a selected historical test case, not a rerun of the authors’ entire experiment or a claim that we independently discovered the bug.
 
 **[NEXT]** Advance once.
 
@@ -292,7 +292,7 @@ Sources: [R]. See the reference list below.
 
 ### 12 · The paper tests more than one example
 
-**07:23–08:04 · 75 spoken words · 3s silent hold**
+**06:26–07:03 · 66 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Evidence for complementary coverage, not universal superiority.
 
@@ -305,7 +305,7 @@ The authors evaluated five database systems and reported forty five previously u
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-That supports the claim of complementary coverage, not universal superiority. The key contribution is broader oracle coverage, especially around subqueries and expression contexts, rather than simply generating a larger number of random queries.
+That supports the claim of complementary coverage, not universal superiority. The contribution is broader oracle coverage, especially around subqueries, not simply more random queries.
 
 **[NEXT]** Advance once.
 
@@ -314,7 +314,7 @@ Sources: [C]. See the reference list below.
 
 ### 13 · Can history change the answer?
 
-**08:04–08:42 · 68 spoken words · 2s silent hold**
+**07:03–07:35 · 58 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The schema history becomes the transformation target.
 
@@ -327,7 +327,7 @@ DDLCheck moves outward, from an expression to an entire schema. It targets schem
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-Its question is simple: if two databases reach an equivalent schema, should later operations behave differently merely because the construction histories were different? A rename, an alteration, or a dropped object can leave internal state that the visible schema does not reveal.
+Its question: should later operations differ merely because equivalent schemas were built differently? A rename, an alteration, or a dropped object can leave internal state that the visible schema does not reveal.
 
 **[NEXT]** Advance once.
 
@@ -336,7 +336,7 @@ Sources: [D]. See the reference list below.
 
 ### 14 · Two histories. One intended schema.
 
-**08:42–09:22 · 76 spoken words · 2s silent hold**
+**07:35–08:10 · 65 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Equivalence includes constraints and relevant state.
 
@@ -349,7 +349,7 @@ The upper path builds a schema through a longer sequence of creation and alterat
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-Equivalent does not mean that the tables merely have the same column names. Constraints, indexes, types, and the relevant initial state must agree. That makes schema reconstruction part of the oracle itself. A reconstruction mistake could otherwise be reported as a database bug.
+Equivalent does not mean that the tables merely have the same column names. Constraints, indexes, types, and the relevant initial state must agree. That makes schema reconstruction part of the oracle itself.
 
 **[NEXT]** Advance once.
 
@@ -358,7 +358,7 @@ Sources: [D]. See the reference list below.
 
 ### 15 · Reconstruct the state, then test it
 
-**09:22–10:10 · 88 spoken words · 3s silent hold**
+**08:10–08:50 · 70 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Generation → introspection → synthesis → comparison.
 
@@ -371,7 +371,7 @@ The tool first generates a DDL sequence and executes it. It extracts information
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The two construction paths are deliberately different. That lets the same workload probe whether the original sequence left inconsistent internal metadata. Unlike a query only oracle, the tested object includes schema evolution and its interaction with later operations, not just the final select statement.
+That lets the same workload probe whether the original sequence left inconsistent internal metadata. The tested object includes schema evolution, not just the final select statement.
 
 **[NEXT]** Advance once.
 
@@ -380,7 +380,7 @@ Sources: [D]. See the reference list below.
 
 ### 16 · Spend tests on different histories
 
-**10:10–10:52 · 76 spoken words · 2s silent hold**
+**08:50–09:24 · 62 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A useful oracle still needs useful test inputs.
 
@@ -389,11 +389,11 @@ Sources: [D]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Contrast repeated branches on the left with distinct branches on the right. No extra body movement; the visual transition is enough.
 
-The paper also addresses a practical problem: many generated DDL sequences are redundant. Running lots of nearly identical construction histories can waste testing effort. DDLCheck therefore includes sequence optimisation intended to improve the diversity and usefulness of the generated tests.
+The paper also addresses a practical problem: many generated DDL sequences are redundant. DDLCheck therefore includes sequence optimisation intended to improve the diversity and usefulness of the generated tests.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-The authors evaluate this component with an ablation, rather than treating the generator as an invisible implementation detail. The oracle supplies the comparison, but the generator determines which interesting internal states the comparison will actually reach.
+The authors evaluate this component with an ablation, rather than treating the generator as an invisible implementation detail. The oracle supplies the comparison, but the generator determines which internal states the comparison reaches.
 
 **[NEXT]** Advance once.
 
@@ -402,7 +402,7 @@ Sources: [D]. See the reference list below.
 
 ### 17 · Before the rename, the relationship is simple
 
-**10:52–11:38 · 84 spoken words · 3s silent hold**
+**09:24–10:10 · 84 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The parent changes name, not its intended role.
 
@@ -424,7 +424,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 18 · The visible schema looks correct
 
-**11:38–12:20 · 76 spoken words · 3s silent hold**
+**10:10–10:44 · 62 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Visible metadata is not the whole internal state.
 
@@ -437,7 +437,7 @@ After the rename, the visible schema says that the child references t two. We in
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-But visible metadata is not necessarily the full internal state. DDLCheck’s second construction path gives us a control: create this final schema directly and perform the same inserts. The next comparison separates what the schema says from how the database actually behaves.
+But visible metadata is not necessarily the full internal state. DDLCheck’s second construction path gives us a control: create this final schema directly and perform the same inserts.
 
 **[NEXT]** Advance once.
 
@@ -446,7 +446,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 19 · The old name survives in the behaviour
 
-**12:20–13:06 · 84 spoken words · 4s silent hold**
+**10:44–11:24 · 70 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same intended schema; different observed behaviour.
 
@@ -459,7 +459,7 @@ The evolved schema rejects the child insert. Its error message still refers to t
 
 **[PAUSE 4s]** Let the audience read or compare the visual.
 
-This is what makes the demonstration compelling: the schema presented to the user references one name, while the failing operation exposes a stale reference to another. We do not need to manually implement foreign key processing to detect the inconsistency.
+This is what makes the demonstration compelling: the schema presented to the user references one name, while the failing operation exposes a stale reference to another.
 
 **[NEXT]** Advance once.
 
@@ -468,7 +468,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 20 · Schema testing reaches a different bug class
 
-**13:06–13:50 · 79 spoken words · 3s silent hold**
+**11:24–11:59 · 61 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Different test object, different coverage.
 
@@ -481,7 +481,7 @@ Across six database systems, DDLCheck submitted thirty four reports. Twenty nine
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The evaluation also compares against existing testing approaches and studies the sequence optimisation. The contribution is targeted schema coverage, not evidence that schema testing subsumes query testing. Its boundary remains the ability to construct genuinely equivalent schemas and meaningful workloads for the supported database features.
+The contribution is targeted schema coverage, not evidence that schema testing subsumes query testing. Its boundary remains the ability to construct genuinely equivalent schemas and meaningful workloads.
 
 **[NEXT]** Advance once.
 
@@ -490,7 +490,7 @@ Sources: [D]. See the reference list below.
 
 ### 21 · Change the schedule. Compare the writes.
 
-**13:50–14:32 · 77 spoken words · 2s silent hold**
+**11:59–12:40 · 77 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] WSS has a scope; it is not arbitrary serializability.
 
@@ -512,7 +512,7 @@ Sources: [W]. See the reference list below.
 
 ### 22 · The write must not depend on an earlier read
 
-**14:32–15:20 · 88 spoken words · 3s silent hold**
+**12:40–13:25 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Scope is part of the correctness argument.
 
@@ -521,11 +521,11 @@ Sources: [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] SHOW the in-scope and out-of-scope patterns. Use one contrast gesture. Emphasise “earlier, separate” to avoid implying that UPDATE cannot read rows.
 
-The important restriction concerns writes that depend on values obtained by earlier, separate read statements. Those application level read then compute then write patterns are outside the central setting. Reading a value inside the write statement itself is different; an update that increments a column can still be in scope.
+The restriction concerns writes that depend on values obtained by earlier, separate read statements. Those application level read then compute then write patterns are outside the central setting. Reading a value inside the write statement itself is different; an update that increments a column can still be in scope.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-This restriction is what allows the paper to focus on write effects while tolerating differences in some read observations. Without it, comparing final states to a selected serial execution could label legitimate weak isolation behaviour as a bug.
+This restriction lets the paper focus on write effects while tolerating some read differences. Without it, comparing final states to a serial execution could label legitimate weak isolation behaviour as a bug.
 
 **[NEXT]** Advance once.
 
@@ -534,7 +534,7 @@ Sources: [W]. See the reference list below.
 
 ### 23 · Choose the reference schedule deliberately
 
-**15:20–16:06 · 85 spoken words · 3s silent hold**
+**13:25–14:04 · 70 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Corresponding serial order—not just any serial order.
 
@@ -543,11 +543,11 @@ Sources: [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Trace the observed finish order into the reference sequence. Then point to the comparison. Keep gestures concurrent with speech.
 
-WriteCheck executes a concurrent schedule and observes how its transactions finish. It constructs a corresponding serial schedule using first commit or rollback, first scheduled. It then recreates the initial database, runs the reference, and compares the final states. The reference is not an arbitrary permutation.
+WriteCheck executes a concurrent schedule and observes how its transactions finish. It constructs a corresponding serial schedule using first commit or rollback, first scheduled. It then recreates the initial database, runs the reference, and compares the final states.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The paper defines transaction level and statement level variants, with different treatment of transaction boundaries and aborted work. For the main example, keep the central contrast in mind: concurrent write effects versus the effects expected under a carefully constructed reference.
+The paper defines transaction level and statement level variants, with different treatment of transaction boundaries and aborted work. The central contrast is concurrent write effects versus those of a carefully constructed reference.
 
 **[NEXT]** Advance once.
 
@@ -556,7 +556,7 @@ Sources: [W]. See the reference list below.
 
 ### 24 · Two updates share three rows
 
-**16:06–16:50 · 80 spoken words · 3s silent hold**
+**14:04–14:42 · 68 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Simple SQL can have subtle concurrent behaviour.
 
@@ -569,7 +569,7 @@ Here is the historical MySQL case associated with our transaction demonstration.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-Both transactions use read committed isolation. We submit the second update while the first transaction still holds its changes uncommitted. The next two slides reveal that schedule one step at a time.
+Both transactions use read committed isolation. We submit the second update while the first transaction still holds its changes uncommitted.
 
 **[NEXT]** Advance once.
 
@@ -578,7 +578,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 25 · The second update waits
 
-**16:50–17:36 · 83 spoken words · 3s silent hold**
+**14:42–15:20 · 69 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] A blocking event is part of the schedule, not a failed test.
 
@@ -591,7 +591,7 @@ Transaction one begins and executes its update, but does not commit yet. Transac
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The wait indication in the replay is not the test crashing. It is the harness recording a blocked statement so that the other transaction can continue. We will now let transaction one commit, allow the blocked work to resume, and inspect the final rows rather than guessing from the schedule.
+The wait indication is not the test crashing. It is the harness recording a blocked statement so the other transaction can continue. Next, transaction one commits, the blocked work resumes, and we inspect the final rows.
 
 **[NEXT]** Advance once.
 
@@ -600,7 +600,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 26 · Resume, commit—and inspect the rows
 
-**17:36–18:20 · 81 spoken words · 3s silent hold**
+**15:20–16:05 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] One unchanged b value is the observable symptom.
 
@@ -622,7 +622,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 27 · The reference updates all three b values
 
-**18:20–19:10 · 89 spoken words · 4s silent hold**
+**16:05–16:46 · 73 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Observed mismatch; reference generated by Troc in our replay.
 
@@ -635,7 +635,7 @@ The Troc replay’s MVCC based oracle expects all three b values to be twenty. I
 
 **[PAUSE 4s]** Let the audience read or compare the visual.
 
-There is a methodological distinction here. Our recorded reference comes from Troc’s oracle; it is not a direct run of WriteCheck’s reference schedule generator. The example illustrates the relevant transaction bug, while the two tools justify their comparisons in different ways.
+Our recorded reference comes from Troc’s oracle; it is not a direct run of WriteCheck’s reference schedule generator. The two tools justify their comparisons differently.
 
 **[NEXT]** Advance once.
 
@@ -644,7 +644,7 @@ Sources: [R], [T], [W]. See the reference list below.
 
 ### 28 · WSS finds bugs—and false positives
 
-**19:10–20:02 · 96 spoken words · 3s silent hold**
+**16:46–17:34 · 88 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Report the denominator and the false positives.
 
@@ -657,7 +657,7 @@ The paper first studies thirty five critical transaction bugs. Thirty two violat
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The table also includes nine false positives, highlighting differences in database design and semantics. This is valuable evidence about the oracle’s boundary. The empirical claim is that a relatively simple write focused property catches many important cases in the studied setting, not that every reported discrepancy is automatically a defect.
+The table also includes nine false positives, highlighting differences in database design and semantics. The empirical claim is that a relatively simple write focused property catches many important cases in the studied setting, not that every reported discrepancy is automatically a defect.
 
 **[NEXT]** Advance once.
 
@@ -666,7 +666,7 @@ Sources: [W]. See the reference list below.
 
 ### 29 · Radar: strip the metadata
 
-**20:02–20:22 · 36 spoken words · 2s silent hold**
+**17:34–17:56 · 36 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Fourth layer: metadata.
 
@@ -688,7 +688,7 @@ Sources: [A]. See the reference list below.
 
 ### 30 · Same data. Strip the metadata.
 
-**20:22–20:58 · 64 spoken words · 2s silent hold**
+**17:56–18:28 · 59 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same data, same query; only metadata differs.
 
@@ -701,7 +701,7 @@ Radar builds a raw copy of the database. It keeps the data but drops metadata su
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-The raw copy is the control. It exercises fewer optimisation paths. It is still the same DBMS, so agreement is not proof.
+The raw copy is the control. It is still the same DBMS, so agreement is not proof.
 
 **[NEXT]** Advance once.
 
@@ -710,7 +710,7 @@ Sources: [A]. See the reference list below.
 
 ### 31 · Indexed: 1 row. Raw: 0 rows.
 
-**20:58–21:42 · 81 spoken words · 3s silent hold**
+**18:28–19:12 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same data and query; the index changes the answer.
 
@@ -732,7 +732,7 @@ Sources: [R]. See the reference list below.
 
 ### 32 · Metadata guidance finds more bugs
 
-**21:42–22:16 · 61 spoken words · 3s silent hold**
+**19:12–19:47 · 61 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Evidence within one study, not a general rate.
 
@@ -754,7 +754,7 @@ Sources: [A]. See the reference list below.
 
 ### 33 · Our replay is narrower than the papers
 
-**22:16–22:50 · 62 spoken words · 2s silent hold**
+**19:47–20:21 · 62 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Replayed bug symptoms ≠ replicated tool evaluation.
 
@@ -776,7 +776,7 @@ Sources: [R], [T], [C], [D], [W], [A]. See the reference list below.
 
 ### 34 · The same pattern survives at every layer
 
-**22:50–23:20 · 52 spoken words · 3s silent hold**
+**20:21–20:51 · 52 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same testing structure; complementary test surfaces.
 
@@ -798,7 +798,7 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 
 ### 35 · The difficult part is the equivalence claim
 
-**23:20–24:10 · 91 spoken words · 3s silent hold**
+**20:51–21:34 · 78 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The equivalence assumptions are part of the contribution.
 
@@ -811,7 +811,7 @@ The critical question is not simply whether two outputs differ. For CODDTest, th
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-Each turns an informal expectation into an executable oracle, then investigates its boundary. A useful follow up study would examine which assumptions cause shared blind spots or false positives, rather than comparing raw bug totals as a leaderboard.
+A useful follow up study would examine which assumptions cause shared blind spots or false positives, rather than comparing raw bug totals as a leaderboard.
 
 **[NEXT]** Advance once.
 
@@ -820,7 +820,7 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 
 ### 36 · Specify what must stay the same
 
-**24:10–24:47 · 70 spoken words · 2s silent hold**
+**21:34–22:11 · 70 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A good oracle makes an expectation executable.
 
