@@ -366,7 +366,7 @@ for i,d in enumerate(SLIDES,1):
   s=base(i,'',sec,'Questions',dark=True)
   label(s,'TAKEAWAY',.84,.76,8,'white',15)
   text(s,'When you cannot\npredict the answer,',.82,1.55,11.8,1.81,48,'white',font=SERIF)
-  text(s,'specify what must\nstay the same.',.82,3.35,11.8,1.87,52,'white',font=SERIF)
+  text(s,'specify what must\nstay the same.',.82,3.35,11.8,1.87,48,'white',font=SERIF)
   text(s,'Substitute.   Reconstruct.   Reschedule.   Strip.',.87,6.11,11.8,.51,25,'white',True)
  LAYOUTS.append(s)
 

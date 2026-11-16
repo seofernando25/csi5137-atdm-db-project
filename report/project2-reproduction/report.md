@@ -3,7 +3,7 @@
 CSI 5137 A00 — Advanced Topics in Databases and Data Management
 Group 12: Fernando Berti Cruz Nogueira, Saatvik Paul, Haekwon Ahn
 
-Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Remote: <https://github.com/seofernando25/csi5137-atdm-db-project>. The deck's source notes list this repository as private, so grant the instructor access or make it public before submission.
+Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Remote: <https://github.com/seofernando25/csi5137-atdm-db-project>. The repository is currently **private** (`gh repo view` reports `PRIVATE`). It is not public yet: the owner must make it public or add the instructor as a collaborator before submission.
 
 ## 1 Scope and honest summary
 
@@ -175,4 +175,4 @@ Requirements: Docker, Git. The container is `csi5137-atdm-mysql8032` on host por
 
 ## 9 Acknowledgment of LLM use
 
-Claude Code (Anthropic) assisted with the reproduction scripts, the study notes, and the drafting of this report. It was used to write and revise the shell runners, to summarize the papers, and to draft text from repository evidence. The authors ran the reproductions and checked the observed values against `artifacts/results/`. This report was drafted with LLM assistance and checked against those files; it has not been independently proofread by all authors.
+Claude Code (Anthropic) assisted with this project. It wrote and revised the shell runners; patched the upstream CODDTest/SQLancer clone (the SQLite CASE-visitor fix, the sqlite-jdbc pin, and the counters in `metrics.patch`); ran the Figure 2 sweeps and wrote the plotting, curve-fitting and PySR scripts; summarized the papers; and drafted this report from repository evidence. The authors chose the target figure, set the experimental plan, and are responsible for the claims. Observed values were checked against `artifacts/results/` and `graph-reproduction/raw/`. A Haiku-model reviewer checked the numbers in this report against those files; not every author has proofread the text.

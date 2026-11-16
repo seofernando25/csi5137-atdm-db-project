@@ -130,7 +130,7 @@ Delivery: SHOW the two columns. Hold three seconds on the two counts. Stress tha
 Evidence within one study, not a general rate.  | Silent hold: 3s
 Delivery: Read the pairs slowly. Pause before the limitation. Do not rank the DBMSs.
 
-**33 · 22:16–22:50 · Our replay is narrower than the papers’ evaluations**
+**33 · 22:16–22:50 · Our replay is narrower than the papers**
 Replayed bug symptoms ≠ replicated tool evaluation.  | Silent hold: 2s
 Delivery: Keep your hands relaxed. LOOK to the audience for this scope statement. No need to point at every checkmark or read file names.
 

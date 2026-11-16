@@ -752,7 +752,7 @@ Developers confirmed thirty eight new bugs, thirty of them metadata related. Thi
 Sources: [A]. See the reference list below.
 
 
-### 33 · Our replay is narrower than the papers’ evaluations
+### 33 · Our replay is narrower than the papers
 
 **22:16–22:50 · 62 spoken words · 2s silent hold**
 
