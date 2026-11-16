@@ -961,7 +961,7 @@ Sources: [B], [P]. See the reference list below.
 
 [A] Jiansen Song et al. Detecting Metadata-Related Logic Bugs in Database Systems via Raw Database Construction (Radar). PVLDB 17(8), 1884–1897, 2024. https://www.vldb.org/pvldb/vol17/p1884-song.pdf ; https://doi.org/10.14778/3659437.3659445
 
-[R] Project evidence: results/coddtest_111241.txt, results/ddlcheck_114904.txt, results/writecheck_104833.txt, results/radar_110125.txt. MySQL 8.0.32, reproduced in the class project. The transaction replay uses Troc, not the WriteCheck implementation. https://github.com/seofernando25/csi5137-atdm-db-project (private).
+[R] Project evidence: results/coddtest_111241.txt, results/ddlcheck_114904.txt, results/writecheck_104833.txt, results/radar_110125.txt. MySQL 8.0.32, reproduced in the class project. The transaction replay uses Troc, not the WriteCheck implementation. https://github.com/seofernando25/csi5137-atdm-db-project.
 
 [T] Troc artifact, pinned commit a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5. https://github.com/criszy/Troc ; case cases/mysql104833.txt. Also listed in WriteCheck/detected-bugs.md at https://github.com/tcse-iscas/WriteCheck .
 

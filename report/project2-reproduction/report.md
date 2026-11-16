@@ -3,7 +3,7 @@
 CSI 5137 A00 — Advanced Topics in Databases and Data Management
 Group 12: Fernando Berti Cruz Nogueira, Saatvik Paul, Haekwon Ahn
 
-Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Remote: <https://github.com/seofernando25/csi5137-atdm-db-project>. The repository is currently **private** (`gh repo view` reports `PRIVATE`). It is not public yet: the owner must make it public or add the instructor as a collaborator before submission.
+Repository: this folder's [artifacts/](artifacts/) hold the code, test cases and captured results. Public repository: <https://github.com/seofernando25/csi5137-atdm-db-project> (made public on 2026-11-16).
 
 ## 1 Scope and honest summary
 
