@@ -10,6 +10,6 @@ Use the files in [v2/](v2/).
 
 The deck has 36 main slides and 6 backup slides. Speaker notes are embedded in the PowerPoint.
 
-The planned main-route duration is about 22 minutes (model estimate 22:11). Rehearse before presenting; the timing files are estimates, not a substitute for a full run-through.
+The planned main-route duration is about 22 minutes (model estimate 22:13). Rehearse before presenting; the timing files are estimates, not a substitute for a full run-through.
 
 The transaction example clearly distinguishes our Troc-based MySQL #104833 replay from WriteCheck's own WSS method.

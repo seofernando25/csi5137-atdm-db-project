@@ -16,7 +16,7 @@ Slides 1–36 are the main presentation. Slides 37–42 are backups for question
 
 ## Timing
 
-The main script is planned for roughly **25 minutes (model total 22:11)** at about 120 words per minute, including deliberate pauses and slide changes.
+The main script is planned for roughly **25 minutes (model total 22:13)** at about 120 words per minute, including deliberate pauses and slide changes.
 
 Use the timing files as a rehearsal guide, then calibrate with a full spoken run.
 

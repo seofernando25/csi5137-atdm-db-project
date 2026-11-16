@@ -1,18 +1,18 @@
 {
   "main_slides": 36,
   "backup_slides": 6,
-  "spoken_words": 2396,
+  "spoken_words": 2400,
   "explicit_hold_seconds": 98,
   "advance_seconds": 35,
   "base_wpm": 120,
-  "model_seconds": 1331.0,
-  "reserve_to_25_minutes_seconds": 169.0,
+  "model_seconds": 1333.0,
+  "reserve_to_25_minutes_seconds": 167.0,
   "checkpoints": {
     "OPENING": "02:14",
-    "CODDTEST": "07:03",
-    "DDLCHECK": "11:59",
-    "WRITECHECK": "17:34",
-    "RADAR": "19:47",
-    "SYNTHESIS": "22:11"
+    "CODDTEST": "07:05",
+    "DDLCHECK": "12:01",
+    "WRITECHECK": "17:36",
+    "RADAR": "19:49",
+    "SYNTHESIS": "22:13"
   }
 }

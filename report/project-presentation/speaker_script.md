@@ -26,22 +26,22 @@ Use natural pauses and meaningful gestures rather than acting every instruction.
 ## Main-route checkpoints
 
 - End of Opening: **02:14** (model).
-- End of Coddtest: **07:03** (model).
-- End of Ddlcheck: **11:59** (model).
-- End of Writecheck: **17:34** (model).
-- End of Radar: **19:47** (model).
-- End of Synthesis: **22:11** (model).
+- End of Coddtest: **07:05** (model).
+- End of Ddlcheck: **12:01** (model).
+- End of Writecheck: **17:36** (model).
+- End of Radar: **19:49** (model).
+- End of Synthesis: **22:13** (model).
 
-**Main-route total: 2,396 spoken words + 98s explicit silence + 35s transitions = 22:11 at 120 wpm.**
-**Remaining to 25:00: 02:49.** This is contingency, not a promise of exact delivery.
+**Main-route total: 2,400 spoken words + 98s explicit silence + 35s transitions = 22:13 at 120 wpm.**
+**Remaining to 25:00: 02:47.** This is contingency, not a promise of exact delivery.
 
 | Assumed speaking rate | Model duration |
 |---|---|
-| 110 wpm | 24:00 |
-| 115 wpm | 23:03 |
-| 120 wpm | 22:11 |
-| 125 wpm | 21:23 |
-| 130 wpm | 20:39 |
+| 110 wpm | 24:02 |
+| 115 wpm | 23:05 |
+| 120 wpm | 22:13 |
+| 125 wpm | 21:25 |
+| 130 wpm | 20:41 |
 
 If the 25 minutes must include a full question period, shorten the main route further. The current reserve is not a five-minute Q&A allocation.
 
@@ -182,7 +182,7 @@ Sources: [C]. See the reference list below.
 
 ### 07 · 2 / Ask the database for its value
 
-**03:26–04:02 · 64 spoken words · 2s silent hold**
+**03:26–04:04 · 68 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The auxiliary query supplies the substitution value.
 
@@ -195,7 +195,7 @@ The auxiliary query evaluates the average. Ten and thirty average to twenty. The
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-Notice what we did not build: a separate SQL interpreter. We used the system under test to obtain the value. The comparison then relies on running the computation in different contexts.
+Notice what we did not build: a separate SQL interpreter. We used the system under test to obtain the value. The comparison then relies on running the computation in different contexts to expose inconsistent behaviour.
 
 **[NEXT]** Advance once.
 
@@ -204,7 +204,7 @@ Sources: [C]. See the reference list below.
 
 ### 08 · 3 / Substitute and compare
 
-**04:02–04:32 · 52 spoken words · 3s silent hold**
+**04:04–04:34 · 52 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same state + valid substitution → equal result.
 
@@ -217,7 +217,7 @@ Now replace the subquery with twenty. Both versions should return thirty and six
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. Then a mismatch is a focused report: one expression behaved inconsistently.
+The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. Then a mismatch becomes a focused report: one expression behaved inconsistently.
 
 **[NEXT]** Advance once.
 
@@ -226,7 +226,7 @@ Sources: [C]. See the reference list below.
 
 ### 09 · A row-dependent value is not one constant
 
-**04:32–05:15 · 79 spoken words · 3s silent hold**
+**04:34–05:17 · 79 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Dependent expressions need a mapping, not a global constant.
 
@@ -248,7 +248,7 @@ Sources: [C]. See the reference list below.
 
 ### 10 · The real bug: the value is still 1
 
-**05:15–05:48 · 59 spoken words · 3s silent hold**
+**05:17–05:50 · 59 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The highlighted fragment is not a standalone bug trigger.
 
@@ -270,7 +270,7 @@ Sources: [C], [R]. See the reference list below.
 
 ### 11 · Equivalent value. Different answer.
 
-**05:48–06:26 · 65 spoken words · 4s silent hold**
+**05:50–06:28 · 65 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Our replay demonstrates one concrete oracle violation.
 
@@ -292,7 +292,7 @@ Sources: [R]. See the reference list below.
 
 ### 12 · The paper tests more than one example
 
-**06:26–07:03 · 66 spoken words · 3s silent hold**
+**06:28–07:05 · 66 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Evidence for complementary coverage, not universal superiority.
 
@@ -314,7 +314,7 @@ Sources: [C]. See the reference list below.
 
 ### 13 · Can history change the answer?
 
-**07:03–07:35 · 58 spoken words · 2s silent hold**
+**07:05–07:37 · 58 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The schema history becomes the transformation target.
 
@@ -336,7 +336,7 @@ Sources: [D]. See the reference list below.
 
 ### 14 · Two histories. One intended schema.
 
-**07:35–08:10 · 65 spoken words · 2s silent hold**
+**07:37–08:12 · 65 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Equivalence includes constraints and relevant state.
 
@@ -358,7 +358,7 @@ Sources: [D]. See the reference list below.
 
 ### 15 · Reconstruct the state, then test it
 
-**08:10–08:50 · 70 spoken words · 3s silent hold**
+**08:12–08:52 · 70 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Generation → introspection → synthesis → comparison.
 
@@ -380,7 +380,7 @@ Sources: [D]. See the reference list below.
 
 ### 16 · Spend tests on different histories
 
-**08:50–09:24 · 62 spoken words · 2s silent hold**
+**08:52–09:26 · 62 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A useful oracle still needs useful test inputs.
 
@@ -402,7 +402,7 @@ Sources: [D]. See the reference list below.
 
 ### 17 · Before the rename, the relationship is simple
 
-**09:24–10:10 · 84 spoken words · 3s silent hold**
+**09:26–10:12 · 84 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The parent changes name, not its intended role.
 
@@ -424,7 +424,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 18 · The visible schema looks correct
 
-**10:10–10:44 · 62 spoken words · 3s silent hold**
+**10:12–10:46 · 62 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Visible metadata is not the whole internal state.
 
@@ -446,7 +446,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 19 · The old name survives in the behaviour
 
-**10:44–11:24 · 70 spoken words · 4s silent hold**
+**10:46–11:26 · 70 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same intended schema; different observed behaviour.
 
@@ -468,7 +468,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 20 · Schema testing reaches a different bug class
 
-**11:24–11:59 · 61 spoken words · 3s silent hold**
+**11:26–12:01 · 61 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Different test object, different coverage.
 
@@ -490,7 +490,7 @@ Sources: [D]. See the reference list below.
 
 ### 21 · Change the schedule. Compare the writes.
 
-**11:59–12:40 · 77 spoken words · 2s silent hold**
+**12:01–12:42 · 77 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] WSS has a scope; it is not arbitrary serializability.
 
@@ -512,7 +512,7 @@ Sources: [W]. See the reference list below.
 
 ### 22 · The write must not depend on an earlier read
 
-**12:40–13:25 · 81 spoken words · 3s silent hold**
+**12:42–13:27 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Scope is part of the correctness argument.
 
@@ -534,7 +534,7 @@ Sources: [W]. See the reference list below.
 
 ### 23 · Choose the reference schedule deliberately
 
-**13:25–14:04 · 70 spoken words · 3s silent hold**
+**13:27–14:06 · 70 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Corresponding serial order—not just any serial order.
 
@@ -556,7 +556,7 @@ Sources: [W]. See the reference list below.
 
 ### 24 · Two updates share three rows
 
-**14:04–14:42 · 68 spoken words · 3s silent hold**
+**14:06–14:44 · 68 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Simple SQL can have subtle concurrent behaviour.
 
@@ -578,7 +578,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 25 · The second update waits
 
-**14:42–15:20 · 69 spoken words · 3s silent hold**
+**14:44–15:22 · 69 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] A blocking event is part of the schedule, not a failed test.
 
@@ -600,7 +600,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 26 · Resume, commit—and inspect the rows
 
-**15:20–16:05 · 81 spoken words · 3s silent hold**
+**15:22–16:07 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] One unchanged b value is the observable symptom.
 
@@ -622,7 +622,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 27 · The reference updates all three b values
 
-**16:05–16:46 · 73 spoken words · 4s silent hold**
+**16:07–16:48 · 73 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Observed mismatch; reference generated by Troc in our replay.
 
@@ -644,7 +644,7 @@ Sources: [R], [T], [W]. See the reference list below.
 
 ### 28 · WSS finds bugs—and false positives
 
-**16:46–17:34 · 88 spoken words · 3s silent hold**
+**16:48–17:36 · 88 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Report the denominator and the false positives.
 
@@ -666,7 +666,7 @@ Sources: [W]. See the reference list below.
 
 ### 29 · Radar: strip the metadata
 
-**17:34–17:56 · 36 spoken words · 2s silent hold**
+**17:36–17:58 · 36 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Fourth layer: metadata.
 
@@ -688,7 +688,7 @@ Sources: [A]. See the reference list below.
 
 ### 30 · Same data. Strip the metadata.
 
-**17:56–18:28 · 59 spoken words · 2s silent hold**
+**17:58–18:30 · 59 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same data, same query; only metadata differs.
 
@@ -710,7 +710,7 @@ Sources: [A]. See the reference list below.
 
 ### 31 · Indexed: 1 row. Raw: 0 rows.
 
-**18:28–19:12 · 81 spoken words · 3s silent hold**
+**18:30–19:14 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same data and query; the index changes the answer.
 
@@ -732,7 +732,7 @@ Sources: [R]. See the reference list below.
 
 ### 32 · Metadata guidance finds more bugs
 
-**19:12–19:47 · 61 spoken words · 3s silent hold**
+**19:14–19:49 · 61 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Evidence within one study, not a general rate.
 
@@ -754,7 +754,7 @@ Sources: [A]. See the reference list below.
 
 ### 33 · Our replay is narrower than the papers
 
-**19:47–20:21 · 62 spoken words · 2s silent hold**
+**19:49–20:23 · 62 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Replayed bug symptoms ≠ replicated tool evaluation.
 
@@ -776,7 +776,7 @@ Sources: [R], [T], [C], [D], [W], [A]. See the reference list below.
 
 ### 34 · The same pattern survives at every layer
 
-**20:21–20:51 · 52 spoken words · 3s silent hold**
+**20:23–20:53 · 52 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same testing structure; complementary test surfaces.
 
@@ -798,7 +798,7 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 
 ### 35 · The difficult part is the equivalence claim
 
-**20:51–21:34 · 78 spoken words · 3s silent hold**
+**20:53–21:36 · 78 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The equivalence assumptions are part of the contribution.
 
@@ -820,7 +820,7 @@ Sources: [C], [D], [W], [A]. See the reference list below.
 
 ### 36 · Specify what must stay the same
 
-**21:34–22:11 · 70 spoken words · 2s silent hold**
+**21:36–22:13 · 70 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A good oracle makes an expectation executable.
 
