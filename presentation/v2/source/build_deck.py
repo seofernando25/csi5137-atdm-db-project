@@ -20,7 +20,7 @@ P=Presentation();P.slide_width=Inches(W);P.slide_height=Inches(H)
 P.core_properties.title='Testing databases without an answer key'
 P.core_properties.subject='CSI 5137 — Advanced Topics in Databases and Data Management'
 P.core_properties.author='CSI 5137 course project'
-P.core_properties.keywords='CODDTest, DDLCheck, WriteCheck, uOttawa, CSI 5137'
+P.core_properties.keywords='CODDTest, DDLCheck, WriteCheck, Radar, uOttawa, CSI 5137'
 P.core_properties.comments='Student course presentation; university branding is not an endorsement. Reproduction evidence is separated from paper evaluation.'
 LAYOUTS=[]
 def rgb(c):return RGBColor.from_string(C.get(c,c))
@@ -186,18 +186,19 @@ def stats(s,nums,labels,xs=None):
 # --- Main slides -----------------------------------------------------------
 for i,d in enumerate(SLIDES,1):
  title=d['title'];sec=d['section']
- src={'OPENING':'Research synthesis · [C, D, W]','CODDTEST':'[C] §3–4 · PACMMOD 2025','DDLCHECK':'[D] §3–6 · PVLDB 2025','WRITECHECK':'[W] §2–6 · PVLDB 2025','SYNTHESIS':'Research synthesis · [C, D, W]'}.get(sec,'')
+ src={'OPENING':'Research synthesis · [C, D, W, A]','CODDTEST':'[C] §3–4 · PACMMOD 2025','DDLCHECK':'[D] §3–6 · PVLDB 2025','WRITECHECK':'[W] §2–6 · PVLDB 2025','RADAR':'[A] §3–4 · PVLDB 2024','SYNTHESIS':'Research synthesis · [C, D, W, A]'}.get(sec,'')
  if i in [10,11]:src='[R] MySQL #111241 · project replay'
  if i in [17,18,19]:src='[D] Listing 4 · [R] MySQL #114904'
  if i in [24,25,26,27]:src='[R, T] MySQL #104833 · Troc replay'
- if i==29:src='[R, T] Project evidence · not full evaluations'
+ if i==31:src='[R] MySQL #110125 · project replay'
+ if i==33:src='[R, T] Project evidence · not full evaluations'
  if i==1:
   s=base(i,'','OPENING','CSI 5137 · Student course project',kicker=' ')
   rect(s,0,0,.22,7.5,'g');s.shapes.add_picture(str(ROOT/'assets/uottawa_logo.png'),Inches(10.1),Inches(.65),width=Inches(2.35))
   label(s,'CSI 5137  /  ATDM',.8,.76,8,'g',16)
   text(s,'Testing databases\nwithout an\nanswer key.',.8,1.9,10.9,3.25,57,'ink',font=SERIF)
   rect(s,.82,5.62,.72,.09,'g')
-  text(s,'CODDTest   /   DDLCheck   /   WriteCheck',.82,5.98,11.4,.42,23,'g',True)
+  text(s,'CODDTest  /  DDLCheck  /  WriteCheck  /  Radar',.82,5.98,11.4,.42,23,'g',True)
   text(s,'Advanced Topics in Databases and Data Management',.82,6.49,11.5,.3,16,'gray')
  elif i==2:
   s=base(i,title,sec,src)
@@ -213,8 +214,8 @@ for i,d in enumerate(SLIDES,1):
   band(s,'Different execution. Same expected semantics.')
  elif i==4:
   s=base(i,title,sec,src)
-  for j,(num,name,target) in enumerate([('01','CODDTest','expression'),('02','DDLCheck','schema history'),('03','WriteCheck','transaction schedule')]):
-   y=2.33+j*1.22;text(s,num,.9,y,1.1,.7,38,'g',font=SERIF);text(s,name,2.4,y+.04,4.4,.6,31,'ink',True);arrow(s,7.0,y+.35,7.87,y+.35);text(s,target,8.2,y+.06,4.1,.6,25,'gray');line(s,2.4,y+.93,12.4,y+.93)
+  for j,(num,name,target) in enumerate([('01','CODDTest','expression'),('02','DDLCheck','schema history'),('03','WriteCheck','transaction schedule'),('04','Radar','metadata')]):
+   y=2.2+j*1.1;text(s,num,.9,y,1.1,.7,38,'g',font=SERIF);text(s,name,2.4,y+.04,4.4,.6,31,'ink',True);arrow(s,7.0,y+.35,7.87,y+.35);text(s,target,8.2,y+.06,4.1,.6,25,'gray');line(s,2.4,y+.88,12.4,y+.88)
  elif i==5:s=section(i,'01','CODDTest',title,'Constant Optimization Driven\nDatabase System Testing','Chi Zhang & Manuel Rigger  ·  PACMMOD / SIGMOD 2025')
  elif i in [6,7,8]:s=base(i,title,sec,src);toy(s,i-6)
  elif i==9:
@@ -317,30 +318,56 @@ for i,d in enumerate(SLIDES,1):
   text(s,'11 new bugs',7.13,4.65,5.3,.53,30,'ink',True);text(s,'9 false positives',7.13,5.36,5.3,.48,27,'gray')
   line(s,6.42,2.16,6.42,6.03)
   text(s,'Not “91.4% of all database bugs”.',1.0,6.31,10.9,.39,19,'gray')
- elif i==29:
-  s=base(i,title,sec,src)
-  label(s,'WHAT WE REPLAYED',.94,2.1,7,'g',14)
-  rows=[('CODDTest case','query-result mismatch','direct SQL'),('DDLCheck case','schema-history mismatch','direct SQL'),('Transaction case','final-state mismatch','Troc harness')]
-  for j,(a,b,c) in enumerate(rows):
-   y=2.76+j*.88;text(s,a,.96,y,3.58,.52,25,'ink',True);text(s,b,4.82,y,4.45,.52,23);text(s,c,9.6,y,2.8,.55,22,'g',True);line(s,.95,y+.69,12.36,y+.69)
-  band(s,'One MySQL release. Selected symptoms. No coverage ranking.')
+ elif i==29:s=section(i,'04','Radar',title,'Detecting Metadata-Related Logic Bugs\nvia Raw Database Construction','Jiansen Song et al.  ·  PVLDB 2024')
  elif i==30:
   s=base(i,title,sec,src)
-  label(s,'PAPER',.95,2.15,3);label(s,'CHANGE',4.64,2.15,3);label(s,'COMPARE',8.74,2.15,3)
-  for j,row in enumerate([('CODDTest','expression','query results'),('DDLCheck','schema history','later behaviour'),('WriteCheck','schedule','write effects')]):
-   y=2.87+j*1.05
-   text(s,row[0],.95,y,3.4,.57,27,'g',True);text(s,row[1],4.64,y,3.73,.57,27);text(s,row[2],8.74,y,3.7,.57,27);line(s,.95,y+.82,12.4,y+.82)
-  text(s,'Complementary—not interchangeable.',.96,6.29,11.3,.38,22,'gray')
+  label(s,'INDEXED COPY',.9,2.15,4);label(s,'RAW COPY',.9,4.15,4)
+  node(s,'data + metadata',.9,2.62,3.3);node(s,'data only',.9,4.62,3.3)
+  for y,r in [(2.62,'result A'),(4.62,'result B')]:
+   arrow(s,4.35,y+.36,5.1,y+.36);node(s,'same query',5.3,y,2.7,.75);arrow(s,8.15,y+.36,8.9,y+.36);node(s,r,9.1,y,2.2,.75)
+  line(s,11.5,3.0,12.0,3.0,'g');line(s,12.0,3.0,12.0,5.0,'g');line(s,11.5,5.0,12.0,5.0,'g');text(s,'=',12.1,3.62,.5,.7,40,'g')
+  band(s,'Same data. Same query. Only the metadata differs.')
  elif i==31:
   s=base(i,title,sec,src)
-  for j,(a,b) in enumerate([('CODDTest','values · types · row dependence'),('DDLCheck','schema · constraints · state'),('WriteCheck','transaction scope · DBMS semantics')]):
-   y=2.35+j*1.25;text(s,a,.97,y,3.46,.63,28,'g',True);text(s,b,4.65,y+.05,7.64,.6,26);line(s,.97,y+.96,12.4,y+.96)
+  label(s,'INDEXED COPY',.92,2.02,5,'g',13);label(s,'RAW COPY',7.1,2.02,5,'gray',13)
+  code1='CREATE TABLE t0 (c0 DOUBLE ZEROFILL);\nCREATE INDEX i0 ON t0 (c0 DESC);\nINSERT INTO t0 VALUES (0);'
+  code2='CREATE TABLE t0 (c0 DOUBLE ZEROFILL);\n\nINSERT INTO t0 VALUES (0);'
+  rect(s,.92,2.4,5.6,1.55,'pale');text(s,code1,1.05,2.52,5.4,1.35,15,'g',True)
+  rect(s,7.1,2.4,5.6,1.55,'light');text(s,code2,7.23,2.52,5.4,1.35,15)
+  text(s,'SELECT COUNT(*) FROM t0 WHERE\n  (IFNULL(-1123870957, \'\')) IN (t0.c0);',.92,4.13,11.7,.7,18,'ink')
+  text(s,'1',1.5,4.78,1.5,1.3,66,'g',font=SERIF);text(s,'matching row',3.0,5.4,3.3,.4,17,'g',True)
+  text(s,'0',7.7,4.78,1.5,1.3,66,font=SERIF);text(s,'matching rows · correct',9.0,5.4,3.7,.4,17,'ink',True)
+  text(s,'≠',6.38,4.95,.9,.9,46,'g',font=SERIF,align=PP_ALIGN.CENTER)
+  band(s,'MySQL 8.0.32 · the indexed copy is the bug',6.16)
  elif i==32:
+  s=base(i,title,sec,'[A] §4 Tables 2–3 · counts as reported')
+  for x,n,l in zip([.86,4.95,9.04],['19 vs 12','22 vs 14','30 of 38'],['TiDB, 12 hours\nwith vs without metadata guidance','five DBMSs, unique bugs\nwith vs without guidance','confirmed new bugs\nare metadata-related']):
+   text(s,n,x,2.35,4.0,1.3,52,'g',font=FONT);text(s,l,x,3.95,3.9,1.0,20,'ink',True)
+  band(s,'One study, one generator—not a general rate.',6.12)
+ elif i==33:
+  s=base(i,title,sec,src)
+  label(s,'WHAT WE REPLAYED',.94,2.1,7,'g',14)
+  rows=[('CODDTest case','query-result mismatch','direct SQL'),('DDLCheck case','schema-history mismatch','direct SQL'),('Transaction case','final-state mismatch','Troc harness'),('Radar case','indexed vs raw count','direct SQL')]
+  for j,(a,b,c) in enumerate(rows):
+   y=2.6+j*.8;text(s,a,.96,y,3.58,.52,25,'ink',True);text(s,b,4.82,y,4.45,.52,23);text(s,c,9.6,y,2.8,.55,22,'g',True);line(s,.95,y+.64,12.36,y+.64)
+  band(s,'One MySQL release. Selected symptoms. No coverage ranking.')
+ elif i==34:
+  s=base(i,title,sec,src)
+  label(s,'PAPER',.95,2.15,3);label(s,'CHANGE',4.64,2.15,3);label(s,'COMPARE',8.74,2.15,3)
+  for j,row in enumerate([('CODDTest','expression','query results'),('DDLCheck','schema history','later behaviour'),('WriteCheck','schedule','write effects'),('Radar','metadata','query results')]):
+   y=2.7+j*.8
+   text(s,row[0],.95,y,3.4,.57,27,'g',True);text(s,row[1],4.64,y,3.73,.57,27);text(s,row[2],8.74,y,3.7,.57,27);line(s,.95,y+.66,12.4,y+.66)
+  text(s,'Complementary—not interchangeable.',.96,6.35,11.3,.38,22,'gray')
+ elif i==35:
+  s=base(i,title,sec,src)
+  for j,(a,b) in enumerate([('CODDTest','values · types · row dependence'),('DDLCheck','schema · constraints · state'),('WriteCheck','transaction scope · DBMS semantics'),('Radar','metadata that must not alter results')]):
+   y=2.2+j*1.0;text(s,a,.97,y,3.46,.63,28,'g',True);text(s,b,4.65,y+.05,7.64,.6,26);line(s,.97,y+.8,12.4,y+.8)
+ elif i==36:
   s=base(i,'',sec,'Questions',dark=True)
   label(s,'TAKEAWAY',.84,.76,8,'white',15)
   text(s,'When you cannot\npredict the answer,',.82,1.55,11.8,1.81,48,'white',font=SERIF)
   text(s,'specify what must\nstay the same.',.82,3.35,11.8,1.87,52,'white',font=SERIF)
-  text(s,'Substitute.   Reconstruct.   Reschedule.',.87,6.11,11.5,.51,25,'white',True)
+  text(s,'Substitute.   Reconstruct.   Reschedule.   Strip.',.87,6.11,11.8,.51,25,'white',True)
  LAYOUTS.append(s)
 
 # --- Backup slides: not part of the 25-minute route -------------------------
@@ -348,36 +375,36 @@ BACKUPS=[
  dict(title='The complete changing-predicate context',section='BACKUP · CODDTEST',spoken=['The membership fragment is not a standalone reproducer. These two predicate forms keep the regular expression, like comparison, and case expression unchanged. Refer to the repository script for an executable copy.',''],pause=0,cue='Use only if asked. Do not read every SQL token.',source='C,R',takeaway='Full context matters.',backup=True,wpm=120),
  dict(title='The foreign-key case in six lines',section='BACKUP · DDLCHECK',spoken=['This is the compact schema-history sequence. The directly created control starts with the renamed parent table and skips the alteration. These statements are representative SQL from the reproduced case.',''],pause=0,cue='Point to ALGORITHM COPY; it is part of this case.',source='D,R',takeaway='Same final schema; different construction.',backup=True,wpm=120),
  dict(title='Two WSS variants—not full serializability',section='BACKUP · WRITECHECK',spoken=['The paper defines transaction-level and statement-level WSS. The first compares with a corresponding serial transaction execution. The latter removes aborted transactions and transaction boundaries from committed work before the reference execution. These variants are not a statement that every read observation is serializable. Savepoint and rollback details require the paper’s full definitions.',''],pause=0,cue='Use the table to distinguish the property from the reference generator and from our Troc replay.',source='W',takeaway='Keep the property, the generator and the harness distinct.',backup=True,wpm=120),
- dict(title='What the evaluations establish',section='BACKUP · EVIDENCE',spoken=['The reported bug totals measure different populations, tool scopes, and experiments. CODDTest compares other oracles on found cases; DDLCheck investigates schema coverage and a generator ablation; WriteCheck combines a historical study with new testing. Raw bug totals are not a reliability ranking of the tested databases.',''],pause=0,cue='Answer the methodological question, rather than reading all the counts.',source='C,D,W',takeaway='Do not rank DBMS reliability from these totals.',backup=True,wpm=120),
- dict(title='Research sources',section='BACKUP · REFERENCES',spoken=['These are the three primary papers, with links in the notes and in the project’s papers folder. Our evidence files and the Troc artifact are cited separately.',''],pause=0,cue='Keep this slide available during questions.',source='C,D,W,R,T',takeaway='Primary papers and reproduction evidence are separate sources.',backup=True,wpm=120),
+ dict(title='What the evaluations establish',section='BACKUP · EVIDENCE',spoken=['The reported bug totals measure different populations, tool scopes, and experiments. CODDTest compares other oracles on found cases; DDLCheck investigates schema coverage and a generator ablation; WriteCheck combines a historical study with new testing; Radar reports a TiDB and five-system ablation. Raw bug totals are not a reliability ranking of the tested databases.',''],pause=0,cue='Answer the methodological question, rather than reading all the counts.',source='C,D,W,A',takeaway='Do not rank DBMS reliability from these totals.',backup=True,wpm=120),
+ dict(title='Research sources',section='BACKUP · REFERENCES',spoken=['These are the four primary papers, with links in the notes and in the project’s papers folder. Our evidence files and the Troc artifact are cited separately.',''],pause=0,cue='Keep this slide available during questions.',source='C,D,W,A,R,T',takeaway='Primary papers and reproduction evidence are separate sources.',backup=True,wpm=120),
  dict(title='Delivery and visual-design sources',section='BACKUP · REFERENCES',spoken=['The typography and palette follow uOttawa’s public Horizon guidance. The timing model counts the spoken words and adds explicit pauses and slide changes. The gesture and pause cues support comprehension; they are not a requirement to perform mechanically. A real rehearsal is needed to calibrate the duration.',''],pause=0,cue='Not a spoken main-route slide. Use the speaker script for calibration details.',source='B,P',takeaway='Model timing; measure actual delivery.',backup=True,wpm=120),
 ]
-for k,d in enumerate(BACKUPS,33):
+for k,d in enumerate(BACKUPS,37):
  s=base(k,d['title'],d['section'],'Backup · outside the main talk')
- if k==33:
+ if k==37:
   text(s,'t0(c0 BOOL) contains TRUE;  MIN(c0) = 1',.85,1.96,11.7,.48,23,'g',True)
   label(s,'SAME SURROUNDING PREDICATE',.87,2.68,11)
   code="('0') NOT REGEXP (\n  c0 NOT LIKE (CASE c0 WHEN 76 THEN 0.7 ELSE c0 END)\n) AND c0 IN ( … )"
   rect(s,.85,3.12,11.55,1.83,'light');text(s,code,1.05,3.35,11.13,1.5,23)
   text(s,'original:  SELECT MIN(c0) FROM t0',.89,5.35,11.2,.5,26)
   text(s,'folded:   1',.89,6.02,11.2,.5,26,'g',True)
- elif k==34:
+ elif k==38:
   code='CREATE TABLE t0(c2 FLOAT8 PRIMARY KEY);\nCREATE TABLE t1(c1 FLOAT8 UNIQUE,\n  FOREIGN KEY(c1) REFERENCES t0(c2) ON UPDATE CASCADE);\nALTER TABLE t0 RENAME AS t2, ALGORITHM COPY;\nINSERT INTO t2 VALUES(1);\nINSERT INTO t1 VALUES(1);   -- rejected on the evolved path'
   rect(s,.87,2.08,11.57,3.91,'light');text(s,code,1.08,2.42,11.1,3.4,23)
   text(s,'Control: create t2 directly, then create t1 referencing t2.',.89,6.28,11.3,.46,21,'g',True)
- elif k==35:
+ elif k==39:
   rows=[('tx-WSS','serial transaction reference'),('stmt-WSS','statement-level reference construction'),('Troc replay','MVCC-based oracle; a different harness')]
   for j,(a,b) in enumerate(rows):
    y=2.36+j*1.26;text(s,a,.97,y,3.38,.72,29,'g',True);text(s,b,4.65,y+.06,7.61,.98,26);line(s,.96,y+.99,12.4,y+.99)
- elif k==36:
-  for j,(a,b) in enumerate([('CODDTest','5 systems; oracle comparison on found cases'),('DDLCheck','6 systems; schema coverage + sequence ablation'),('WriteCheck','35 historical bugs + a new testing campaign')]):
-   y=2.17+j*1.16;text(s,a,.94,y,3.7,.7,29,'g',True);text(s,b,4.79,y+.02,7.5,.88,25);line(s,.94,y+.94,12.38,y+.94)
-  text(s,'Different campaigns and scopes → no apples-to-apples leaderboard.',.95,6.18,11.5,.51,21,'gray')
- elif k==37:
-  entries=[('C / CODDTest','Zhang & Rigger · PACMMOD 3(1), Article 24, 2025','doi.org/10.1145/3709674'),('D / DDLCheck','Song et al. · PVLDB 18(7), 2281–2294, 2025','vldb.org/pvldb/vol18/p2281-song.pdf'),('W / WriteCheck','Cui et al. · PVLDB 18(8), 2547–2560, 2025','vldb.org/pvldb/vol18/p2547-cui.pdf')]
+ elif k==40:
+  for j,(a,b) in enumerate([('CODDTest','5 systems; oracle comparison on found cases'),('DDLCheck','6 systems; schema coverage + ablation'),('WriteCheck','35 historical bugs + a new testing campaign'),('Radar','5 systems; metadata-guidance ablation')]):
+   y=2.0+j*1.0;text(s,a,.94,y,3.7,.7,29,'g',True);text(s,b,4.79,y+.02,7.5,.88,25);line(s,.94,y+.82,12.38,y+.82)
+  text(s,'Different campaigns and scopes → no apples-to-apples leaderboard.',.95,6.3,11.5,.51,21,'gray')
+ elif k==41:
+  entries=[('C / CODDTest','Zhang & Rigger · PACMMOD 3(1), Article 24, 2025','doi.org/10.1145/3709674'),('D / DDLCheck','Song et al. · PVLDB 18(7), 2281–2294, 2025','vldb.org/pvldb/vol18/p2281-song.pdf'),('W / WriteCheck','Cui et al. · PVLDB 18(8), 2547–2560, 2025','vldb.org/pvldb/vol18/p2547-cui.pdf'),('A / Radar','Song et al. · PVLDB 17(8), 1884–1897, 2024','vldb.org/pvldb/vol17/p1884-song.pdf')]
   for j,(a,b,c) in enumerate(entries):
-   y=2.1+j*1.48;text(s,a,.94,y,3.5,.55,25,'g',True);text(s,b,4.61,y,7.71,.55,23);text(s,c,4.61,y+.56,7.71,.46,19,'gray');line(s,.94,y+1.19,12.39,y+1.19)
- elif k==38:
+   y=1.95+j*1.2;text(s,a,.94,y,3.5,.55,25,'g',True);text(s,b,4.61,y,7.71,.55,23);text(s,c,4.61,y+.56,7.71,.46,19,'gray');line(s,.94,y+1.08,12.39,y+1.08)
+ elif k==42:
   for j,(a,b) in enumerate([('Visual identity','uOttawa Horizon · colours, typography, logo'),('Pace + rehearsal','Microsoft Speaker Coach · Trent Academic Skills'),('Purposeful delivery','Trent Academic Skills · Toastmasters')]):
    y=2.15+j*1.18;text(s,a,.94,y,3.65,.75,26,'g',True);text(s,b,4.79,y+.03,7.49,.86,24);line(s,.94,y+.98,12.39,y+.98)
   band(s,'Pause lengths and gesture placements are rehearsal choices.')
@@ -391,7 +418,7 @@ def clock(sec):
  sec=int(round(sec));return f'{sec//60:02}:{sec%60:02}'
 rows=[];cumulative=0
 script=['# CSI 5137 — Speaker script and delivery plan','',
-'**Deck:** Testing databases without an answer key. 32 main slides; 6 backup slides. Student course project, not an official university presentation.','',
+'**Deck:** Testing databases without an answer key. 36 main slides; 6 backup slides. Student course project, not an official university presentation.','',
 '## Timing model — estimate, not a stopwatch guarantee','',
 'The main-route count includes spoken prose only. Cues, titles, citations and backup answers are excluded. English words are counted by the regular expression in `source/build_deck.py`; contractions/hyphenated compounds count as one. SQL is explained, not read token by token.','',
 'For each main slide: `seconds = 60 × spoken words / 120 + explicit silent hold + 1 second to advance`. The last main slide has no advance allowance. Gestures and gaze changes happen during speech and are not double-counted. Ordinary phrasing is absorbed into the gross speaking-rate assumption; the extra holds below are intentionally silent.','',
@@ -400,20 +427,20 @@ script=['# CSI 5137 — Speaker script and delivery plan','',
 '- `[SHOW]`: direct attention to content already visible. No hidden object animations are required.','- `[PAUSE Ns]`: deliberate silence; do not fill it with extra commentary.','- `[LOOK]`, `[GESTURE]`, `[MOVE]`: optional delivery guidance, performed during speech unless inside the marked pause. Stay seated or at a lectern when appropriate; movement is not mandatory.','- `[NEXT]`: advance once at the end of the slide. Slides 6–8, 17–19 and 24–27 form progressive visual sequences. Do not click midway through a sentence.','',
 '## Rehearsal procedure','',
 'Record a two-minute representative method section, including its prescribed pauses. Calculate actual spoken wpm using the transcript and subtract only the explicit holds from the recording time. Rehearse the full talk next; a formula is not a substitute. Aim to finish the main route at roughly 23–24 minutes and use the remaining time for recovery or questions. If your pace is nearer 110 wpm, shorten the script before presenting; do not simply rush the technical parts.','',
-'Use natural pauses and meaningful gestures rather than acting every instruction. Point briefly, return your gaze to the audience, and move only at the three section changes. No continuous pacing, laser-pointer circling, or turning your back to read slides. For remote delivery, remain seated and gesture within camera view.','',
+'Use natural pauses and meaningful gestures rather than acting every instruction. Point briefly, return your gaze to the audience, and move only at the four section changes. No continuous pacing, laser-pointer circling, or turning your back to read slides. For remote delivery, remain seated and gesture within camera view.','',
 '## Main-route checkpoints','']
 sections={}
 for idx,(d,sld) in enumerate(zip(ALL,LAYOUTS),1):
- n=words(' '.join(d['spoken']));advance=0 if d['backup'] or idx==32 else 1
+ n=words(' '.join(d['spoken']));advance=0 if d['backup'] or idx==36 else 1
  dur=n/d['wpm']*60+d['pause']+advance
  start=cumulative
  if not d['backup']:cumulative+=dur;sections[d['section']]=cumulative
  r=dict(slide=idx,title=d['title'],route='backup' if d['backup'] else 'main',spoken_words=n,wpm=d['wpm'],silent_seconds=d['pause'],advance_seconds=advance,model_seconds=round(dur,1),start=clock(start) if not d['backup'] else '',end=clock(cumulative) if not d['backup'] else '')
  rows.append(r)
- note=[f"SLIDE {idx:02} — {d['title']}",f"{'BACKUP: not budgeted' if d['backup'] else 'MODEL '+r['start']+'–'+r['end']} | {n} spoken words | 120 wpm | {d['pause']}s hold | {advance}s advance",'',f"[PACE] {d['wpm']} words per minute; articulate rather than rush.",f"[SHOW] {d['takeaway']}",'[LOOK] Briefly check the highlighted element, then return your gaze to the audience.',('[GESTURE] One open-hand contrast or one directional trace; then return to neutral.' if idx in [3,4,6,7,8,9,10,11,14,15,16,17,18,19,22,23,24,25,26,27,30] else '[GESTURE] Hands relaxed; a small emphasis gesture is enough.'),('[MOVE] Optional single position change at this section boundary; then stand still. Stay seated if appropriate.' if idx in [5,13,21] else '[MOVE] Stay in place; do not pace.'),f"[DELIVERY] {d['cue']}",'',d['spoken'][0]]
+ note=[f"SLIDE {idx:02} — {d['title']}",f"{'BACKUP: not budgeted' if d['backup'] else 'MODEL '+r['start']+'–'+r['end']} | {n} spoken words | 120 wpm | {d['pause']}s hold | {advance}s advance",'',f"[PACE] {d['wpm']} words per minute; articulate rather than rush.",f"[SHOW] {d['takeaway']}",'[LOOK] Briefly check the highlighted element, then return your gaze to the audience.',('[GESTURE] One open-hand contrast or one directional trace; then return to neutral.' if idx in [3,4,6,7,8,9,10,11,14,15,16,17,18,19,22,23,24,25,26,27,30,34] else '[GESTURE] Hands relaxed; a small emphasis gesture is enough.'),('[MOVE] Optional single position change at this section boundary; then stand still. Stay seated if appropriate.' if idx in [5,13,21,29] else '[MOVE] Stay in place; do not pace.'),f"[DELIVERY] {d['cue']}",'',d['spoken'][0]]
  if d['pause']:note.extend(['',f"[PAUSE {d['pause']}s] Read/compare the visual silently."])
  if d['spoken'][1]:note.extend(['',d['spoken'][1]])
- note.extend(['', '[NEXT] Advance one slide.' if idx<32 else ('[STOP] Invite questions; do not enter the appendix automatically.' if idx==32 else '[BACKUP] Return to the main discussion.'),'','SOURCE / SCOPE NOTES'])
+ note.extend(['', '[NEXT] Advance one slide.' if idx<36 else ('[STOP] Invite questions; do not enter the appendix automatically.' if idx==36 else '[BACKUP] Return to the main discussion.'),'','SOURCE / SCOPE NOTES'])
  for key in d['source'].split(','):
   if key:note.append(f'[{key}] {SOURCES[key]}')
  sld.notes_slide.notes_text_frame.text='\n'.join(note)
@@ -421,24 +448,24 @@ for idx,(d,sld) in enumerate(zip(ALL,LAYOUTS),1):
 # Add model checkpoints before slide-by-slide notes.
 for sec,end in sections.items():script.append(f'- End of {sec.title()}: **{clock(end)}** (model).')
 mainwords=sum(r['spoken_words'] for r in rows if r['route']=='main');holds=sum(d['pause'] for d in SLIDES)
-script+=['',f'**Main-route total: {mainwords:,} spoken words + {holds}s explicit silence + 31s transitions = {clock(cumulative)} at 120 wpm.**',f'**Remaining to 25:00: {clock(1500-cumulative)}.** This is contingency, not a promise of exact delivery.','', '| Assumed speaking rate | Model duration |','|---|---|']
-for rate in [110,115,120,125,130]:script.append(f'| {rate} wpm | {clock(mainwords/rate*60+holds+31)} |')
+script+=['',f'**Main-route total: {mainwords:,} spoken words + {holds}s explicit silence + 35s transitions = {clock(cumulative)} at 120 wpm.**',f'**Remaining to 25:00: {clock(1500-cumulative)}.** This is contingency, not a promise of exact delivery.','', '| Assumed speaking rate | Model duration |','|---|---|']
+for rate in [110,115,120,125,130]:script.append(f'| {rate} wpm | {clock(mainwords/rate*60+holds+35)} |')
 script+=['','If the 25 minutes must include a full question period, shorten the main route further. The current reserve is not a five-minute Q&A allocation.','','## Main script','']
 for idx,d in enumerate(ALL,1):
- if idx==33:script+=['','## Backup answers — outside the timed route','']
+ if idx==37:script+=['','## Backup answers — outside the timed route','']
  r=rows[idx-1]
  script+=['',f"### {idx:02} · {d['title']}",'',f"**{'Backup / outside timed route' if d['backup'] else r['start']+'–'+r['end']} · {r['spoken_words']} spoken words · {d['pause']}s silent hold**",'',f"[PACE] 120 wpm. [SHOW] {d['takeaway']}",'']
  cue_lines=d['notes'].split('[LOOK]',1)[1].split(d['spoken'][0],1)[0].strip()
  script+=['[LOOK]'+cue_lines,'',d['spoken'][0],'']
  if d['pause']:script += [f"**[PAUSE {d['pause']}s]** Let the audience read or compare the visual.",'']
  if d['spoken'][1]:script += [d['spoken'][1],'']
- script += [('**[NEXT]** Advance once.' if idx<32 else ('**[STOP]** Invite questions. Do not enter the appendix automatically.' if idx==32 else '**[BACKUP]** Return to the discussion.')),'',f"Sources: [{d['source'].replace(',', '], [')}]. See the reference list below.",'']
+ script += [('**[NEXT]** Advance once.' if idx<36 else ('**[STOP]** Invite questions. Do not enter the appendix automatically.' if idx==36 else '**[BACKUP]** Return to the discussion.')),'',f"Sources: [{d['source'].replace(',', '], [')}]. See the reference list below.",'']
 script+=['','## Research and delivery references','']
 for key,v in SOURCES.items():script.append(f'[{key}] {v}\n')
 (OUT/'speaker_script.md').write_text('\n'.join(script),encoding='utf-8')
 with (OUT/'timing.csv').open('w',newline='',encoding='utf-8') as f:
  writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
-(OUT/'timing_summary.json').write_text(json.dumps({'main_slides':32,'backup_slides':6,'spoken_words':mainwords,'explicit_hold_seconds':holds,'advance_seconds':31,'base_wpm':120,'model_seconds':cumulative,'reserve_to_25_minutes_seconds':1500-cumulative,'checkpoints':{k:clock(v) for k,v in sections.items()}},indent=2),encoding='utf-8')
+(OUT/'timing_summary.json').write_text(json.dumps({'main_slides':36,'backup_slides':6,'spoken_words':mainwords,'explicit_hold_seconds':holds,'advance_seconds':35,'base_wpm':120,'model_seconds':cumulative,'reserve_to_25_minutes_seconds':1500-cumulative,'checkpoints':{k:clock(v) for k,v in sections.items()}},indent=2),encoding='utf-8')
 cue=['# At-a-glance cue sheet','','The full script is in `speaker_script.md`; these are prompts, not extra spoken words.','']
 for i,d in enumerate(SLIDES,1):cue += [f"**{i:02} · {rows[i-1]['start']}–{rows[i-1]['end']} · {d['title']}**",f"{d['takeaway']}  | Silent hold: {d['pause']}s",f"Delivery: {d['cue']}",'']
 (OUT/'cue_sheet.md').write_text('\n'.join(cue),encoding='utf-8')

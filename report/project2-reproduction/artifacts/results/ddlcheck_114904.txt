@@ -1,0 +1,8 @@
+=== DDLCheck / MySQL #114904 ===
+version=8.0.32
+visible_schema=t1	CREATE TABLE `t1` (\n  `c1` double DEFAULT NULL,\n  UNIQUE KEY `c1` (`c1`),\n  CONSTRAINT `t1_ibfk_1` FOREIGN KEY (`c1`) REFERENCES `t2` (`c2`) ON UPDATE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+evolved_insert_exit=1
+evolved_insert_error=mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1452 (23000) at line 1: Cannot add or update a child row: a foreign key constraint fails (`ddl114904_evolved_20260928191709_25627`.`t1`, CONSTRAINT `t1_ibfk_1` FOREIGN KEY (`c1`) REFERENCES `t0` (`c2`) ON UPDATE CASCADE)
+direct_schema_inserted_value=1
+PASS: MySQL #114904 reproduced.

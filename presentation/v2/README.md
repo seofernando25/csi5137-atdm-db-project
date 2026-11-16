@@ -12,11 +12,11 @@
 - `source/` — deck content and build script
 - `assets/` — presentation assets
 
-Slides 1–32 are the main presentation. Slides 33–38 are backups for questions.
+Slides 1–36 are the main presentation. Slides 37–42 are backups for questions.
 
 ## Timing
 
-The main script is planned for roughly **23 minutes** at about 120 words per minute, including deliberate pauses and slide changes.
+The main script is planned for roughly **25 minutes (model total 24:47)** at about 120 words per minute, including deliberate pauses and slide changes.
 
 Use the timing files as a rehearsal guide, then calibrate with a full spoken run.
 
@@ -50,7 +50,7 @@ Check the exported PDF after edits because layout and font substitution can vary
 
 ## References
 
-Research sources are cited in the slide notes and speaker script. The three papers are also available in the repository's [papers/](../../papers/) folder.
+Research sources are cited in the slide notes and speaker script. The CODDTest, DDLCheck, and WriteCheck papers are also in the repository's [papers/](../../papers/) folder; the Radar paper is cited in the speaker script (PVLDB 17(8), 2024).
 
 Presentation guidance used during preparation:
 

@@ -8,8 +8,8 @@ Use the files in [v2/](v2/).
 - [Cue sheet](v2/cue_sheet.md)
 - [Timing data](v2/timing.csv)
 
-The deck has 32 main slides and 6 backup slides. Speaker notes are embedded in the PowerPoint.
+The deck has 36 main slides and 6 backup slides. Speaker notes are embedded in the PowerPoint.
 
-The planned main-route duration is about 23 minutes. Rehearse before presenting; the timing files are estimates, not a substitute for a full run-through.
+The planned main-route duration is about 25 minutes (model estimate 24:47). Rehearse before presenting; the timing files are estimates, not a substitute for a full run-through.
 
 The transaction example clearly distinguishes our Troc-based MySQL #104833 replay from WriteCheck's own WSS method.

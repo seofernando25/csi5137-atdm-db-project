@@ -1,6 +1,6 @@
 # CSI 5137 — Speaker script and delivery plan
 
-**Deck:** Testing databases without an answer key. 32 main slides; 6 backup slides. Student course project, not an official university presentation.
+**Deck:** Testing databases without an answer key. 36 main slides; 6 backup slides. Student course project, not an official university presentation.
 
 ## Timing model — estimate, not a stopwatch guarantee
 
@@ -21,26 +21,27 @@ The 120-wpm planning rate is an authored choice. Microsoft suggests a broad 100�
 
 Record a two-minute representative method section, including its prescribed pauses. Calculate actual spoken wpm using the transcript and subtract only the explicit holds from the recording time. Rehearse the full talk next; a formula is not a substitute. Aim to finish the main route at roughly 23–24 minutes and use the remaining time for recovery or questions. If your pace is nearer 110 wpm, shorten the script before presenting; do not simply rush the technical parts.
 
-Use natural pauses and meaningful gestures rather than acting every instruction. Point briefly, return your gaze to the audience, and move only at the three section changes. No continuous pacing, laser-pointer circling, or turning your back to read slides. For remote delivery, remain seated and gesture within camera view.
+Use natural pauses and meaningful gestures rather than acting every instruction. Point briefly, return your gaze to the audience, and move only at the four section changes. No continuous pacing, laser-pointer circling, or turning your back to read slides. For remote delivery, remain seated and gesture within camera view.
 
 ## Main-route checkpoints
 
-- End of Opening: **02:32** (model).
-- End of Coddtest: **08:16** (model).
-- End of Ddlcheck: **14:01** (model).
-- End of Writecheck: **20:12** (model).
-- End of Synthesis: **23:14** (model).
+- End of Opening: **02:37** (model).
+- End of Coddtest: **08:04** (model).
+- End of Ddlcheck: **13:50** (model).
+- End of Writecheck: **20:02** (model).
+- End of Radar: **22:16** (model).
+- End of Synthesis: **24:47** (model).
 
-**Main-route total: 2,549 spoken words + 88s explicit silence + 31s transitions = 23:14 at 120 wpm.**
-**Remaining to 25:00: 01:46.** This is contingency, not a promise of exact delivery.
+**Main-route total: 2,708 spoken words + 98s explicit silence + 35s transitions = 24:47 at 120 wpm.**
+**Remaining to 25:00: 00:13.** This is contingency, not a promise of exact delivery.
 
 | Assumed speaking rate | Model duration |
 |---|---|
-| 110 wpm | 25:09 |
-| 115 wpm | 24:09 |
-| 120 wpm | 23:14 |
-| 125 wpm | 22:23 |
-| 130 wpm | 21:35 |
+| 110 wpm | 26:50 |
+| 115 wpm | 25:46 |
+| 120 wpm | 24:47 |
+| 125 wpm | 23:53 |
+| 130 wpm | 23:03 |
 
 If the 25 minutes must include a full question period, shorten the main route further. The current reserve is not a five-minute Q&A allocation.
 
@@ -49,29 +50,29 @@ If the 25 minutes must include a full question period, shorten the main route fu
 
 ### 01 · Testing databases without an answer key
 
-**00:00–00:36 · 65 spoken words · 2s silent hold**
+**00:00–00:37 · 68 spoken words · 2s silent hold**
 
-[PACE] 120 wpm. [SHOW] Three papers; one oracle problem.
+[PACE] 120 wpm. [SHOW] Four papers; one oracle problem.
 
 [LOOK]Briefly check the highlighted element, then return your gaze to the audience.
 [GESTURE] Hands relaxed; a small emphasis gesture is enough.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Stand beside the screen, hands relaxed. Look at the centre of the room before starting. No pacing.
 
-A database can finish a query successfully and still give the wrong answer. This project compares three papers that turn that problem into something testable. Instead of predicting every answer, they construct another execution whose result should agree.
+A database can finish a query successfully and still give the wrong answer. This project compares four papers that turn that problem into something testable. Instead of predicting every answer, they construct another execution whose result should agree.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-We will move from expressions, to schema histories, to transactions. For each paper, I will explain the method, examine the evidence, and show a small MySQL example.
+We will move from expressions, to schema histories, to transactions, and to metadata. For each paper, I will explain the method, examine the evidence, and show a small MySQL example.
 
 **[NEXT]** Advance once.
 
-Sources: [C], [D], [W]. See the reference list below.
+Sources: [C], [D], [W], [A]. See the reference list below.
 
 
 ### 02 · A plausible answer is not an answer key
 
-**00:36–01:14 · 69 spoken words · 3s silent hold**
+**00:37–01:16 · 69 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Wrong answers can look normal.
 
@@ -93,7 +94,7 @@ Sources: [C], [D], [W]. See the reference list below.
 
 ### 03 · Compare executions, not guesses
 
-**01:14–01:55 · 76 spoken words · 2s silent hold**
+**01:16–01:56 · 76 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A consistency oracle is not a proof of correctness.
 
@@ -113,9 +114,9 @@ Agreement does not prove correctness: both executions might make the same mistak
 Sources: [C], [D], [W]. See the reference list below.
 
 
-### 04 · One question, three layers
+### 04 · One question, four layers
 
-**01:55–02:32 · 68 spoken words · 2s silent hold**
+**01:56–02:37 · 75 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Expression → schema history → transaction schedule.
 
@@ -124,7 +125,7 @@ Sources: [C], [D], [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] GESTURE to the three rows in sequence. Make one small step at the transition to CODDTest, then settle.
 
-The three papers change different objects. CODDTest changes an expression using values already computed by the database. DDLCheck changes the history used to construct a schema. WriteCheck changes a transaction schedule and compares the resulting writes.
+The four papers change different objects. CODDTest changes an expression using values already computed by the database. DDLCheck changes the history used to construct a schema. WriteCheck changes a transaction schedule and compares the resulting writes. Radar removes metadata and compares query results.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
@@ -137,7 +138,7 @@ Sources: [C], [D], [W]. See the reference list below.
 
 ### 05 · Evaluate. Substitute. Compare.
 
-**02:32–03:09 · 68 spoken words · 2s silent hold**
+**02:37–03:14 · 68 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A compiler transformation becomes a test oracle.
 
@@ -159,7 +160,7 @@ Sources: [C]. See the reference list below.
 
 ### 06 · 1 / Begin with the original query
 
-**03:09–03:50 · 75 spoken words · 3s silent hold**
+**03:14–03:56 · 75 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Toy example; the highlighted expression is the transformation target.
 
@@ -181,7 +182,7 @@ Sources: [C]. See the reference list below.
 
 ### 07 · 2 / Ask the database for its value
 
-**03:50–04:33 · 79 spoken words · 2s silent hold**
+**03:56–04:38 · 79 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The auxiliary query supplies the substitution value.
 
@@ -203,7 +204,7 @@ Sources: [C]. See the reference list below.
 
 ### 08 · 3 / Substitute and compare
 
-**04:33–05:14 · 75 spoken words · 3s silent hold**
+**04:38–05:17 · 70 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same state + valid substitution → equal result.
 
@@ -216,7 +217,7 @@ Now replace the subquery with twenty. Both versions should return thirty and six
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. Nondeterministic expressions need special care. With these conditions, a mismatch becomes a focused report: one expression has behaved inconsistently across the two executions.
+The relation is conditional. The database state must remain unchanged between evaluations, and the replacement must preserve the relevant value and type behaviour. With these conditions, a mismatch becomes a focused report: one expression has behaved inconsistently across the two executions.
 
 **[NEXT]** Advance once.
 
@@ -225,7 +226,7 @@ Sources: [C]. See the reference list below.
 
 ### 09 · A row-dependent value is not one constant
 
-**05:14–05:58 · 79 spoken words · 3s silent hold**
+**05:17–06:00 · 79 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Dependent expressions need a mapping, not a global constant.
 
@@ -247,7 +248,7 @@ Sources: [C]. See the reference list below.
 
 ### 10 · The real bug: the value is still 1
 
-**05:58–06:42 · 80 spoken words · 3s silent hold**
+**06:00–06:39 · 69 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The highlighted fragment is not a standalone bug trigger.
 
@@ -260,7 +261,7 @@ Our real example is MySQL bug one one one two four one. The table contains a sin
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-I am showing only the changing fragment here. The complete test also contains a surrounding regular expression, a like comparison, and a case expression; those remain unchanged. The simple membership fragment alone is not the reproducer. The full SQL is in the repository and the backup slides.
+I am showing only the changing fragment here. The complete test also contains a surrounding regular expression, a like comparison, and a case expression; those remain unchanged. The simple membership fragment alone is not the reproducer.
 
 **[NEXT]** Advance once.
 
@@ -269,7 +270,7 @@ Sources: [C], [R]. See the reference list below.
 
 ### 11 · Equivalent value. Different answer.
 
-**06:42–07:26 · 78 spoken words · 4s silent hold**
+**06:39–07:23 · 78 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Our replay demonstrates one concrete oracle violation.
 
@@ -291,7 +292,7 @@ Sources: [R]. See the reference list below.
 
 ### 12 · The paper tests more than one example
 
-**07:26–08:16 · 91 spoken words · 3s silent hold**
+**07:23–08:04 · 75 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Evidence for complementary coverage, not universal superiority.
 
@@ -304,7 +305,7 @@ The authors evaluated five database systems and reported forty five previously u
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-That supports the claim of complementary coverage, not universal superiority. The implementation and investigation developed over several months. Auxiliary queries and value mappings also add work. The key contribution is broader oracle coverage, especially around subqueries and expression contexts, rather than simply generating a larger number of random queries.
+That supports the claim of complementary coverage, not universal superiority. The key contribution is broader oracle coverage, especially around subqueries and expression contexts, rather than simply generating a larger number of random queries.
 
 **[NEXT]** Advance once.
 
@@ -313,7 +314,7 @@ Sources: [C]. See the reference list below.
 
 ### 13 · Can history change the answer?
 
-**08:16–08:52 · 68 spoken words · 2s silent hold**
+**08:04–08:42 · 68 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] The schema history becomes the transformation target.
 
@@ -335,7 +336,7 @@ Sources: [D]. See the reference list below.
 
 ### 14 · Two histories. One intended schema.
 
-**08:52–09:34 · 76 spoken words · 2s silent hold**
+**08:42–09:22 · 76 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Equivalence includes constraints and relevant state.
 
@@ -357,7 +358,7 @@ Sources: [D]. See the reference list below.
 
 ### 15 · Reconstruct the state, then test it
 
-**09:34–10:22 · 88 spoken words · 3s silent hold**
+**09:22–10:10 · 88 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Generation → introspection → synthesis → comparison.
 
@@ -379,7 +380,7 @@ Sources: [D]. See the reference list below.
 
 ### 16 · Spend tests on different histories
 
-**10:22–11:02 · 76 spoken words · 2s silent hold**
+**10:10–10:52 · 76 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A useful oracle still needs useful test inputs.
 
@@ -401,7 +402,7 @@ Sources: [D]. See the reference list below.
 
 ### 17 · Before the rename, the relationship is simple
 
-**11:02–11:48 · 84 spoken words · 3s silent hold**
+**10:52–11:38 · 84 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The parent changes name, not its intended role.
 
@@ -423,7 +424,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 18 · The visible schema looks correct
 
-**11:48–12:30 · 76 spoken words · 3s silent hold**
+**11:38–12:20 · 76 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Visible metadata is not the whole internal state.
 
@@ -445,7 +446,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 19 · The old name survives in the behaviour
 
-**12:30–13:18 · 84 spoken words · 4s silent hold**
+**12:20–13:06 · 84 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same intended schema; different observed behaviour.
 
@@ -467,7 +468,7 @@ Sources: [D], [R]. See the reference list below.
 
 ### 20 · Schema testing reaches a different bug class
 
-**13:18–14:01 · 79 spoken words · 3s silent hold**
+**13:06–13:50 · 79 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Different test object, different coverage.
 
@@ -489,7 +490,7 @@ Sources: [D]. See the reference list below.
 
 ### 21 · Change the schedule. Compare the writes.
 
-**14:01–14:42 · 77 spoken words · 2s silent hold**
+**13:50–14:32 · 77 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] WSS has a scope; it is not arbitrary serializability.
 
@@ -511,7 +512,7 @@ Sources: [W]. See the reference list below.
 
 ### 22 · The write must not depend on an earlier read
 
-**14:42–15:30 · 88 spoken words · 3s silent hold**
+**14:32–15:20 · 88 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Scope is part of the correctness argument.
 
@@ -533,7 +534,7 @@ Sources: [W]. See the reference list below.
 
 ### 23 · Choose the reference schedule deliberately
 
-**15:30–16:17 · 85 spoken words · 3s silent hold**
+**15:20–16:06 · 85 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Corresponding serial order—not just any serial order.
 
@@ -555,7 +556,7 @@ Sources: [W]. See the reference list below.
 
 ### 24 · Two updates share three rows
 
-**16:17–17:01 · 80 spoken words · 3s silent hold**
+**16:06–16:50 · 80 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Simple SQL can have subtle concurrent behaviour.
 
@@ -577,7 +578,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 25 · The second update waits
 
-**17:01–17:46 · 83 spoken words · 3s silent hold**
+**16:50–17:36 · 83 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] A blocking event is part of the schedule, not a failed test.
 
@@ -599,7 +600,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 26 · Resume, commit—and inspect the rows
 
-**17:46–18:31 · 81 spoken words · 3s silent hold**
+**17:36–18:20 · 81 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] One unchanged b value is the observable symptom.
 
@@ -621,7 +622,7 @@ Sources: [R], [T]. See the reference list below.
 
 ### 27 · The reference updates all three b values
 
-**18:31–19:20 · 89 spoken words · 4s silent hold**
+**18:20–19:10 · 89 spoken words · 4s silent hold**
 
 [PACE] 120 wpm. [SHOW] Observed mismatch; reference generated by Troc in our replay.
 
@@ -643,7 +644,7 @@ Sources: [R], [T], [W]. See the reference list below.
 
 ### 28 · WSS finds bugs—and false positives
 
-**19:20–20:12 · 96 spoken words · 3s silent hold**
+**19:10–20:02 · 96 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Report the denominator and the false positives.
 
@@ -663,9 +664,97 @@ The table also includes nine false positives, highlighting differences in databa
 Sources: [W]. See the reference list below.
 
 
-### 29 · Our replay is narrower than the papers’ evaluations
+### 29 · Radar: strip the metadata
 
-**20:12–20:58 · 84 spoken words · 2s silent hold**
+**20:02–20:22 · 36 spoken words · 2s silent hold**
+
+[PACE] 120 wpm. [SHOW] Fourth layer: metadata.
+
+[LOOK]Briefly check the highlighted element, then return your gaze to the audience.
+[GESTURE] Hands relaxed; a small emphasis gesture is enough.
+[MOVE] Optional single position change at this section boundary; then stand still. Stay seated if appropriate.
+[DELIVERY] Pause at the section slide; let the new layer register. Single position change, then stand still.
+
+The fourth layer is metadata. Radar asks whether a database should answer a query the same way with or without its indexes and other metadata.
+
+**[PAUSE 2s]** Let the audience read or compare the visual.
+
+That turns a missing index into a control, not a shortcut.
+
+**[NEXT]** Advance once.
+
+Sources: [A]. See the reference list below.
+
+
+### 30 · Same data. Strip the metadata.
+
+**20:22–20:58 · 64 spoken words · 2s silent hold**
+
+[PACE] 120 wpm. [SHOW] Same data, same query; only metadata differs.
+
+[LOOK]Briefly check the highlighted element, then return your gaze to the audience.
+[GESTURE] One open-hand contrast or one directional trace; then return to neutral.
+[MOVE] Stay in place; do not pace.
+[DELIVERY] Trace the two paths from the same data, then open your hand at the comparison.
+
+Radar builds a raw copy of the database. It keeps the data but drops metadata such as indexes. The same query runs on both copies. Metadata may change the plan, but not the correct result, so a mismatch is a candidate bug.
+
+**[PAUSE 2s]** Let the audience read or compare the visual.
+
+The raw copy is the control. It exercises fewer optimisation paths. It is still the same DBMS, so agreement is not proof.
+
+**[NEXT]** Advance once.
+
+Sources: [A]. See the reference list below.
+
+
+### 31 · Indexed: 1 row. Raw: 0 rows.
+
+**20:58–21:42 · 81 spoken words · 3s silent hold**
+
+[PACE] 120 wpm. [SHOW] Same data and query; the index changes the answer.
+
+[LOOK]Briefly check the highlighted element, then return your gaze to the audience.
+[GESTURE] Hands relaxed; a small emphasis gesture is enough.
+[MOVE] Stay in place; do not pace.
+[DELIVERY] SHOW the two columns. Hold three seconds on the two counts. Stress that the raw copy is the correct one.
+
+On MySQL eight point zero point thirty two, we replayed bug one one zero one two five. Both databases hold table t zero with one DOUBLE ZEROFILL column and the value zero. Only the indexed copy adds a descending index on that column.
+
+**[PAUSE 3s]** Let the audience read or compare the visual.
+
+Data and query are identical. The indexed copy counts one matching row; the raw copy counts none. The raw result is correct, so the indexed answer is the bug. This is one replayed case, not Radar's own tool.
+
+**[NEXT]** Advance once.
+
+Sources: [R]. See the reference list below.
+
+
+### 32 · Metadata guidance finds more bugs
+
+**21:42–22:16 · 61 spoken words · 3s silent hold**
+
+[PACE] 120 wpm. [SHOW] Evidence within one study, not a general rate.
+
+[LOOK]Briefly check the highlighted element, then return your gaze to the audience.
+[GESTURE] Hands relaxed; a small emphasis gesture is enough.
+[MOVE] Stay in place; do not pace.
+[DELIVERY] Read the pairs slowly. Pause before the limitation. Do not rank the DBMSs.
+
+The authors report ablations. With metadata guidance, TiDB yields nineteen unique bugs in twelve hours, against twelve without. Across five systems the totals are twenty two against fourteen.
+
+**[PAUSE 3s]** Let the audience read or compare the visual.
+
+Developers confirmed thirty eight new bugs, thirty of them metadata related. This supports metadata diversity under a fixed budget. It does not show the gain holds for another generator or a patched version.
+
+**[NEXT]** Advance once.
+
+Sources: [A]. See the reference list below.
+
+
+### 33 · Our replay is narrower than the papers’ evaluations
+
+**22:16–22:50 · 62 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] Replayed bug symptoms ≠ replicated tool evaluation.
 
@@ -674,20 +763,20 @@ Sources: [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Keep your hands relaxed. LOOK to the audience for this scope statement. No need to point at every checkmark or read file names.
 
-Our project reproduced selected historical symptoms on one MySQL release. The query and schema examples are small direct replays. For the transaction case, we used a pinned Troc artifact and preserved its observed and oracle outputs.
+Our project reproduced selected historical symptoms on one MySQL release. The query, schema, and metadata examples are small direct replays. For the transaction case, we used a pinned Troc artifact and preserved its observed and oracle outputs.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-This gives us concrete examples and a reproducible teaching artifact, but it does not establish comparative coverage, discovery rates, or a full replication of WriteCheck. The papers supply those broader research claims. Our contribution to this presentation is making their core questions visible in one common database environment.
+This gives us concrete examples and a reproducible teaching artifact, but it does not establish comparative coverage, discovery rates, or a full replication of WriteCheck.
 
 **[NEXT]** Advance once.
 
-Sources: [R], [T], [C], [D], [W]. See the reference list below.
+Sources: [R], [T], [C], [D], [W], [A]. See the reference list below.
 
 
-### 30 · The same pattern survives at every layer
+### 34 · The same pattern survives at every layer
 
-**20:58–21:43 · 83 spoken words · 3s silent hold**
+**22:50–23:20 · 52 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] Same testing structure; complementary test surfaces.
 
@@ -696,20 +785,20 @@ Sources: [R], [T], [C], [D], [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Use one downward sweep over the rows, then turn fully to the audience for the complementary-coverage argument.
 
-Now compare the papers directly. CODDTest changes an expression and compares query results. DDLCheck changes the construction history and compares later database behaviour. WriteCheck changes the schedule and compares write effects under its assumptions.
+Now compare the papers directly. CODDTest changes an expression. DDLCheck changes the construction history. WriteCheck changes the schedule and compares write effects under its assumptions. Radar changes the metadata and compares query results.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-This also explains why the techniques are complementary. An expression transformation does not necessarily visit schema evolution paths. Equivalent schema construction does not necessarily exercise transaction interleavings. Their shared philosophy does not make them substitutes for one another; it gives us a way to reason about their distinct coverage.
+An expression transformation does not necessarily visit schema evolution paths. Equivalent schema construction does not necessarily exercise transaction interleavings.
 
 **[NEXT]** Advance once.
 
-Sources: [C], [D], [W]. See the reference list below.
+Sources: [C], [D], [W], [A]. See the reference list below.
 
 
-### 31 · The difficult part is the equivalence claim
+### 35 · The difficult part is the equivalence claim
 
-**21:43–22:32 · 89 spoken words · 3s silent hold**
+**23:20–24:10 · 91 spoken words · 3s silent hold**
 
 [PACE] 120 wpm. [SHOW] The equivalence assumptions are part of the contribution.
 
@@ -718,43 +807,43 @@ Sources: [C], [D], [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Give each assumption one verbal beat. End the list with hands lowered. Emphasise the equivalence assumptions rather than speeding through the limitations.
 
-The critical question is not simply whether two outputs differ. For CODDTest, that means valid values, types, and row dependence. For DDLCheck, it means a faithful reconstruction of the schema and state. For WriteCheck, it means the right transaction restrictions and database semantics.
+The critical question is not simply whether two outputs differ. For CODDTest, that means valid values, types, and row dependence. For DDLCheck, it means a faithful reconstruction of the schema and state. For WriteCheck, it means the right transaction restrictions and database semantics. For Radar, it means metadata that should not alter results.
 
 **[PAUSE 3s]** Let the audience read or compare the visual.
 
-That is the strongest connection between the papers. Each turns an informal expectation into an executable oracle, then investigates its boundary. A useful follow up study would examine which assumptions cause shared blind spots or false positives, rather than comparing raw bug totals as a leaderboard.
+Each turns an informal expectation into an executable oracle, then investigates its boundary. A useful follow up study would examine which assumptions cause shared blind spots or false positives, rather than comparing raw bug totals as a leaderboard.
 
 **[NEXT]** Advance once.
 
-Sources: [C], [D], [W]. See the reference list below.
+Sources: [C], [D], [W], [A]. See the reference list below.
 
 
-### 32 · Specify what must stay the same
+### 36 · Specify what must stay the same
 
-**22:32–23:14 · 80 spoken words · 2s silent hold**
+**24:10–24:47 · 70 spoken words · 2s silent hold**
 
 [PACE] 120 wpm. [SHOW] A good oracle makes an expectation executable.
 
 [LOOK]Briefly check the highlighted element, then return your gaze to the audience.
 [GESTURE] Hands relaxed; a small emphasis gesture is enough.
 [MOVE] Stay in place; do not pace.
-[DELIVERY] Return to a neutral position. Look across the room for the three verbs. Hold after the three verbs, then deliver the closing thought. Stop—do not click into the appendix automatically.
+[DELIVERY] Return to a neutral position. Look across the room for the four verbs. Hold after the four verbs, then deliver the closing thought. Stop—do not click into the appendix automatically.
 
-The main takeaway is this: when predicting the answer is hard, specify what must stay the same. Substitute an expression. Reconstruct a schema. Reschedule transactions. Then test the relation, while being explicit about its assumptions.
+The main takeaway is this: when predicting the answer is hard, specify what must stay the same. Substitute an expression. Reconstruct a schema. Reschedule transactions. Strip metadata. Then test the relation, while being explicit about its assumptions.
 
 **[PAUSE 2s]** Let the audience read or compare the visual.
 
-These three papers show how a compact correctness idea can reach deep implementation behaviour. Our MySQL replays make those ideas tangible, but the general lesson is the design of the oracle. Thank you. I am happy to discuss either the methods or the reproduction details.
+These four papers show how a compact correctness idea can reach deep implementation behaviour. Our MySQL replays make those ideas tangible, but the general lesson is the design of the oracle. Thank you.
 
 **[STOP]** Invite questions. Do not enter the appendix automatically.
 
-Sources: [C], [D], [W], [R]. See the reference list below.
+Sources: [C], [D], [W], [A], [R]. See the reference list below.
 
 
 ## Backup answers — outside the timed route
 
 
-### 33 · The complete changing-predicate context
+### 37 · The complete changing-predicate context
 
 **Backup / outside timed route · 31 spoken words · 0s silent hold**
 
@@ -772,7 +861,7 @@ The membership fragment is not a standalone reproducer. These two predicate form
 Sources: [C], [R]. See the reference list below.
 
 
-### 34 · The foreign-key case in six lines
+### 38 · The foreign-key case in six lines
 
 **Backup / outside timed route · 29 spoken words · 0s silent hold**
 
@@ -790,7 +879,7 @@ This is the compact schema-history sequence. The directly created control starts
 Sources: [D], [R]. See the reference list below.
 
 
-### 35 · Two WSS variants—not full serializability
+### 39 · Two WSS variants—not full serializability
 
 **Backup / outside timed route · 52 spoken words · 0s silent hold**
 
@@ -808,9 +897,9 @@ The paper defines transaction-level and statement-level WSS. The first compares 
 Sources: [W]. See the reference list below.
 
 
-### 36 · What the evaluations establish
+### 40 · What the evaluations establish
 
-**Backup / outside timed route · 46 spoken words · 0s silent hold**
+**Backup / outside timed route · 53 spoken words · 0s silent hold**
 
 [PACE] 120 wpm. [SHOW] Do not rank DBMS reliability from these totals.
 
@@ -819,14 +908,14 @@ Sources: [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Answer the methodological question, rather than reading all the counts.
 
-The reported bug totals measure different populations, tool scopes, and experiments. CODDTest compares other oracles on found cases; DDLCheck investigates schema coverage and a generator ablation; WriteCheck combines a historical study with new testing. Raw bug totals are not a reliability ranking of the tested databases.
+The reported bug totals measure different populations, tool scopes, and experiments. CODDTest compares other oracles on found cases; DDLCheck investigates schema coverage and a generator ablation; WriteCheck combines a historical study with new testing; Radar reports a TiDB and five-system ablation. Raw bug totals are not a reliability ranking of the tested databases.
 
 **[BACKUP]** Return to the discussion.
 
-Sources: [C], [D], [W]. See the reference list below.
+Sources: [C], [D], [W], [A]. See the reference list below.
 
 
-### 37 · Research sources
+### 41 · Research sources
 
 **Backup / outside timed route · 27 spoken words · 0s silent hold**
 
@@ -837,14 +926,14 @@ Sources: [C], [D], [W]. See the reference list below.
 [MOVE] Stay in place; do not pace.
 [DELIVERY] Keep this slide available during questions.
 
-These are the three primary papers, with links in the notes and in the project’s papers folder. Our evidence files and the Troc artifact are cited separately.
+These are the four primary papers, with links in the notes and in the project’s papers folder. Our evidence files and the Troc artifact are cited separately.
 
 **[BACKUP]** Return to the discussion.
 
-Sources: [C], [D], [W], [R], [T]. See the reference list below.
+Sources: [C], [D], [W], [A], [R], [T]. See the reference list below.
 
 
-### 38 · Delivery and visual-design sources
+### 42 · Delivery and visual-design sources
 
 **Backup / outside timed route · 47 spoken words · 0s silent hold**
 
@@ -870,7 +959,9 @@ Sources: [B], [P]. See the reference list below.
 
 [W] Ziyu Cui et al. Simple Testing Can Expose Most Critical Transaction Bugs: Understanding and Detecting Write-Specific Serializability Violations in Database Systems. PVLDB 18(8), 2547–2560, 2025. https://www.vldb.org/pvldb/vol18/p2547-cui.pdf
 
-[R] Project evidence: results/coddtest_111241.txt, results/ddlcheck_114904.txt, results/writecheck_104833.txt. MySQL 8.0.32, reproduced in the class project. The transaction replay uses Troc, not the WriteCheck implementation. https://github.com/seofernando25/csi5137-atdm-db-project (private).
+[A] Jiansen Song et al. Detecting Metadata-Related Logic Bugs in Database Systems via Raw Database Construction (Radar). PVLDB 17(8), 1884–1897, 2024. https://www.vldb.org/pvldb/vol17/p1884-song.pdf ; https://doi.org/10.14778/3659437.3659445
+
+[R] Project evidence: results/coddtest_111241.txt, results/ddlcheck_114904.txt, results/writecheck_104833.txt, results/radar_110125.txt. MySQL 8.0.32, reproduced in the class project. The transaction replay uses Troc, not the WriteCheck implementation. https://github.com/seofernando25/csi5137-atdm-db-project (private).
 
 [T] Troc artifact, pinned commit a6d50e3f596b356137d2f8c3c8b31a61bf7fe2c5. https://github.com/criszy/Troc ; case cases/mysql104833.txt. Also listed in WriteCheck/detected-bugs.md at https://github.com/tcse-iscas/WriteCheck .
 

@@ -1,0 +1,53 @@
+09/28 23:17:11.421 INFO troc.Main main: Run tests for MYSQL in [DB troc104833_20260928191711_25650]-[Table t] on [127.0.0.1:3306]
+09/28 23:17:11.718 INFO troc.Main main: Read database and transactions from file: /repo/repro/writecheck_104833.case.txt
+09/28 23:17:11.886 INFO troc.Main main: Initial table:
+View{
+	1:[null, 1]
+	2:[2, 2]
+	3:[null, 3]
+}
+
+09/28 23:17:11.956 INFO troc.Main main: Read transactions from file:
+Transaction{1, READ_COMMITTED}, with statements:
+	BEGIN;
+	UPDATE t SET a = 10 WHERE TRUE;
+	COMMIT;
+Transaction{2, READ_COMMITTED}, with statements:
+	BEGIN;
+	UPDATE t SET b = 20 WHERE a;
+	COMMIT;
+
+09/28 23:17:11.957 INFO troc.Main main: Get schedule from file: 1-1-2-2-1-2
+09/28 23:17:11.958 INFO troc.TrocChecker main: Check new schedule.
+09/28 23:17:14.023 INFO troc.TxnPairExecutor Thread-0: 2-1: time out
+09/28 23:17:14.983 INFO troc.TrocChecker main: Schedule: [1-0, 1-1, 2-0, 2-1, 1-2, 2-2]
+09/28 23:17:14.984 INFO troc.TrocChecker main: Input schedule: 1-1-2-2-1-2
+09/28 23:17:14.984 INFO troc.TrocChecker main: Get execute result: Result:
+Order:[1-0, 1-1, 2-0, 2-1(B), 1-2, 2-1, 2-2]
+Query Results:
+	1-0: null
+	1-1: null
+	2-0: null
+	2-1: null
+	1-2: null
+	2-1: null
+	2-2: null
+FinalState: [10, 1, 10, 20, 10, 20]
+DeadBlock: false
+
+09/28 23:17:14.985 INFO troc.TrocChecker main: MVCC-based oracle order: [1-0, 1-1, 2-0, 2-1(B), 1-2, 2-1, 2-2]
+09/28 23:17:14.985 INFO troc.TrocChecker main: MVCC-based oracle result: Result:
+Order:[1-0, 1-1, 2-0, 2-1(B), 1-2, 2-1, 2-2]
+Query Results:
+	1-0: null
+	1-1: null
+	2-0: null
+	2-1: null
+	1-2: null
+	2-1: null
+	2-2: null
+FinalState: [10, 20, 10, 20, 10, 20]
+DeadBlock: false
+
+09/28 23:17:14.986 INFO troc.TrocChecker main: txp: 1, all case: 1, skip: 0
+09/28 23:17:14.987 INFO troc.TrocChecker main: Error: Inconsistent final database state

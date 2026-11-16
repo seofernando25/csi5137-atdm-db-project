@@ -1,0 +1,5 @@
+=== Radar / MySQL #110125 ===
+version=8.0.32
+indexed_rows=1
+raw_rows=0
+PASS: MySQL #110125 reproduced.
