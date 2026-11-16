@@ -31,3 +31,4 @@ results/tmp/
 
 # Obsidian local workspace state
 obsidian/.obsidian/workspace*.json
+__pycache__/
