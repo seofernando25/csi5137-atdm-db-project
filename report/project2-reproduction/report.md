@@ -16,7 +16,7 @@ Project 2 asks for one paper from Project 1 and at least one reproduced graph. O
 | WriteCheck | #104833 | final state `[10, 1, 10, 20, 10, 20]` vs oracle `[10, 20, 10, 20, 10, 20]` | reproduced with **Troc**, not WriteCheck's own tool |
 | Radar | #110125 | indexed copy returns 1 row, raw copy returns 0 | reproduced |
 
-**Extent of success: partial for the graph, full for the bug cases.** The Figure 2 sweep reproduces the published *shape* with a heavily reduced budget (40 s per depth instead of 24 h, three seeds). The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/`; we did not measure run-to-run stability). We did not rerun any paper's full fuzzing campaign, and we did not attempt Figure 3. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §7.
+**Extent of success: partial for the graph, full for the bug cases.** The Figure 2 sweep reproduces the published *shape* with a heavily reduced budget (40 s per depth instead of 24 h, three seeds). The four bug-triggering cases reproduced in the captured runs (one captured run per case in `artifacts/results/` (the folder also holds the failed #111421 output); we did not measure run-to-run stability). We did not rerun any paper's full fuzzing campaign, and we did not attempt Figure 3. The Project 1 figures are re-plots of values read off the published figures; they are not reproductions. See §7.
 
 ## 2 Graph reproduction: CODDTest Figure 2
 

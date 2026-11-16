@@ -7,7 +7,7 @@
 | Completed tests | -88.6% (-88.3 to -88.9) | -89.4% |
 | Time per query | x5.58 (x5.48 to x5.78) | x9.91 (read-off curve about x10.9) |
 
-Both curves have the published shape (monotonic fall in tests, monotonic rise in time per query). The test-count change matches within about 1 point. The time-per-query rise is about 55% of the published factor. A 40 s budget gives a trend check, not the paper's 24 h absolute numbers. Seed-to-seed spread is small (error bars in the plot are min-max over 3 seeds).
+Both curves have the published shape (monotonic fall in tests, monotonic rise in time per query). The test-count change matches within about 1 point. The time-per-query rise is about 56% of the published factor. A 40 s budget gives a trend check, not the paper's 24 h absolute numbers. Seed-to-seed spread is small (error bars in the plot are min-max over 3 seeds).
 
 ![comparison](fig2_reproduction.png)
 
