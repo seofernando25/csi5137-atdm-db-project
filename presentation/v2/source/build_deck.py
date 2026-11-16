@@ -280,7 +280,7 @@ for i,d in enumerate(SLIDES,1):
   text(s,'34',.9,2.15,3.3,1.5,93,'gray',font=FONT);text(s,'submitted',.96,3.95,3.3,.7,27,'gray')
   arrow(s,4.0,3.05,5.23,3.05,'g',2.5)
   text(s,'29',5.65,2.15,4,1.5,93,'g',font=FONT);text(s,'confirmed new',5.7,3.95,5.4,.7,27,'ink',True)
-  text(s,'21 schema-related  +  8 crashes',5.7,5.13,6.85,.8,26,'g');label(s,'6 DBMSs · 9 fixed at reporting point',.95,6.33,11,'gray',14)
+  text(s,'21 schema-related  +  8 crashes',5.7,5.13,6.85,.8,26,'g');text(s,'6 DBMSs · 9 fixed at reporting point',.95,6.25,9,.4,14,'gray')
  elif i==21:s=section(i,'03','WriteCheck','Change the schedule.\nCompare the writes.','Simple Testing Can Expose\nMost Critical Transaction Bugs','Ziyu Cui et al.  ·  PVLDB 2025')
  elif i==22:
   s=base(i,title,sec,'[W] §2.2 · transaction scope')
