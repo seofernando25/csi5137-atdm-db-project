@@ -315,7 +315,7 @@ for i,d in enumerate(SLIDES,1):
   label(s,'HISTORICAL STUDY',.97,2.22,5);label(s,'NEW TESTING CAMPAIGN',7.1,2.22,5)
   text(s,'32 / 35',.94,2.77,5.5,1.31,77,'g',font=FONT);text(s,'studied bugs violate WSS',1.01,4.22,5.36,.95,25,'ink',True)
   text(s,'22',7.12,2.77,2.4,1.24,77,'g',font=FONT);text(s,'unique\nviolations',9.46,3.22,3.0,1,24)
-  text(s,'11 new bugs',7.13,4.65,5.3,.53,30,'ink',True);text(s,'9 false positives',7.13,5.36,5.3,.48,27,'gray')
+  text(s,'11 new + 2 known bugs',7.13,4.65,5.3,.53,30,'ink',True);text(s,'9 false positives',7.13,5.36,5.3,.48,27,'gray')
   line(s,6.42,2.16,6.42,6.03)
   text(s,'Not “91.4% of all database bugs”.',1.0,6.31,10.9,.39,19,'gray')
  elif i==29:s=section(i,'04','Radar',title,'Detecting Metadata-Related Logic Bugs\nvia Raw Database Construction','Jiansen Song et al.  ·  PVLDB 2024')

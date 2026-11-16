@@ -35,7 +35,7 @@ Project 2 asks for one paper from Project 1 and at least one reproduced graph. O
 | Completed tests | −88.6% (−88.3 to −88.9) | −89.4% |
 | Time per query | ×5.58 (×5.48 to ×5.78) | ×9.91 (read-off curve about ×10.9) |
 
-Both curves have the published shape. The decline in tests is within about one point of the paper. The rise in time per query is about 55% of the published factor. Likely causes, none tested: hardware, the 40 s budget, and our measure (wall time of the oracle's own queries, including result fetching, summed over threads). Absolute numbers are not comparable with the paper's 24-hour counts.
+Both curves have the published shape. The decline in tests is within about one point of the paper. The rise in time per query is about 56% of the published factor. Likely causes, none tested: hardware, the 40 s budget, and our measure (wall time of the oracle's own queries, including result fetching, summed over threads). Absolute numbers are not comparable with the paper's 24-hour counts.
 
 **Scaling laws.** We fit five forms (linear, power, exponential, exponential plus constant, quadratic) to each curve relative to depth 1, and ran PySR on the same eight points (`fits.md`, `pysr_log.txt`, `fig_scaling.png`).
 
@@ -44,7 +44,7 @@ Both curves have the published shape. The decline in tests is within about one p
 | Time per query | constant + exponential, rate per depth level | 0.241 (PySR 0.247) | 0.263 (PySR 0.268) |
 | Completed tests | near-linear, slope per depth level | −0.058 (PySR −0.064) | −0.062 (PySR −0.066) |
 
-The growth rates agree within 10%; ours has a smaller exponential part, which is the missing factor in the rise. For the test count the data cannot separate linear, quadratic and exponential-plus-constant (within about 6 AIC). With eight points per curve, and published values read off a figure, this supports the *shape* of the dependence and is not a measured scaling law.
+The growth rates agree within 10%; ours has a smaller exponential part, which is the missing factor in the rise. For the test count the data cannot separate linear, quadratic and exponential-plus-constant (within about 6.4 AIC). With eight points per curve, and published values read off a figure, this supports the *shape* of the dependence and is not a measured scaling law.
 
 **Verdict.** Partial reproduction. The qualitative claim holds in our run (deeper expressions cost more time per query and complete fewer tests under a fixed budget), and the test decline matches in magnitude. The time-per-query magnitude does not. We did not attempt Figure 3 or count oracle mismatches on SQLite.
 
@@ -175,4 +175,4 @@ Requirements: Docker, Git. The container is `csi5137-atdm-mysql8032` on host por
 
 ## 9 Acknowledgment of LLM use
 
-Claude Code (Anthropic) assisted with this project. It wrote and revised the shell runners; patched the upstream CODDTest/SQLancer clone (the SQLite CASE-visitor fix, the sqlite-jdbc pin, and the counters in `metrics.patch`); ran the Figure 2 sweeps and wrote the plotting, curve-fitting and PySR scripts; summarized the papers; and drafted this report from repository evidence. The authors chose the target figure, set the experimental plan, and are responsible for the claims. Observed values were checked against `artifacts/results/` and `graph-reproduction/raw/`. A Haiku-model reviewer checked the numbers in this report against those files; not every author has proofread the text.
+Claude Code (Anthropic) assisted with this project. It wrote and revised the shell runners; patched the upstream CODDTest/SQLancer clone (the SQLite CASE-visitor fix, the sqlite-jdbc pin, and the counters in `metrics.patch`); ran the Figure 2 sweeps and wrote the plotting, curve-fitting and PySR scripts; summarized the papers; and drafted this report from repository evidence. The authors chose the target figure, set the experimental plan, and are responsible for the claims. Observed values were checked against `artifacts/results/` and `graph-reproduction/raw/`. No author has yet proofread the full text.
