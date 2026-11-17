@@ -1,77 +1,151 @@
-\documentclass[tikz,border=4pt]{standalone}
+\documentclass[tikz,border=6pt]{standalone}
 \input{tikzstyle.tex}
 
+\definecolor{okgreen}{HTML}{1E5631}
+\definecolor{stepblue}{HTML}{2B5B84}
+
 \tikzset{
-  sbox/.style={box, font=\scriptsize, text width=1.15cm, minimum height=0.85cm, line width=0.7pt},
-  cell/.style={draw=ink!55, minimum width=0.65cm, minimum height=0.4cm, inner sep=0pt, font=\scriptsize},
-  stepno/.style={font=\footnotesize, text=ink!70},
-  sub/.style={font=\scriptsize\itshape, anchor=north west, text width=2.5cm, align=left},
-  dia/.style={diamond, draw=ink!60, fill=white, aspect=2.2, minimum width=1.6cm,
-    inner sep=1.5pt, font=\scriptsize, line width=0.6pt},
+  topcard/.style={
+    panel, minimum width=15.90cm, minimum height=3.70cm,
+    anchor=south west, inner sep=0pt
+  },
+  execcard/.style={
+    panel, minimum width=6.30cm, minimum height=2.45cm,
+    anchor=south west, inner sep=0pt
+  },
+  opbox/.style={
+    rounded corners=3.5pt, fill=white!92,
+    minimum width=1.90cm, minimum height=0.56cm,
+    inner xsep=4pt, inner ysep=3pt, align=center,
+    font=\ttfamily\fontsize{7}{8.8}\selectfont, text=ink, line width=0.7pt
+  },
+  statebox/.style={
+    draw=ink!50, rounded corners=4pt, fill=white!88,
+    minimum width=4.60cm, minimum height=0.74cm,
+    font=\ttfamily\fontsize{7.5}{9.5}\selectfont, text=ink, line width=0.7pt
+  },
+  resbox/.style={
+    draw=ink!50, fill=pgrey!60, rounded corners=4pt,
+    minimum width=2.85cm, minimum height=0.58cm,
+    font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
+  },
+  dia/.style={
+    diamond, draw=ink!60, fill=white, aspect=2.0,
+    minimum width=1.40cm, inner sep=1pt,
+    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
+  },
+  pill/.style={
+    rounded corners=7pt, inner xsep=14pt, minimum height=0.64cm,
+    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
+  },
+  flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
+  busline/.style={ink!65, line width=0.8pt, line cap=round}
 }
 
 \begin{document}
-\begin{tikzpicture}
+\begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
+  % ==============================================================================
+  % Top card: Workload and schedule (shared input)
+  % ==============================================================================
+  \node[topcard, fill=pgrey] (sched) at (0.00,5.65) {};
 
-% ---------- Panel A: workload and schedule (x 0-9.0, y 1.1-9.8) ----------
-\path[panel, fill=pgrey] (0,1.1) rectangle (9.0,9.8);
-\node[title] at (0.4,9.4) {Workload and schedule};
-\node[anchor=west, font=\scriptsize\itshape] at (0.4,8.8) {Two transactions on table $t(a,b)$, READ COMMITTED};
-\node[anchor=west, font=\scriptsize] at (0.4,8.45) {initial rows: $(\mathrm{NULL},1),\ (2,2),\ (\mathrm{NULL},3)$};
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (0.35,9.12) {Workload and schedule};
+  \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at (0.35,8.72) {Two transactions on table \texttt{t(a, b)}, \texttt{READ COMMITTED}};
+  \node[anchor=north east, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at (15.55,8.72) {initial rows: \texttt{(NULL, 1), (2, 2), (NULL, 3)}};
 
-% Lane T1 (box centre y=7.3), lane T2 (y=5.4). Each step number sits 0.35 cm above its box.
-% Columns follow the schedule 1-1-2-2-1-2.
-\node[stepno] at (1.9,8.0) {1};
-\node[stepno] at (3.65,8.0) {2};
-\node[stepno] at (6.9,8.0) {5};
-\node[stepno] at (4.4,6.2) {3};
-\node[stepno] at (6.15,6.2) {4};
-\node[stepno] at (7.9,6.2) {6};
+  % 6-step grid (centered around x = 7.95, pitch = 2.30cm)
+  \foreach \i/\xpos in {1/2.20, 2/4.50, 3/6.80, 4/9.10, 5/11.40, 6/13.70} {
+    \node[font=\bfseries\fontsize{7}{8}\selectfont, text=ink!60] at (\xpos,8.14) {\i};
+  }
 
-\node[anchor=west, font=\footnotesize\bfseries, text=cblue] at (0.4,7.3) {T1};
-\node[anchor=west, font=\footnotesize\bfseries, text=cgreen] at (0.4,5.4) {T2};
-\draw[dashed, rule, line width=0.6pt] (0.4,6.5) -- (8.6,6.5);
+  % Lane T1 (y = 7.54)
+  \node[font=\bfseries\fontsize{8}{9.5}\selectfont, text=stepblue] at (0.68,7.54) {T1};
+  \draw[stepblue!35, dash pattern=on 2pt off 2pt, line width=0.7pt] (2.20,7.54) -- (11.40,7.54);
+  \node[opbox, draw=stepblue!75] at (2.20,7.54)  {BEGIN};
+  \node[opbox, draw=stepblue!75] at (4.50,7.54)  {SET a = 10};
+  \node[opbox, draw=stepblue!75] at (11.40,7.54) {COMMIT};
 
-\node[sbox, draw=cblue] at (1.9,7.3) {BEGIN};
-\node[sbox, draw=cblue] at (3.65,7.3) {SET\\$a{=}10$};
-\node[sbox, draw=cblue] at (6.9,7.3) {COMMIT};
+  % Lane divider
+  \draw[rule, line width=0.5pt, dash pattern=on 2pt off 2pt] (0.35,6.98) -- (15.55,6.98);
 
-\node[sbox, draw=cgreen] at (4.4,5.4) {BEGIN};
-\node[sbox, draw=cgreen] at (6.15,5.4) {SET\\$b{=}20$};
-\node[sbox, draw=cgreen] at (7.9,5.4) {COMMIT};
+  % Lane T2 (y = 6.42)
+  \node[font=\bfseries\fontsize{8}{9.5}\selectfont, text=okgreen] at (0.68,6.42) {T2};
+  \draw[okgreen!35, dash pattern=on 2pt off 2pt, line width=0.7pt] (6.80,6.42) -- (13.70,6.42);
+  \node[opbox, draw=okgreen!75] at (6.80,6.42)  {BEGIN};
+  \node[opbox, draw=okgreen!75] at (9.10,6.42)  {SET b = 20};
+  \node[opbox, draw=okgreen!75] at (13.70,6.42) {COMMIT};
 
-\node[anchor=west, font=\scriptsize\itshape] at (0.4,2.6) {write-write conflict on rows of $t$};
+  \node[anchor=center, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at (7.95,5.90) {write-write conflict on rows of \texttt{t}};
 
-% ---------- Panel B: concurrent DBMS run (x 9.5-12.8, y 5.25-9.8) ----------
-\path[panel, fill=pblue] (9.5,5.25) rectangle (12.8,9.8);
-\node[title, text=ink, text width=2.5cm, align=left] at (9.9,9.4) {DBMS:\\concurrent run};
-\node[sub] at (9.9,8.6) {same transactions,\\schedule 1-1-2-2-1-2};
-\node[box, minimum width=2.4cm, minimum height=1.1cm, text width=2.2cm] at (11.15,7.0) {rows of $t(a,b)$};
-\node[anchor=west, font=\scriptsize\itshape] at (9.9,6.0) {final state of the DBMS};
+  % ==============================================================================
+  % Middle row: Reference execution (baseline) vs. DBMS concurrent run (variant)
+  % ==============================================================================
+  \node[execcard, fill=pblue]   (cRef)  at (0.80,2.40) {};
+  \node[execcard, fill=porange] (cDbms) at (8.80,2.40) {};
 
-% ---------- Panel C: reference execution (x 9.5-12.8, y 1.1-4.75) ----------
-\path[panel, fill=pgreen] (9.5,1.1) rectangle (12.8,4.75);
-\node[title, text=ink] at (9.9,4.55) {Reference execution};
-\node[sub] at (9.9,4.15) {same transactions,\\inferred order};
-\node[box, minimum width=2.4cm, minimum height=1.1cm, text width=2.2cm] at (11.15,2.9) {rows of $t(a,b)$};
-\node[anchor=west, font=\scriptsize\itshape] at (9.9,1.6) {final state of the reference};
+  % Left card: Reference execution
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (1.12,4.64) {Reference execution};
+  \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at (1.12,4.26) {same transactions, inferred serial order (\texttt{T1 $\rightarrow$ T2})};
+  \node[statebox] at (3.95,3.38) {rows of t(a, b)};
+  \node[anchor=center, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!70]
+    at (3.95,2.68) {final state of the reference};
 
-% ---------- Oracle (x 13.0-17.3, y 1.1-9.8) ----------
-\path[panel, draw=garnet, fill=pgarnet] (13.0,1.1) rectangle (17.3,9.8);
-\node[title, text=ink] at (13.4,9.4) {Oracle};
-\node[ok, text width=3.6cm, minimum height=0.85cm, align=center, inner sep=3pt] at (15.15,7.15) {same $\rightarrow$ ok};
-\node[dia] (eq) at (15.15,5.05) {equal?};
-\node[bug, text width=3.6cm, minimum height=0.85cm, align=center, inner sep=3pt] at (15.15,2.9) {differ $\rightarrow$ candidate defect};
-\draw[-{Stealth[length=2.2mm]}, cgreen, line width=0.8pt] (eq.north) -- (15.15,6.72);
-\node[anchor=west, font=\scriptsize, text=cgreen] at (15.32,6.15) {yes};
-\draw[-{Stealth[length=2.2mm]}, garnet, line width=0.8pt] (eq.south) -- (15.15,3.32);
-\node[anchor=west, font=\scriptsize, text=garnet] at (15.32,4.05) {no};
+  % Right card: DBMS concurrent run
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (9.12,4.64) {DBMS: concurrent run};
+  \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at (9.12,4.26) {same transactions, schedule \texttt{1-1-2-2-1-2}};
+  \node[statebox] at (11.95,3.38) {rows of t(a, b)};
+  \node[anchor=center, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!70]
+    at (11.95,2.68) {final state of the DBMS};
 
-% ---------- Flow arrows (states enter the oracle panel) ----------
-\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (9.0,7.3) -- (9.5,7.3);
-\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (9.0,3.0) -- (9.5,3.0);
-\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (12.8,7.3) -- (13.0,7.3);
-\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (12.8,3.0) -- (13.0,3.0);
+  % Symmetric dispatch arrows from the schedule card into both execution cards
+  \draw[flow] (3.95,5.65) --
+    node[right=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {replay serial} (cRef.north);
+  \draw[flow] (11.95,5.65) --
+    node[left=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {execute schedule} (cDbms.north);
 
+  % ==============================================================================
+  % Bottom evaluation layer: states -> bus -> equal? -> pills
+  % ==============================================================================
+  \node[resbox] (r1) at (3.95,1.56) {Reference state};
+  \node[resbox] (r2) at (11.95,1.56) {DBMS state};
+
+  \draw[flow] (cRef.south)  -- (r1.north);
+  \draw[flow] (cDbms.south) -- (r2.north);
+
+  % Collector bus exits the bottom of the state boxes
+  \coordinate (busL) at (r1.south |- 0,0.82);
+  \coordinate (busR) at (r2.south |- 0,0.82);
+  \coordinate (busM) at ($(busL)!0.5!(busR)$);
+
+  \draw[busline] (r1.south) -- (busL);
+  \draw[busline] (r2.south) -- (busR);
+  \draw[busline] (busL) -- (busR);
+
+  % Centered decision diamond and symmetric outcome pills
+  \node[dia] (eq) at ($(busM) - (0,0.62)$) {equal?};
+  \draw[-{Stealth[length=2.2mm]}, busline] (busM) -- (eq.north);
+
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine)
+    at ($(busM) + (-3.15,-1.58)$) {fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug)
+    at ($(busM) + (3.15,-1.58)$) {candidate defect};
+
+  \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
+    (eq.west) -| (fine.north);
+  \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
+    (eq.east) -| (bug.north);
+
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=okgreen, yshift=1pt]
+    at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=garnet, yshift=1pt]
+    at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
 \end{tikzpicture}
 \end{document}

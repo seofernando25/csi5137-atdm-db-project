@@ -1,62 +1,167 @@
 \documentclass[tikz,border=6pt]{standalone}
 \input{tikzstyle.tex}
 
-\begin{document}
-\begin{tikzpicture}[
-  tstp/.style={box, text width=3.95cm, align=left},
-  schema/.style={box, text width=3.0cm, align=left},
-  wl/.style={box, draw=corange, dashed, text width=2.9cm, align=center},
-  pan/.style={fill=#1, rounded corners=4pt},
-  capn/.style={text width=3.8cm, align=center, font=\footnotesize\itshape},
-  db/.style={cylinder, shape border rotate=90, aspect=0.35, draw=cblue, fill=white,
-             minimum width=1.9cm, minimum height=0.95cm, inner sep=1pt, line width=0.7pt},
-]
+\definecolor{okgreen}{HTML}{1E5631}
+\definecolor{stepblue}{HTML}{2B5B84}
+\definecolor{accent}{HTML}{D97706}
 
-% Panels: 0.4 cm gaps between panels, 0.4 cm padding to contents
-\path[pan=pblue]  (0,-0.4)    rectangle (5.8,8.4);
-\path[pan=pgrey]  (6.2,-0.4)  rectangle (10.5,8.4);
-\path[pan=pgreen] (10.9,-0.4) rectangle (16.5,8.4);
-\node[title] at (0.4,8.0)  {Evolved database};
-\node[title] at (6.6,8.0)  {Introspect schema};
-\node[title] at (11.3,8.0) {Directly built database};
-
-% Left: DDL history as a step timeline
-\draw[line width=0.6pt, draw=cblue] (0.6,7.0) -- (0.6,4.3);
-\foreach \y/\n in {7.0/1, 5.65/2, 4.3/3} {
-  \node[circle, fill=cblue, text=white, inner sep=0pt, minimum size=4mm,
-        font=\scriptsize\bfseries] at (0.6,\y) {\n};
+\tikzset{
+  card/.style={
+    panel, minimum width=4.50cm, minimum height=4.85cm,
+    anchor=south west, inner sep=0pt
+  },
+  ddlbox/.style={
+    draw=ink!45, rounded corners=3.5pt, fill=white!88,
+    inner xsep=7pt, inner ysep=4.5pt, align=left,
+    font=\ttfamily\fontsize{7}{9.2}\selectfont, text=ink
+  },
+  stepnum/.style={
+    circle, fill=stepblue, text=white, inner sep=0pt,
+    minimum size=0.38cm, font=\bfseries\fontsize{7}{7}\selectfont
+  },
+  workbox/.style={
+    draw=accent, dash pattern=on 2pt off 2pt, rounded corners=4pt,
+    fill=porange!35, inner xsep=9pt, inner ysep=5pt, align=center,
+    font=\fontsize{7.5}{9.5}\selectfont, text=ink
+  },
+  resbox/.style={
+    draw=ink!50, fill=pgrey!60, rounded corners=4pt,
+    minimum width=2.85cm, minimum height=0.60cm,
+    font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
+  },
+  dia/.style={
+    diamond, draw=ink!60, fill=white, aspect=2.0,
+    minimum width=1.40cm, inner sep=1pt,
+    font=\bfseries\fontsize{8.5}{9.5}\selectfont, line width=0.75pt
+  },
+  pill/.style={
+    rounded corners=7pt, inner xsep=14pt, minimum height=0.64cm,
+    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
+  },
+  flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
+  busline/.style={ink!65, line width=0.8pt, line cap=round},
+  cyl/.style={
+    cylinder, shape border rotate=90, draw=ink!60, fill=white,
+    aspect=0.22, minimum height=0.88cm, minimum width=1.18cm,
+    font=\fontsize{7.5}{9}\selectfont, line width=0.75pt
+  }
 }
-\node[tstp] (st1) at (3.25,7.0)  {\textbf{CREATE TABLE t0}\\ c2 FLOAT8, PRIMARY KEY};
-\node[tstp] (st2) at (3.25,5.65) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE,\\ FK c1 $\rightarrow$ t0};
-\node[tstp] (st3) at (3.25,4.3)  {\textbf{ALTER TABLE t0}\\ RENAME TO t2};
-\node[db] (cL) at (3.25,3.0) {Evolved DB};
-\draw[arr] (st3.south) -- (cL.north);
 
-% Middle: introspection of the final schema
-\node[schema] (schema) at (8.35,3.0)
-  {\textbf{Final schema}\\[2pt] t2: c2 FLOAT8, PK\\ t1: c1 FLOAT8, UNIQUE\\ FK c1 $\rightarrow$ t2(c2)};
-\node[capn] at (8.35,4.75) {SHOW CREATE TABLE\\ on evolved database};
-\draw[arr] (cL.east) -- (schema.west);
-\node[lab] at (5.25,3.35) {extract};
+\begin{document}
+\begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
+  % Top row: three role-colored cards
+  \node[card, fill=pblue]   (c1) at (0.00,3.40) {};
+  \node[card, fill=pgrey]   (c2) at (5.70,3.40) {};
+  \node[card, fill=porange] (c3) at (11.40,3.40) {};
 
-% Shared workload W feeding both databases, routed below the Final schema box
-\node[wl] (W) at (8.35,0.9)
-  {\textbf{Shared workload W}\\ INSERT t2 (1)\\ INSERT t1 (1)};
-\draw[arr] (W.west) -| (cL.south);
+  % ---------- Card 1: Evolved database (baseline history) ----------
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (0.32,8.00) {Evolved database};
 
-% Right: directly built schema
-\node[tstp] (st4) at (13.7,7.0)  {\textbf{CREATE TABLE t2}\\ c2 FLOAT8, PRIMARY KEY};
-\node[tstp] (st5) at (13.7,5.65) {\textbf{CREATE TABLE t1}\\ c1 FLOAT8 UNIQUE,\\ FK c1 $\rightarrow$ t2};
-\node[db] (cR) at (13.7,3.0) {Direct DB};
-\draw[arr] (st5.south) -- (cR.north);
-\draw[arr] (schema.east) -- (cR.west);
-\node[lab] at (11.38,3.35) {build};
-\draw[arr] (W.east) -| (cR.south);
+  \node[ddlbox, minimum width=3.30cm] (s1) at (2.25,7.12) {%
+    \textbf{CREATE TABLE t0}\\
+    c2 FLOAT8, PRIMARY KEY%
+  };
+  \node[ddlbox, minimum width=3.30cm] (s2) at (2.25,6.18) {%
+    \textbf{CREATE TABLE t1}\\
+    c1 FLOAT8 UNIQUE, FK c1 $\rightarrow$ t0%
+  };
+  \node[ddlbox, minimum width=3.30cm] (s3) at (2.25,5.24) {%
+    \textbf{ALTER TABLE t0}\\
+    RENAME TO t2%
+  };
 
-% Oracle: both databases receive the same insert; compare the outcomes
-\node[draw=garnet, line width=1pt, fill=white, rounded corners=3pt, align=center,
-      inner sep=5pt, text width=15.4cm] (O) at (8.25,-1.35)
-  {\textbf{Oracle: same insert on both databases, compare outcomes}\\
-   Equal outcomes: ok. Different outcomes: candidate bug.};
+  \node[cyl] (cyl1) at (2.25,4.05) {Evolved DB};
+  \draw[flow] (s3.south) -- (cyl1.north);
+
+  % ---------- Card 2: Introspect schema (intermediate derivation) ----------
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (6.02,8.00) {Introspect schema};
+  \node[anchor=center, align=center, font=\itshape\fontsize{7.5}{9.5}\selectfont, text=ink!75]
+    at (7.95,7.22) {\texttt{SHOW CREATE TABLE}\\on evolved database};
+
+  \node[ddlbox, minimum width=3.80cm, inner ysep=6pt] (schema) at (7.95,5.75) {%
+    {\normalfont\bfseries\fontsize{8}{9.5}\selectfont Final schema}\\[2pt]
+    t2: c2 FLOAT8, PK\\
+    t1: c1 FLOAT8, UNIQUE\\
+    FK c1 $\rightarrow$ t2(c2)%
+  };
+
+  % Extract connector routed through the left gutter
+  \draw[flow] (cyl1.east) -| (5.35,5.75) -- (schema.west);
+  \node[anchor=south, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75]
+    at (4.92,4.08) {extract};
+
+  % ---------- Card 3: Directly built database (derived variant) ----------
+  \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at (11.72,8.00) {Directly built database};
+
+  \node[draw=ink!40, dash pattern=on 2pt off 2pt, rounded corners=4pt,
+    fill=white!40, minimum width=3.86cm, minimum height=1.96cm] (ddlR) at (13.65,6.22) {};
+
+  \node[ddlbox, minimum width=3.54cm] at (13.65,6.68) {%
+    \textbf{CREATE TABLE t2}\\
+    c2 FLOAT8, PRIMARY KEY%
+  };
+  \node[ddlbox, minimum width=3.54cm] at (13.65,5.76) {%
+    \textbf{CREATE TABLE t1}\\
+    c1 FLOAT8 UNIQUE, FK c1 $\rightarrow$ t2%
+  };
+
+  \node[cyl] (cyl3) at (13.65,4.05) {Direct DB};
+  \draw[flow] (ddlR.south) -- (cyl3.north);
+
+  % Build connector routed through the right gutter into the target DDL
+  \draw[flow] (schema.east) -| (10.55,6.22) -- (ddlR.west);
+  \node[anchor=south, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75]
+    at (10.98,6.25) {build};
+
+  % ---------- Evaluation layer: injection -> outcomes -> bus -> equal? ----------
+
+  \node[resbox] (r1) at (2.25,1.48) {Evolved outcome};
+  \node[resbox] (r3) at (13.65,1.48) {Direct outcome};
+
+  \draw[flow] (2.25,3.40) -- (r1.north);
+  \draw[flow] (13.65,3.40) -- (r3.north);
+
+  % Shared workload W injects into both evaluation paths above the outcome boxes
+  \node[workbox] (work) at (7.95,2.52) {%
+    \textbf{Shared workload $W$}\\[2pt]
+    \texttt{INSERT t2 (1);}\\
+    \texttt{INSERT t1 (1);}%
+  };
+
+  \draw[-{Stealth[length=2.0mm]}, accent, line width=0.8pt] (work.west) -- (2.25,2.52);
+  \draw[-{Stealth[length=2.0mm]}, accent, line width=0.8pt] (work.east) -- (13.65,2.52);
+  \node[anchor=south, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!80]
+    at (4.15,2.58) {run $W$};
+  \node[anchor=south, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!80]
+    at (11.75,2.58) {run $W$};
+
+  % Collector bus exits the bottom of the outcome boxes
+  \coordinate (busL) at (r1.south |- 0,0.74);
+  \coordinate (busR) at (r3.south |- 0,0.74);
+  \coordinate (busM) at ($(busL)!0.5!(busR)$);
+
+  \draw[busline] (r1.south) -- (busL);
+  \draw[busline] (r3.south) -- (busR);
+  \draw[busline] (busL) -- (busR);
+
+  % Decision diamond and symmetric outcome pills
+  \node[dia] (eq) at ($(busM) - (0,0.62)$) {equal?};
+  \draw[-{Stealth[length=2.2mm]}, busline] (busM) -- (eq.north);
+
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.45,-0.78) {fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (10.45,-0.78) {candidate bug};
+
+  \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
+    (eq.west) -| (fine.north);
+  \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
+    (eq.east) -| (bug.north);
+
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=okgreen, yshift=1pt]
+    at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=garnet, yshift=1pt]
+    at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
 \end{tikzpicture}
 \end{document}

@@ -101,7 +101,7 @@ Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_codd}
-\caption{CODDTest on a Product table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated. In the figure the average over the Product rows folds to 6.}
+\caption{CODDTest on a \texttt{Product} table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated. In the figure the average over the \texttt{Product} rows folds to 6.}
 \label{fig:codd}
 \end{figure*}
 

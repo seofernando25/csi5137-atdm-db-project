@@ -19,10 +19,9 @@
     draw=ink!35, dash pattern=on 2pt off 2pt, rounded corners=3pt,
     inner xsep=6pt, inner ysep=2pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!55
   },
-  smalltable/.style={font=\ttfamily\fontsize{7}{8.5}\selectfont, text=ink},
   resbox/.style={
     draw=ink!50, fill=pgrey!60, rounded corners=4pt,
-    minimum width=2.9cm, minimum height=0.62cm,
+    minimum width=2.9cm, minimum height=0.6cm,
     font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
   },
   dia/.style={
@@ -31,79 +30,78 @@
     font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
   },
   pill/.style={
-    rounded corners=7pt, minimum width=2.4cm, minimum height=0.66cm,
+    rounded corners=7pt, minimum height=0.66cm, inner xsep=10pt,
     font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
   },
   flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
-  busline/.style={ink!65, line width=0.75pt, line cap=round},
+  busline/.style={ink!65, line width=0.8pt, line cap=round},
   coll/.style={font=\fontsize{7}{8.5}\selectfont\itshape, text=ink!70, align=center},
   ttl/.style={font=\bfseries\fontsize{9.5}{11}\selectfont, text=ink},
   cyl/.style={
     cylinder, shape border rotate=90, draw=ink!60, fill=white,
-    aspect=0.22, minimum height=1.4cm, minimum width=0.85cm,
+    aspect=0.22, minimum height=1.35cm, minimum width=0.85cm,
     font=\ttfamily\fontsize{8}{9}\selectfont, line width=0.75pt
   }
 }
 
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  % Cards: pblue baseline, pgrey derivation, porange transformed variant
-  \node[card, fill=pblue]   (d1) at (0,3.2) {};
-  \node[card, fill=pgrey]   (d2) at (6.1,3.2) {};
-  \node[card, fill=porange] (d3) at (12.2,3.2) {};
+  % Cards: pblue baseline / pgrey derivation / porange transformed variant
+  \node[card, fill=pblue]   (d1) at (0,3.55) {};
+  \node[card, fill=pgrey]   (d2) at (6.1,3.55) {};
+  \node[card, fill=porange] (d3) at (12.2,3.55) {};
 
   % ---- Card 1: Database with metadata
-  \node[anchor=north west, ttl] at (0.35,6.72) {Database with metadata};
-  \node[hlchip] (idx1) at (2.15,5.55) {index i\textsubscript{0} on c\textsubscript{0} DESC};
-  \node[cyl] (cyl1) at (2.15,4.4) {t0};
+  \node[anchor=north west, ttl] at (0.35,7.07) {Database with metadata};
+  \node[hlchip] (idx1) at (2.15,6.2) {index i\textsubscript{0} on c\textsubscript{0} DESC};
+  \node[cyl] (cyl1) at (2.15,4.62) {t\textsubscript{0}};
   \draw[dash pattern=on 2pt off 2pt, accent, line width=0.75pt] (idx1.south) -- (cyl1.north);
-  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (2.15,3.38) {rows: \texttt{c0 = 0}};
+  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (2.15,3.72) {rows: \texttt{c\textsubscript{0} = 0}};
 
-  % ---- Card 2: Raw database construction
-  \node[anchor=north west, ttl] at (6.45,6.72) {Raw database build};
+  % ---- Card 2: Raw database build
+  \node[anchor=north west, ttl] at (6.45,7.07) {Raw database build};
   \node[draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-        fill=white!75, minimum width=3.66cm, minimum height=0.85cm] (stripTop) at (8.25,5.55) {};
+        fill=white!75, minimum width=3.66cm, minimum height=0.9cm] (stripTop) at (8.25,6.2) {};
   \node[draw=ink!35, fill=pgrey!50, rounded corners=3pt, inner xsep=5pt, inner ysep=1.5pt,
-        font=\ttfamily\fontsize{7.5}{9}\selectfont, text=ink!50] at (7.25,5.55) {index i\textsubscript{0}};
-  \node[font=\bfseries\fontsize{8}{9.5}\selectfont, text=garnet] at (9.15,5.55) {$\times$\enspace removed};
+        font=\ttfamily\fontsize{7}{8.5}\selectfont, text=ink!50] at (7.1,6.2) {index i\textsubscript{0}};
+  \node[font=\bfseries\fontsize{7.5}{9}\selectfont, text=garnet, anchor=west] at (8.35,6.2) {$\times$ removed};
 
   \node[draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-        fill=white!75, minimum width=3.66cm, minimum height=1.05cm] (stripBot) at (8.25,4.3) {};
-  \node[inner sep=0pt] at (7.1,4.3) {%
-    \renewcommand{\arraystretch}{1.12}%
+        fill=white!75, minimum width=3.66cm, minimum height=1.16cm] (stripBot) at (8.25,4.62) {};
+  \node[inner sep=0pt] at (7.05,4.62) {%
+    \renewcommand{\arraystretch}{1.0}\fontsize{6.5}{8.5}\selectfont%
     \begin{tabular}{|c|}
       \hline
-      \textbf{\ttfamily c0} \\ \hline
+      \textbf{\ttfamily c\textsubscript{0}} \\ \hline
       \ttfamily 0 \\ \hline
     \end{tabular}};
-  \node[font=\bfseries\fontsize{8}{9.5}\selectfont, text=okgreen] at (9.2,4.3) {kept};
+  \draw[okgreen, line width=1.3pt] (8.42,4.68) -- (8.6,4.46) -- (9.1,4.92);
+  \node[font=\bfseries\fontsize{7.5}{9}\selectfont, text=okgreen, anchor=west] at (9.22,4.6) {kept};
 
   % ---- Card 3: Raw database (mirrored slot geometry to card 1)
-  \node[anchor=north west, ttl] at (12.55,6.72) {Raw database};
-  \node[idxbadge] (idx3) at (14.35,5.55) {no index};
-  \node[cyl] (cyl3) at (14.35,4.4) {t0};
-  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (14.35,3.38) {rows: \texttt{c0 = 0}};
+  \node[anchor=north west, ttl] at (12.55,7.07) {Raw database};
+  \node[idxbadge] (idx3) at (14.35,6.2) {no index};
+  \node[cyl] (cyl3) at (14.35,4.62) {t\textsubscript{0}};
+  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (14.35,3.72) {rows: \texttt{c\textsubscript{0} = 0}};
 
   % ---- Inter-card flows (card edges only)
   \draw[flow] (d1.east) -- (d2.west);
   \draw[flow] (d2.east) -- (d3.west);
 
-  % ---- Oracle: drops from compared cards only (d1, d3)
-  \node[resbox] (q1) at (2.15,1.6) {Row count of $Q$};
-  \node[resbox] (q3) at (14.35,1.6) {Row count of $Q$};
+  % ---- Oracle: result boxes first, then bus
+  \node[resbox] (q1) at (2.15,2.17) {Row count of $Q$};
+  \node[resbox] (q3) at (14.35,2.17) {Row count of $Q$};
   \draw[flow] (d1.south) -- node[right=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {run $Q$} (q1.north);
   \draw[flow] (d3.south) -- node[left=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {run $Q$} (q3.north);
 
-  % ---- shared bus and single routing diamond
-  \coordinate (busM) at ($(d1.south)!0.5!(d3.south)$);
-  \draw[busline] (q1.south) -- (q1.south |- 0,2.25);
-  \draw[busline] (q1.south |- 0,2.25) -- (q3.south |- 0,2.25);
-  \draw[busline] (q3.south) -- (q3.south |- 0,2.25);
-  \node[dia] (eq) at (8.25,1.3) {equal?};
-  \draw[-{Stealth[length=2.2mm]}, busline] (8.25,2.25) -- (eq.north);
+  \draw[busline] (q1.south) -- (q1.south |- 0,1.56);
+  \draw[busline] (q1.south |- 0,1.56) -- (q3.south |- 0,1.56);
+  \draw[busline] (q3.south) -- (q3.south |- 0,1.56);
+  \node[dia] (eq) at (8.25,0.86) {equal?};
+  \draw[-{Stealth[length=2.2mm]}, busline] (8.25,1.56) -- (eq.north);
 
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,0.2) {fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,0.2) {candidate bug};
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,-0.14) {fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,-0.14) {candidate bug};
   \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
     (eq.west) -| (fine.north);
   \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
