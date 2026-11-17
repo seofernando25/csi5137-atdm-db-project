@@ -41,16 +41,16 @@ Algorithm~\ref{alg:oracle} gives the generic loop shared by the four methods.
 \Require DBMS $E$, configuration $C$, generator $G$, oracle family $F$, testing budget
 \Ensure Reduced candidate inconsistencies
 \While{budget remains}
-  \State $(D,W)\gets G.\textsc{NextCase}(C)$
-  \State $(T,P)\gets F.\textsc{ChooseTransformation}(D,W,C)$
-  \If{\textbf{not} \textsc{ValidatePrecondition}$(P,D,W,C)$} \State \textbf{continue} \EndIf
+  \State $(D,W)\gets G.\textit{NextCase}(C)$
+  \State $(T,P)\gets F.\textit{ChooseTransformation}(D,W,C)$
+  \If{\textbf{not} \textit{ValidatePrecondition}$(P,D,W,C)$} \State \textbf{continue} \EndIf
   \State $(D',W')\gets T(D,W)$
-  \State $A\gets\textsc{ExecuteFromCleanState}(E,D,W,C)$
-  \State $B\gets\textsc{ExecuteFromCleanState}(E,D',W',C)$
-  \If{\textbf{not} \textsc{Equivalent}$(A,B,F.\mathit{observationRules})$}
-    \State $\mathit{case}\gets\textsc{ReduceMismatch}(D,W,T,C)$
-    \State \textsc{Record}$(\mathit{case},\text{version},\text{outcomes},\text{seed})$
-    \State \textsc{ClassifyAndDeduplicate}$(\mathit{case})$
+  \State $A\gets\textit{ExecuteFromCleanState}(E,D,W,C)$
+  \State $B\gets\textit{ExecuteFromCleanState}(E,D',W',C)$
+  \If{\textbf{not} \textit{Equivalent}$(A,B,F.\mathit{observationRules})$}
+    \State $\mathit{case}\gets\textit{ReduceMismatch}(D,W,T,C)$
+    \State \textit{Record}$(\mathit{case},\text{version},\text{outcomes},\text{seed})$
+    \State \textit{ClassifyAndDeduplicate}$(\mathit{case})$
   \EndIf
 \EndWhile
 \end{algorithmic}
