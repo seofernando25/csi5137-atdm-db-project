@@ -66,6 +66,17 @@ These rules exist because the report's own redesign burned several review rounds
 - Hoist shared invariants into one common element (e.g., the shared oracle bar) instead of repeating them per card.
 - Captions carry what the figure cannot (source, caveat, validation note); they never restate data labels or prose. If fixing a figure leaves the caption restating it, cut the caption in the same commit.
 
+## Hard rules from the report redesign (additive, not optional)
+
+1. **Semantic role coloring across multi-figure sets.** Bind fill colors to fixed functional roles (baseline input = blue, derivation/derivation step = grey, transformed variant = accent) and keep the mapping identical in every explainer figure.
+2. **Never pierce containers with connectors.** Edges route strictly between outer card boundaries (`east` to `west`, or `south` to `north`); a path never crosses text, tables or icons inside an adjacent node.
+3. **Oracle drops come only from compared artifacts.** In differential pipelines, evaluate only from the nodes whose outputs are actually compared — never from helper/construction boxes.
+4. **One decision locus, truly branching.** Never an `equal?` diamond beside repeated verdict text; the diamond is a routing vertex with two orthogonal branches ending in a green pass pill and a red failure pill.
+5. **Compute coordinates with `calc`.** Bus midpoints, branch label positions, aligned slots and pill columns use `($(A)!0.5!(B)$)` and `(A |- B)`/`(A -| B)`; hardcoded decimals are a defect to flag in review.
+6. **Constant clearance everywhere.** ≥ 6 pt between decision diamonds and adjacent labels; equal top/bottom margins around internal dashed dividers; placeholder badges in parallel cards share identical vertical rhythm.
+7. **Uniform typography in code.** Code identifiers, SQL and subscripts inside code blocks are monospace (`\ttfamily` + `\textsubscript{...}`, never math mode `$...$`); titles and prose inherit the document's primary typeface.
+8. **Colored branches are single continuous orthogonal paths** with `rounded corners=3pt` and one semantic color each — never two segments joined at a mitered corner, never split-color elbows.
+
 ## Review output format
 
 When asked to review or rate a figure, answer in this exact shape:
