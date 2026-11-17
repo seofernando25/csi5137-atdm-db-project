@@ -193,12 +193,10 @@ TxCheck & 16 & 1 & 4\\
 
 \section{Cross-study discussion and threats to validity}\label{sec:discussion}
 
-Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. The columns keep different reporting stages and are not a ranking. The studies show that each method exposes real defects in mature systems. They do not allow adding the counts, because versions and periods differ, overlap across the four campaigns is unknown, and confirmation and fix counts are snapshots from publication.
-
-\begin{table*}[!b]
+\begin{table*}[!t]
 \caption{Publication-time discovery results. Reporting stages differ across rows; this is not a performance ranking.}
 \label{tab:summary}
-\centering\small
+\centering\footnotesize\renewcommand{\arraystretch}{0.95}
 \begin{tabularx}{\linewidth}{@{}lXXX@{}}
 \toprule
 \textbf{Study} & \textbf{Submitted or reported} & \textbf{Confirmed new bugs} & \textbf{Target category} \\
@@ -206,10 +204,12 @@ Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. 
 CODDTest \cite{coddtest} & 45 unique new bugs & 45 (33 fixed, 12 verified) & 24 logic bugs\\
 DDLCheck \cite{ddlcheck} & 34 submissions & 29 & 21 schema-related logic bugs\\
 Radar \cite{radar} & 42 submissions & 38 & 30 metadata-related bugs\\
-WriteCheck \cite{writecheck} & 22 unique WSS violations & 11 & 13 confirmed critical bugs, 2 already known\\
+WriteCheck \cite{writecheck} & 22 unique WSS violations & 11 & 13 confirmed critical bugs (11 new, 2 already known)\\
 \bottomrule
 \end{tabularx}
 \end{table*}
+
+Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. The columns keep different reporting stages and are not a ranking. The studies show that each method exposes real defects in mature systems. They do not allow adding the counts, because versions and periods differ, overlap across the four campaigns is unknown, and confirmation and fix counts are snapshots from publication.
 
 \textbf{Internal and construct validity.} The main internal threat is that the paired executions may not satisfy the oracle's preconditions. Nondeterminism, errors, type conversion, or incomplete reconstruction can break the relation without exposing a defect. Reduction can change execution plans, so a reduced case needs re-checking. Developer confirmation helps, but projects apply different severity labels. On construct validity, a unique query plan is not necessarily a unique semantic path, high coverage can coexist with undetected faults, and a fast tester can repeat equivalent cases. Bug counts also depend on how hard the authors reduced and deduplicated.
 
@@ -226,3 +226,5 @@ Composition needs a new validity argument. An evolved schema could give expressi
 \textbf{Conclusion.} CODDTest, DDLCheck, Radar, and WriteCheck make different parts of database behavior testable through carefully chosen comparisons. Our sufficiency judgments support existence claims, not size claims.
 
 Each equivalence carries its own precondition: expression replacement needs a stable, faithful value mapping, schema reconstruction needs the final definition preserved, metadata removal needs a query whose meaning survives the removal, and serial replay needs a conflict model that justifies the inferred order.
+
+\paragraph{Disclosure of LLM use.}{\footnotesize We used Claude (Anthropic) throughout. It converted our draft to \LaTeX{}, rewrote the prose in several passes, and drew the explainer diagrams (in TikZ) and the plot scripts. Figures 6--10 are redrawn from values read off the published figures, so they are approximate and were not re-measured. An LLM review against the course guide flagged missing parts (Given/Sought, motivation deficiencies, sufficiency judgments), which we then added. Claude also recomputed the arithmetic in the tables. We chose the papers, and we, the authors, are responsible for the final text and its claims.\par}
