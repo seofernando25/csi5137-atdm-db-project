@@ -131,7 +131,7 @@ The validity condition is that FCRFS fits the DBMS's conflict handling. It is no
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
-\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. The figure uses the schedule 1-1-2-2-1-2 and an inferred reference order.}
+\caption{WriteCheck. A DBMS executes the six-step concurrent schedule while a reference run replays the same transactions in an inferred serial (FCRFS) order. A mismatch between the two final states flags a candidate defect, pending the checks in Section~2.}
 \label{fig:write}
 \end{figure*}
 
