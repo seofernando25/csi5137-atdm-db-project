@@ -1,6 +1,6 @@
 % sec_a.tex: Abstract, Introduction, Problem definition, Motivation, Related work
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 Testing the correctness of database management systems (DBMSs) is a part of data management that checks whether the engines holding an organization's data return and store what the SQL semantics promise.
 
 A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behavior depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
@@ -9,7 +9,7 @@ The research question of this report is how the equivalence assumption behind ea
 
 Section~2 defines the problem and Section~3 motivates it. Section~4 groups and compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.4)~\cite{norec,tlp}.
 
-\section{Problem definition and discussion}
+\section{Problem definition and discussion}\label{sec:problem}
 \subsection{High-level description}
 Take a database that stores product quantities. Two SQL executions that mean the same thing on the same stored data must give the same observations. Replacing a deterministic expression by its computed value cannot change which products a query selects. A table rebuilt in its final form behaves like one that reached that form through several migrations. A deterministic query that never names an index returns the same answer without it. Logic testing looks for cases where one of these expectations fails.
 
@@ -58,7 +58,7 @@ Algorithm~\ref{alg:oracle} gives the generic loop shared by the four methods.
 
 The procedure is our synthesis for this review. CODDTest needs an auxiliary evaluation step, and WriteCheck may run both a transaction-level and a statement-level reference, so the real tools use more steps than the two executions shown. What they share is the order: validate the comparison, observe both executions from controlled states, and keep the mismatch alive during reduction.
 
-\section{Motivation}
+\section{Motivation}\label{sec:motivation}
 \subsection{Running example}
 Suppose an inventory service stores a table \texttt{Product} with columns \texttt{id}, \texttt{quantity} and \texttt{reserved}, and available stock is \mbox{$\mathrm{quantity}-\mathrm{reserved}$}. The four papers map onto it as follows.
 \begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
@@ -87,7 +87,7 @@ All four also share the same-DBMS reference problem described above.
 
 Could existing work be extended to cover these gaps? In our assessment, some of it can, though none of it is demonstrated by the papers. CODDTest's folding and Radar's raw construction both operate on a given state, so they could in principle run on states produced by DDLCheck's schema histories. DDLCheck already checks its confirmed schema bugs against Radar's detectable scope~\cite[Table~4]{ddlcheck}. Extending WriteCheck to read-dependent writes is harder, because the serial reference is no longer well defined once a write uses a value read earlier in the transaction. Covering all four mechanisms needs several oracles, each with its own validity condition.
 
-\section{Related work}
+\section{Related work}\label{sec:related}
 We group the papers by how each builds its reference execution. The first group tests read-query consistency by changing expressions (CODDTest) or optional metadata (Radar). The second changes schema construction history (DDLCheck). The third changes transaction execution (WriteCheck). Table~\ref{tab:compare} summarizes the comparison, and the subsections give the essentials of each method.
 
 \subsection{Query consistency through expression and metadata transformation}

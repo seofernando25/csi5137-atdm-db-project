@@ -1,11 +1,13 @@
 \documentclass[11pt,letterpaper]{article}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1in,headheight=30pt,headsep=14pt]{geometry}
 \usepackage{newtxtext,newtxmath}   % Times-compatible, as the course guide requires
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{graphicx,booktabs,array,tabularx,xcolor,amsmath,enumitem}
 \usepackage[most]{tcolorbox}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black,pdfborder={0 0 0},pdftitle={Detecting Logic Bugs in Relational Database Systems},pdfauthor={Group 12, CSI 5137}]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome5}
 \usepackage[font=small,labelfont=bf,labelsep=period,skip=6pt]{caption}
 \usepackage[ruled]{algorithm}
 \usepackage{algpseudocode}
@@ -19,35 +21,51 @@
 \graphicspath{{figures/}}
 \definecolor{abstractbg}{HTML}{EAF1FA}
 \definecolor{abstractborder}{HTML}{B8C7DD}
+\definecolor{panelbg}{HTML}{EAF1FA}
+\definecolor{panelborder}{HTML}{C9D6EA}
+% Running header: short title plus a clickable section map; the current section is bold.
+
+
+\newcommand{\hdrentry}[3]{\hyperref[sec:#1]{\edef\cur{\rightmark}\edef\me{#2}\ifx\cur\me\textbf{#2~#3}\else #2~#3\fi}}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{\thesection}}
+\renewcommand{\subsectionmark}[1]{\markright{\thesection}}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{panelborder}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[C]{\footnotesize\textbf{Detecting Logic Bugs in Relational Database Systems}\\[2pt]
+\hdrentry{intro}{1}{Intro} $|$ \hdrentry{problem}{2}{Problem} $|$ \hdrentry{motivation}{3}{Motivation} $|$ \hdrentry{related}{4}{Related} $|$ \hdrentry{experiments}{5}{Experiments} $|$ \hdrentry{discussion}{6}{Discussion} $|$ \hdrentry{conclusions}{7}{Conclusion}}
+\fancyfoot[C]{\small\thepage}
 \begin{document}
 \thispagestyle{empty}
 \begin{center}
-{\LARGE\bfseries Detecting Logic Bugs in Relational Database Systems\par}
-\vspace{4pt}
-{\large Four oracles that compare a database with itself\par}
+{\fontsize{22}{26}\selectfont\bfseries Detecting Logic Bugs in\\[2pt] Relational Database Systems\par}
+\vspace{8pt}
+{\large\itshape Four oracles that compare a database with itself\par}
 \vspace{12pt}
-{\large\bfseries Group 12\par}
+{\large Fernando Berti Cruz Nogueira$^{1}$ \qquad Saatvik Paul$^{1}$ \qquad Haekwon Ahn$^{1}$\par}
+\vspace{3pt}
+{\small $^{1}$University of Ottawa \qquad CSI 5137 A00, Group 12 \qquad Project 1 Report\par}
 \vspace{4pt}
-Fernando Berti Cruz Nogueira \quad Saatvik Paul \quad Haekwon Ahn\par
-\vspace{2pt}
-\small CSI 5137 A00 --- Advanced Topics in Databases and Data Management\\
-Project 1 Report\par
+{\small\href{https://github.com/seofernando25/csi5137-atdm-db-project}{\textcolor{blue!60!black}{\faGithub\ \textbf{Code}}} \qquad Advanced Topics in Databases and Data Management\par}
 \end{center}
-\vspace{6pt}
-\begin{tcolorbox}[enhanced,colback=abstractbg,colframe=abstractborder,boxrule=0.5pt,arc=4pt,
-  left=10pt,right=10pt,top=10pt,bottom=10pt,title={\centering\bfseries Abstract},coltitle=black,
-  colbacktitle=abstractbg,attach boxed title to top center={yshift=-2mm},boxed title style={colframe=abstractborder,boxrule=0pt,frame hidden,colback=abstractbg},
-  fonttitle=\bfseries,boxsep=0pt]
+\vspace{10pt}
+\begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,
+  left=10pt,right=10pt,top=9pt,bottom=9pt,boxsep=0pt]
 \small
 Logic bugs make a relational database return a wrong answer or keep a wrong state without crashing, so nothing signals the failure. This report reviews four papers from 2024--2025: CODDTest, DDLCheck, WriteCheck and Radar. Each detects such bugs by running two executions that should agree and flagging a mismatch, but they vary different things: expression evaluation, schema construction history, optional metadata, and transaction schedules. We compare their test oracles, equivalence assumptions, supported features and published experiments. The evaluations show that every method finds real bugs. Differences in workloads, DBMS versions, time budgets and confirmation procedures still rule out a ranking by bug count, so we compare the methods by the validity of their oracles and by what each one can and cannot reach.
+\medskip
+
+\begin{tcolorbox}[colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=3pt,bottom=3pt,boxsep=0pt]
+\centering\includegraphics[width=\linewidth]{fig_overview}
 \end{tcolorbox}
-\vspace{8pt}
-\begin{center}
-\includegraphics[width=\linewidth]{fig_overview}
+\vspace{2pt}
+\captionsetup{type=figure,font=footnotesize,skip=0pt}
 \captionof{figure}{\textbf{Four oracles, one idea.} Each method runs two executions of the same data, here a table Product(id, quantity, reserved), that should give the same observable result: a folded expression versus the original query (CODDTest), a table built through ALTER statements versus built directly (DDLCheck), a concurrent schedule versus a serial one (WriteCheck), and a database with an index versus one without (Radar). A mismatch between the two observations is a candidate bug to be validated.}
 \label{fig:overview}
-\end{center}
+\end{tcolorbox}
 \clearpage
+\setcounter{page}{2}
 \input{sec_a}
 \input{sec_b}
 \input{refs}

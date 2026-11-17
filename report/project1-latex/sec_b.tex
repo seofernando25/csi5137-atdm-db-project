@@ -1,4 +1,4 @@
-\section{Experimental study}
+\section{Experimental study}\label{sec:experiments}
 \label{sec:exp}
 
 This section reviews the experiments the original authors report. The studies use generated databases and SQL workloads rather than fixed application datasets, which fits their aim: explore semantic combinations and produce small counterexamples, not measure application throughput. The same choice limits what they show. Generated workloads say little about how often these defects occur in production traffic.
@@ -206,7 +206,7 @@ For Project~2 we also re-ran CODDTest's expression-depth sweep (Figure~\ref{fig:
 
 \textbf{Sufficiency.} Sufficient for the qualitative trend in one run; insufficient for magnitude or variance beyond three seeds at a 40 s budget.
 
-\section{Cross-study discussion and threats to validity}
+\section{Cross-study discussion and threats to validity}\label{sec:discussion}
 \label{sec:discussion}
 
 Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. The columns keep different reporting stages and are not a ranking. The studies show that each method exposes real defects in mature systems. They do not allow adding the counts, because versions and periods differ, overlap across the four campaigns is unknown, and confirmation and fix counts are snapshots from publication.
@@ -231,7 +231,7 @@ WriteCheck \cite{writecheck} & 22 unique WSS violations & 11 & 13 confirmed crit
 
 \textbf{External validity and reproducibility.} The systems span embedded, traditional, and distributed designs, but that does not mean every deployment is covered. WriteCheck uses a single-node CockroachDB cluster while Radar uses three nodes. Small generated states do not cover long production histories or arbitrary application transactions. Stronger comparative work would pin shared DBMS revisions, separate known-case capability from fresh discovery, repeat randomized runs with recorded seeds, and measure manual triage effort. Time to the first confirmed target bug would complement raw throughput. Negative controls, meaning cases that look inconsistent but are valid, would test oracle precision.
 
-\section{Conclusions and research directions}
+\section{Conclusions and research directions}\label{sec:conclusions}
 \label{sec:conclusions}
 
 \textbf{Combining oracles.} The four papers suggest organizing database testing around independent sources of disagreement. Start from a valid database state and apply each oracle within its supported workload: CODDTest for expression evaluation, DDLCheck for schema history, Radar for optional metadata, WriteCheck for write interleavings. Keep the classification rules separate so that a failure stays attributable to one relation.
