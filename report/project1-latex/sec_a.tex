@@ -3,11 +3,11 @@
 \section{Introduction}
 Testing the correctness of database management systems (DBMSs) is a part of data management that checks whether the engines holding an organization's data return and store what the SQL semantics promise.
 
-A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behaviour depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
+A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behavior depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
 
 The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. We claim no new experimental results. All measurements come from the four papers, and the formal model and running example are our own explanatory analysis.
 
-Section~2 defines the problem and Section~3 motivates it. Section~4 groups and compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.5)~\cite{norec,tlp}.
+Section~2 defines the problem and Section~3 motivates it. Section~4 groups and compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.4)~\cite{norec,tlp}.
 
 \section{Problem definition and discussion}
 \subsection{High-level description}
@@ -93,7 +93,7 @@ We group the papers by how each builds its reference execution. The first group 
 \subsection{Query consistency through expression and metadata transformation}
 \paragraph{CODDTest.} The method applies constant folding and propagation (replacing an expression by its value) to testing~\cite[Sec.~3]{coddtest}. It evaluates a generated expression through an auxiliary query and substitutes the result into the larger query. An expression independent of outer columns becomes a constant. A row-dependent one becomes a SQL CASE expression mapping outer-column values to results, since one scalar would invalidate the test. The tool extends SQLancer, a DBMS testing framework, and studies five DBMSs. The validity condition is that the replacement was computed on the same unchanged state.
 
-In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by its value (a constant in Figure~\ref{fig:codd}) or, because availability differs between the two rows, by a CASE that yields 5 for the first row and 0 for the second. The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behaviour.
+In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by its value (a constant in Figure~\ref{fig:codd}) or, because availability differs between the two rows, by a CASE that yields 5 for the first row and 0 for the second. The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behavior.
 
 \begin{figure}[!tb]
 \centering
@@ -112,9 +112,9 @@ In Product, one row has availability 5 and the other 0, so the predicate on \mbo
 \end{figure}
 
 \subsection{Schema history equivalence}
-\paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behaviour mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
+\paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behavior mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
 
-The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck} (Figure~\ref{fig:ddl}). The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
+The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows the same pattern in our MySQL \#114904 replay. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
 \begin{figure}[!tb]
 \centering
@@ -126,7 +126,7 @@ The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB c
 \subsection{Transaction execution equivalence}
 \paragraph{WriteCheck.} The method checks write-specific serializability (WSS) of concurrent transactions against serial reference executions~\cite{writecheck}. Its restriction is that a write must not depend on values returned by an earlier read in the same transaction; a write may use explicit values or values read within the write itself, such as \texttt{UPDATE t SET c = c + 1}. Transaction-level WSS compares a concurrent schedule with a serial schedule of the same transactions. Statement-level WSS drops aborted transactions and transaction-control statements and runs the remaining statements individually under autocommit. The serial order follows the actual completion order, called First Commit/Rollback First Scheduled (FCRFS). With initial state $D_0$, concurrent history $H_c$ and inferred reference $H_f$, the check is $\mathrm{State}(D_0,H_c)=\mathrm{State}(D_0,H_f)$ (Figure~\ref{fig:write}).
 
-The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviours such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Its reference construction is relatively simple, but each mismatch needs semantic qualification against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
+The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviors such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Its reference construction is relatively simple, but each mismatch needs semantic qualification against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
 
 \begin{figure}[!tb]
 \centering
@@ -146,7 +146,7 @@ The validity condition is that FCRFS fits the DBMS's conflict handling. It is no
 \midrule
 CODDTest~\cite{coddtest} & Expression or subquery representation & Original versus folded query result & Stable state; faithful replacement & Same-DBMS reference; no history or concurrency \\
 Radar~\cite{radar} & Optional metadata & Read-query result & Data preserved; query independent of removed metadata & Read-only; shared bugs hidden \\
-DDLCheck~\cite{ddlcheck} & Schema construction history & Results, state, schema behaviour & Equivalent relevant schema; matching data & Needs complete schema description \\
+DDLCheck~\cite{ddlcheck} & Schema construction history & Results, state, schema behavior & Equivalent relevant schema; matching data & Needs complete schema description \\
 WriteCheck~\cite{writecheck} & Concurrent versus inferred serial schedule & Final state, write outcomes & Restricted writes; applicable conflict rules & No read anomalies; oracle-boundary false positives \\
 \bottomrule
 \end{tabularx}
