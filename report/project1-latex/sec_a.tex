@@ -5,9 +5,9 @@ Testing the correctness of database management systems (DBMSs) is a part of data
 
 A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behavior depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
 
-The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. We claim no new experimental results. All measurements come from the four papers, and the formal model and running example are our own explanatory analysis.
+The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. All measurements in Sections~2 to~7 come from the four papers, except the short reproduction in Section~5.8, which we ran ourselves. The formal model and running example are our own explanatory analysis.
 
-Section~2 defines the problem and Section~3 motivates it. Section~4 groups and compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.4)~\cite{norec,tlp}.
+Section~2 defines the problem, Section~3 motivates it, and Section~4 compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC and TLP, two earlier query-level oracles, are used as background (Section~4.4)~\cite{norec,tlp}.
 
 \section{Problem definition and discussion}\label{sec:problem}
 \subsection{High-level description}
@@ -27,9 +27,9 @@ fails. Each such triple is a candidate defect, reported with a reduced, reproduc
 \paragraph{Scope of the model.} Candidate status is deliberate: a mismatch becomes a defect only after $P$ is validated, permitted nondeterminism is excluded, the case is reduced, and the DBMS documentation is checked. The model describes the shared testing task, not a formalism that all four papers use.
 
 \subsection{Detailed reading of the definition}
-For an unordered result, equivalence compares multisets of rows: order is ignored, duplicate counts are not. A set comparison could hide a duplicate-related bug. If the query fixes an order, the order counts. NULLs, data types, collation, rounding and errors need the same treatment on both sides. A volatile function or an under-specified LIMIT makes a query unsuitable unless the oracle accounts for it.
+For an unordered result, equivalence compares multisets of rows: order is ignored, duplicate counts are not. A set comparison could hide a duplicate bug. If the query fixes an order, the order counts. NULLs, data types, collation, rounding and errors need the same treatment on both sides. A volatile function or an under-specified LIMIT makes a query unsuitable unless the oracle accounts for it.
 
-For statements that change data, equal query output is not enough, because two INSERT statements can both succeed and store different values. The observation must then include the final state. For transactions, each replay starts from the same initial state, and committed, aborted and failed statements are told apart. These requirements are what $P$ means in practice. They keep ordinary semantic differences from being mistaken for defects.
+For statements that change data, equal query output is not enough, because two INSERT statements can both succeed and store different values. The observation must then include the final state. For transactions, each replay starts from the same initial state, and committed, aborted and failed statements are told apart. These requirements are what $P$ means in practice: they keep ordinary semantic differences from being reported as defects.
 
 \subsection{Pseudoalgorithm}
 Algorithm~\ref{alg:oracle} gives the generic loop shared by the four methods.
@@ -48,15 +48,15 @@ Algorithm~\ref{alg:oracle} gives the generic loop shared by the four methods.
   \State $A\gets\textsc{ExecuteFromCleanState}(E,D,W,C)$
   \State $B\gets\textsc{ExecuteFromCleanState}(E,D',W',C)$
   \If{\textbf{not} \textsc{Equivalent}$(A,B,F.\mathit{observationRules})$}
-    \State $\mathit{case}\gets\textsc{ReduceKeepingMismatch}(D,W,T,C)$
-    \State \textsc{Record}$(\mathit{case},\text{version},\text{outcomes},\text{seed},C)$
+    \State $\mathit{case}\gets\textsc{ReduceMismatch}(D,W,T,C)$
+    \State \textsc{Record}$(\mathit{case},\text{version},\text{outcomes},\text{seed})$
     \State \textsc{ClassifyAndDeduplicate}$(\mathit{case})$
   \EndIf
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
 
-The procedure is our synthesis for this review. CODDTest needs an auxiliary evaluation step, and WriteCheck may run both a transaction-level and a statement-level reference, so the real tools use more steps than the two executions shown. What they share is the order: validate the comparison, observe both executions from controlled states, and keep the mismatch alive during reduction.
+The procedure is our own synthesis. CODDTest needs an auxiliary evaluation step, and WriteCheck may run both a transaction-level and a statement-level reference, so the real tools use more steps than the two executions shown. What they share is the order: validate the comparison, observe both executions from controlled states, and keep the mismatch alive during reduction.
 
 \section{Motivation}\label{sec:motivation}
 \subsection{Running example}
@@ -68,24 +68,24 @@ Suppose an inventory service stores a table \texttt{Product} with columns \textt
 \item Transactions: compare the final quantities after overlapping updates with an admissible serial replay.
 \end{itemize}
 
-The example is illustrative and is not a bug from the reviewed studies. It shows why one passing test says little about the other mechanisms. An expression test on a fresh table never exercises the state a migration leaves behind, and a single-connection metadata test never exercises write conflicts. Transaction testing also needs care. An application that reads a quantity and later writes a value computed from it violates WriteCheck's workload restriction, and such an ordinary race must not be reported as a DBMS defect.
+The example is illustrative, not a bug from the reviewed studies. It shows why one passing test says little about the other mechanisms. An expression test on a fresh table never exercises the state a migration leaves behind, and a single-connection metadata test never exercises write conflicts. Transaction testing also needs care. An application that reads a quantity and later writes a value computed from it violates WriteCheck's workload restriction, and such an ordinary race must not be reported as a DBMS defect.
 
 \subsection{Who benefits, and what makes it hard}
-Developers of a DBMS get small, reproducible tests that expose wrong assumptions in optimizer and executor code. Application teams benefit because a wrong stored state outlives the request that caused it. Researchers get oracles for DBMS-specific features that need no second implementation of the same SQL dialect.
+Developers of a DBMS get small, reproducible tests that expose wrong assumptions in optimizer and executor code. Application teams benefit because a wrong stored state outlives the request that caused it. Researchers get oracles that need no second implementation of the SQL dialect.
 
 The problem has four difficulties. Valid SQL is not automatically a valid metamorphic test, that is, a test whose two executions are related by a rule that fixes how their results must compare. The reference execution runs on the same DBMS, so it can share the original fault, and a bug present in both executions stays hidden. Schema changes leave hidden history behind. Concurrent completion does not always imply one correct serialization order.
 
 \subsection{What the four papers do not handle}
-Each paper narrows the comparison to meet these challenges, and each narrowing leaves a gap.
+Each paper narrows the comparison, and each narrowing leaves a gap.
 \begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
 \item \textbf{CODDTest} tests expressions and subqueries on a fixed state. It does not vary schema history, metadata or concurrency, and a volatile expression may have no stable replacement value.
-\item \textbf{DDLCheck} needs a schema description complete enough to rebuild the table directly. A dropped property yields a faulty reference, and its structural abstraction can group histories that differ in an unmodelled property.
+\item \textbf{DDLCheck} needs a schema description complete enough to rebuild the table directly. A dropped property yields a faulty reference, and its structural abstraction can group histories that differ in an unmodeled property.
 \item \textbf{Radar} covers read-only queries on a copied state. It excludes queries that name an index, ask for a default value, or use identity or nondeterministic functions. Updates would need a separate validity argument, since removing a UNIQUE constraint can change whether an INSERT succeeds.
 \item \textbf{WriteCheck} covers writes that do not depend on earlier reads in the same transaction. It does not cover read anomalies. Its serial reference relies on conflict-handling assumptions, and false positives came from semi-consistent reads and missing gap locks.
 \end{itemize}
 All four also share the same-DBMS reference problem described above.
 
-Could existing work be extended to cover these gaps? In our assessment, some of it can, though none of it is demonstrated by the papers. CODDTest's folding and Radar's raw construction both operate on a given state, so they could in principle run on states produced by DDLCheck's schema histories. DDLCheck already checks its confirmed schema bugs against Radar's detectable scope~\cite[Table~4]{ddlcheck}. Extending WriteCheck to read-dependent writes is harder, because the serial reference is no longer well defined once a write uses a value read earlier in the transaction. Covering all four mechanisms needs several oracles, each with its own validity condition.
+Could existing work be extended to cover these gaps? In our assessment, some of it can, though none of it is demonstrated by the papers. CODDTest's folding and Radar's raw construction both operate on a given state, so they could in principle run on states produced by DDLCheck's schema histories. DDLCheck already checks its confirmed schema bugs against Radar's detectable scope~\cite[Table~4]{ddlcheck}. Extending WriteCheck to read-dependent writes is harder, because the serial reference is no longer well defined once a write uses a value read earlier in the transaction. Covering all four mechanisms takes several oracles, each with its own validity condition.
 
 \section{Related work}\label{sec:related}
 We group the papers by how each builds its reference execution. The first group tests read-query consistency by changing expressions (CODDTest) or optional metadata (Radar). The second changes schema construction history (DDLCheck). The third changes transaction execution (WriteCheck). Table~\ref{tab:compare} summarizes the comparison, and the subsections give the essentials of each method.
@@ -93,7 +93,7 @@ We group the papers by how each builds its reference execution. The first group 
 \subsection{Query consistency through expression and metadata transformation}
 \paragraph{CODDTest.} The method applies constant folding and propagation (replacing an expression by its value) to testing~\cite[Sec.~3]{coddtest}. It evaluates a generated expression through an auxiliary query and substitutes the result into the larger query. An expression independent of outer columns becomes a constant. A row-dependent one becomes a SQL CASE expression mapping outer-column values to results, since one scalar would invalidate the test. The tool extends SQLancer, a DBMS testing framework, and studies five DBMSs. The validity condition is that the replacement was computed on the same unchanged state.
 
-In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by its value (a constant in Figure~\ref{fig:codd}) or, because availability differs between the two rows, by a CASE that yields 5 for the first row and 0 for the second. The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behavior.
+Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product table is replaced by its value, the constant 6. The row-dependent case needs a CASE instead. In Product, availability \mbox{$\mathrm{quantity}-\mathrm{reserved}$} is 5 for one row and 0 for the other, so the folded query uses a CASE on \texttt{id} that yields 5 for the first row and 0 for the second. The figure does not show this mapping. A real implementation must also preserve row context, types and NULL behavior.
 
 \begin{figure*}[!tb]
 \centering
@@ -114,7 +114,7 @@ In Product, one row has availability 5 and the other 0, so the predicate on \mbo
 \subsection{Schema history equivalence}
 \paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behavior mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
 
-The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows the same pattern in our MySQL \#114904 replay. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
+The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows a different history, a rename under a foreign key, with the same effect: a stale name survives in the evolved database (our MySQL \#114904 replay). The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
 \begin{figure*}[!tb]
 \centering
@@ -126,12 +126,12 @@ The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB c
 \subsection{Transaction execution equivalence}
 \paragraph{WriteCheck.} The method checks write-specific serializability (WSS) of concurrent transactions against serial reference executions~\cite{writecheck}. Its restriction is that a write must not depend on values returned by an earlier read in the same transaction; a write may use explicit values or values read within the write itself, such as \texttt{UPDATE t SET c = c + 1}. Transaction-level WSS compares a concurrent schedule with a serial schedule of the same transactions. Statement-level WSS drops aborted transactions and transaction-control statements and runs the remaining statements individually under autocommit. The serial order follows the actual completion order, called First Commit/Rollback First Scheduled (FCRFS). With initial state $D_0$, concurrent history $H_c$ and inferred reference $H_f$, the check is $\mathrm{State}(D_0,H_c)=\mathrm{State}(D_0,H_f)$ (Figure~\ref{fig:write}).
 
-The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviors such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Its reference construction is relatively simple, but each mismatch needs semantic qualification against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
+The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviors such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Each mismatch still has to be checked against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
-\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. In our Troc-based replay of MySQL \#104833 the observed state is $[10,1,10,20,10,20]$ and the reference state is $[10,20,10,20,10,20]$.}
+\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. In our replay of MySQL \#104833 with the upstream Troc transaction-testing tool the observed state is $[10,1,10,20,10,20]$ and the reference state is $[10,20,10,20,10,20]$.}
 \label{fig:write}
 \end{figure*}
 
@@ -152,6 +152,6 @@ WriteCheck~\cite{writecheck} & Concurrent versus inferred serial schedule & Fina
 \end{tabularx}
 \end{table*}
 
-The methods overlap where a migration leaves wrong metadata that a later SELECT exposes, so DDLCheck and Radar may both reach the case; DDLCheck tests this against its confirmed bugs~\cite[Table~4]{ddlcheck}. Overlap must be judged per bug. A tool may expose a supplied case yet fail to generate it end to end, or run the revealing statement without an oracle that recognizes the wrong result.
+The methods overlap where a migration leaves wrong metadata that a later SELECT exposes, so DDLCheck and Radar may both reach the case; DDLCheck tests this against its confirmed bugs~\cite[Table~4]{ddlcheck}. Overlap must be judged per bug: a tool may expose a supplied case yet never generate it, or run the revealing statement without an oracle that recognizes the wrong result.
 
 NoREC rewrites a predicate into a form that avoids the optimizations being checked and compares counts of qualifying rows~\cite{norec}. TLP (ternary logic partitioning) splits a query by whether a predicate is true, false or NULL and recombines the parts~\cite{tlp}. Both are query-level baselines; neither varies schema history or transaction scheduling. The selected papers also compare against DQE, which checks one predicate across SELECT, UPDATE and DELETE statements, and DQP, which compares the results of equivalent query plans.
