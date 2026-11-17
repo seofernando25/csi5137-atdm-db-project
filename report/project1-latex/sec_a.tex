@@ -95,48 +95,48 @@ We group the papers by how each builds its reference execution. The first group 
 
 In Product, one row has availability 5 and the other 0, so the predicate on \mbox{$\mathrm{quantity}-\mathrm{reserved}$} can be replaced by its value (a constant in Figure~\ref{fig:codd}) or, because availability differs between the two rows, by a CASE that yields 5 for the first row and 0 for the second. The example keys rows by \texttt{id} for clarity; a real implementation must preserve the row context, types and NULL behavior.
 
-\begin{figure}[!tb]
+\begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_codd}
 \caption{CODDTest on a Product table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated, as in our MySQL \#111241 replay.}
 \label{fig:codd}
-\end{figure}
+\end{figure*}
 
 \paragraph{Radar.} The method builds a raw copy of the database without optional metadata such as indexes and constraints, keeps the data a query needs, and compares the query's result on both~\cite{radar}. Its relation is $E(D,Q)\equiv E(\mathrm{raw}(D),Q)$ for a read query $Q$. The validity condition is that the data and type semantics carry over (a generated column keeps its computed values) and that $Q$ does not depend on the removed metadata. It excludes queries that name an index, ask for a default value, or use identity or nondeterministic functions~\cite[Sec.~3.2.2]{radar}. An index on \texttt{quantity} may change how a read query finds available products, but the answer must match the one on the raw copy (Figure~\ref{fig:radar}). Extending the relation to updates needs its own validity argument, because removing a UNIQUE constraint can change whether an INSERT succeeds. The paper reports three false positives, so a mismatch still needs triage.
 
-\begin{figure}[!tb]
+\begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_radar}
 \caption{Radar. The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated. In our MySQL \#110125 replay the indexed copy returns one row and the raw copy none; the raw result is the correct one.}
 \label{fig:radar}
-\end{figure}
+\end{figure*}
 
 \subsection{Schema history equivalence}
 \paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behavior mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
 
 The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows the same pattern in our MySQL \#114904 replay. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
-\begin{figure}[!tb]
+\begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_ddl}
 \caption{DDLCheck. The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause. In our MySQL \#114904 replay the evolved schema shows a reference to \texttt{t2}, yet the insert fails citing the stale \texttt{t0}.}
 \label{fig:ddl}
-\end{figure}
+\end{figure*}
 
 \subsection{Transaction execution equivalence}
 \paragraph{WriteCheck.} The method checks write-specific serializability (WSS) of concurrent transactions against serial reference executions~\cite{writecheck}. Its restriction is that a write must not depend on values returned by an earlier read in the same transaction; a write may use explicit values or values read within the write itself, such as \texttt{UPDATE t SET c = c + 1}. Transaction-level WSS compares a concurrent schedule with a serial schedule of the same transactions. Statement-level WSS drops aborted transactions and transaction-control statements and runs the remaining statements individually under autocommit. The serial order follows the actual completion order, called First Commit/Rollback First Scheduled (FCRFS). With initial state $D_0$, concurrent history $H_c$ and inferred reference $H_f$, the check is $\mathrm{State}(D_0,H_c)=\mathrm{State}(D_0,H_f)$ (Figure~\ref{fig:write}).
 
 The validity condition is that FCRFS fits the DBMS's conflict handling. It is not a universal definition of SQL serializability, and the evaluation reports behaviors such as semi-consistent reads and missing gap locks that violate it without being implementation bugs~\cite[Secs.~4 and 6.4]{writecheck}. Its reference construction is relatively simple, but each mismatch needs semantic qualification against the isolation mode and conflict rules. TiDB\#42486 is a reported case: the concurrent run keeps an inserted value while the inferred serial run leaves the table empty~\cite[Listing~4]{writecheck}.
 
-\begin{figure}[!tb]
+\begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
 \caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. In our Troc-based replay of MySQL \#104833 the observed state is $[10,1,10,20,10,20]$ and the reference state is $[10,20,10,20,10,20]$.}
 \label{fig:write}
-\end{figure}
+\end{figure*}
 
 \subsection{Comparison and earlier methods}
-\begin{table}[!tb]
+\begin{table*}[!tb]
 \centering\small
 \caption{Qualitative comparison of the four oracles, grouped by what changes between the two executions. Conditions are summaries, not full implementation specifications.}
 \label{tab:compare}
@@ -150,7 +150,7 @@ DDLCheck~\cite{ddlcheck} & Schema construction history & Results, state, schema 
 WriteCheck~\cite{writecheck} & Concurrent versus inferred serial schedule & Final state, write outcomes & Restricted writes; applicable conflict rules & No read anomalies; oracle-boundary false positives \\
 \bottomrule
 \end{tabularx}
-\end{table}
+\end{table*}
 
 The methods overlap where a migration leaves wrong metadata that a later SELECT exposes, so DDLCheck and Radar may both reach the case; DDLCheck tests this against its confirmed bugs~\cite[Table~4]{ddlcheck}. Overlap must be judged per bug. A tool may expose a supplied case yet fail to generate it end to end, or run the revealing statement without an oracle that recognizes the wrong result.
 
