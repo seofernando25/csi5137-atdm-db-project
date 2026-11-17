@@ -4,8 +4,9 @@
 % above/below the arrow with at least 2 mm clearance; every box has inner sep >= 4 pt and its text fits
 % inside (use text width / align=left / manual line breaks, then check the render); >= 5 mm gap between boxes;
 % >= 4 mm padding between content and panel border; one accent colour per meaning (garnet = mismatch/bug).
-\usepackage{newtxtext}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\setmainfont{Liberation Serif}
+\setmonofont[Scale=0.9]{Liberation Mono}
 \usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc,shapes.geometric,shapes.symbols,decorations.pathreplacing}
 \definecolor{garnet}{HTML}{8F001A}\definecolor{ink}{HTML}{2D2D2C}
 \definecolor{cblue}{HTML}{2B6CB0}\definecolor{corange}{HTML}{D9822B}\definecolor{cgreen}{HTML}{2F855A}

@@ -49,59 +49,29 @@
 % ---------- Panel B: concurrent DBMS run (x 9.5-12.8, y 5.25-9.8) ----------
 \path[panel, fill=pblue] (9.5,5.25) rectangle (12.8,9.8);
 \node[title, text=ink, text width=2.5cm, align=left] at (9.9,9.4) {DBMS:\\concurrent run};
-\node[sub] at (9.9,8.6) {MySQL 8.0.32,\\same schedule};
+\node[sub] at (9.9,8.6) {same transactions,\\schedule 1-1-2-2-1-2};
+\node[box, minimum width=2.4cm, minimum height=1.1cm, text width=2.2cm] at (11.15,7.0) {rows of $t(a,b)$};
+\node[anchor=west, font=\scriptsize\itshape] at (9.9,6.0) {final state of the DBMS};
 
-\node[font=\scriptsize] at (10.575,7.62) {$a$};
-\node[font=\scriptsize] at (11.225,7.62) {$b$};
-\node[cell] at (10.575,7.2) {10};
-\node[cell, draw=garnet, line width=1pt, text=garnet, font=\scriptsize\bfseries] at (11.225,7.2) {1};
-\node[cell] at (10.575,6.8) {10};
-\node[cell] at (11.225,6.8) {20};
-\node[cell] at (10.575,6.4) {10};
-\node[cell] at (11.225,6.4) {20};
-\node[anchor=west, font=\scriptsize\itshape] at (9.9,5.95) {observed final state};
-
-% ---------- Panel C: reference execution (x 9.5-12.8, y 1.7-4.75) ----------
+% ---------- Panel C: reference execution (x 9.5-12.8, y 1.1-4.75) ----------
 \path[panel, fill=pgreen] (9.5,1.1) rectangle (12.8,4.75);
 \node[title, text=ink] at (9.9,4.55) {Reference execution};
-\node[sub] at (9.9,4.15) {same transactions,\\reference semantics};
+\node[sub] at (9.9,4.15) {same transactions,\\inferred order};
+\node[box, minimum width=2.4cm, minimum height=1.1cm, text width=2.2cm] at (11.15,2.9) {rows of $t(a,b)$};
+\node[anchor=west, font=\scriptsize\itshape] at (9.9,1.6) {final state of the reference};
 
-\node[font=\scriptsize] at (10.575,3.25) {$a$};
-\node[font=\scriptsize] at (11.225,3.25) {$b$};
-\node[cell] at (10.575,2.85) {10};
-\node[cell] at (11.225,2.85) {20};
-\node[cell] at (10.575,2.45) {10};
-\node[cell] at (11.225,2.45) {20};
-\node[cell] at (10.575,2.05) {10};
-\node[cell] at (11.225,2.05) {20};
-\node[anchor=west, font=\scriptsize\itshape] at (9.9,1.6) {expected final state};
-
-% ---------- Oracle (x 13.3-16.5, y 4.3-9.8) ----------
-\path[panel, draw=garnet, fill=pgarnet] (13.3,4.3) rectangle (16.5,9.8);
+% ---------- Oracle (x 13.3-16.5, y 1.1-9.8) ----------
+\path[panel, draw=garnet, fill=pgarnet] (13.3,1.1) rectangle (16.5,9.8);
 \node[title, text=ink] at (13.7,9.4) {Oracle};
-\node[anchor=west, font=\scriptsize\itshape] at (13.7,8.95) {compare final states};
-\node[anchor=west, font=\scriptsize] at (13.7,8.4) {observed};
-\node[anchor=west, font=\ttfamily\scriptsize] at (13.7,8.1) {[10, 1, 10, 20,};
-\node[anchor=west, font=\ttfamily\scriptsize] at (13.7,7.85) {10, 20]};
-\node[anchor=west, font=\scriptsize] at (13.7,7.3) {expected};
-\node[anchor=west, font=\ttfamily\scriptsize] at (13.7,7.0) {[10, 20, 10, 20,};
-\node[anchor=west, font=\ttfamily\scriptsize] at (13.7,6.75) {10, 20]};
-\draw[dashed, ink!40, line width=0.5pt] (13.7,6.2) -- (16.1,6.2);
-\node[anchor=west, font=\scriptsize\bfseries, text=garnet] at (13.7,5.85) {differ $\rightarrow$ bug};
-\node[anchor=west, font=\scriptsize, text=cgreen] at (13.7,5.45) {equal $\rightarrow$ no bug};
-
-% ---------- Garnet callout (x 13.3-16.5, y 0.6-3.8) ----------
-\path[panel, draw=garnet, fill=white] (13.3,0.6) rectangle (16.5,3.8);
-\node[anchor=north west, text=garnet, text width=2.4cm, align=left, inner sep=0pt]
-  at (13.7,3.55) {\footnotesize\textbf{MySQL \#104833} (8.0.32)\\[2pt]
-  \footnotesize Replayed with Troc, not WriteCheck's own tool.\\[2pt]
-  \scriptsize\bfseries Error: Inconsistent final database state};
+\node[anchor=west, font=\scriptsize\itshape] at (13.7,8.85) {compare final states};
+\node[ok, text width=2.2cm, minimum height=1.0cm, align=center] at (14.9,7.2) {same $\rightarrow$ ok};
+\node[bug, text width=2.2cm, minimum height=1.0cm, align=center] at (14.9,5.0) {differ $\rightarrow$\\candidate defect};
 
 % ---------- Flow arrows (between panel edges only) ----------
 \draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (9.0,7.3) -- (9.5,7.3);
 \draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (9.0,3.0) -- (9.5,3.0);
 \draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (12.8,7.3) -- (13.3,7.3);
-\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (12.8,4.5) -- (13.3,4.5);
+\draw[-{Stealth[length=2.2mm]}, corange, line width=1pt] (12.8,3.0) -- (13.3,3.0);
 
 \end{tikzpicture}
 \end{document}

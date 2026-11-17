@@ -5,7 +5,7 @@ Testing the correctness of database management systems (DBMSs) is a part of data
 
 A crash is easy to notice. A wrong answer is not: a product missing from a stock report, a total that is slightly off, or an update that reports success and stores something else. Applications may act on these results. Correct behavior depends on the query optimizer, schema maintenance, metadata handling and transaction processing working together, so silent failures matter to data management.
 
-The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. All measurements in Sections~2 to~7 come from the four papers, except the short reproduction in Section~5.8, which we ran ourselves. The formal model and running example are our own explanatory analysis.
+The research question of this report is how the equivalence assumption behind each oracle determines which logic bugs it can find, and how convincingly each paper's experiments show it. The four papers vary, in turn, expression evaluation (CODDTest~\cite{coddtest}), the history used to build a schema (DDLCheck~\cite{ddlcheck}), concurrent versus serial writes (WriteCheck~\cite{writecheck}), and optional metadata (Radar~\cite{radar}). Figure~\ref{fig:overview} (page~1) summarizes the shared idea. All measurements come from the four papers; the formal model and running example are our own explanatory analysis.
 
 Section~2 defines the problem, Section~3 motivates it, and Section~4 compares the four papers. Section~5 reviews their experiments, and Sections~6 and~7 assess the evidence and conclude. NoREC (non-optimizing reference engine construction) and TLP (ternary logic partitioning), two earlier query-level oracles, are used as background (Section~4.4)~\cite{norec,tlp}.
 
@@ -98,7 +98,7 @@ Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_codd}
-\caption{CODDTest on a Product table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated, as in our MySQL \#111241 replay.}
+\caption{CODDTest on a Product table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated. In the figure the average over the Product rows folds to 6.}
 \label{fig:codd}
 \end{figure*}
 
@@ -107,19 +107,19 @@ Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_radar}
-\caption{Radar. The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated. In our MySQL \#110125 replay the indexed copy returns one row and the raw copy none; the raw result is the correct one.}
+\caption{Radar. The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated.}
 \label{fig:radar}
 \end{figure*}
 
 \subsection{Schema history equivalence}
 \paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behavior mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
 
-The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows a different history, a rename under a foreign key, with the same effect: a stale name survives in the evolved database (our MySQL \#114904 replay). The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
+The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows a different history, a rename under a foreign key, where a stale name could survive in the evolved database. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_ddl}
-\caption{DDLCheck. The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause. In our MySQL \#114904 replay the evolved schema shows a reference to \texttt{t2}, yet the insert fails citing the stale \texttt{t0}.}
+\caption{DDLCheck. The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause.}
 \label{fig:ddl}
 \end{figure*}
 
@@ -131,7 +131,7 @@ The validity condition is that FCRFS fits the DBMS's conflict handling. It is no
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
-\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. In our replay of MySQL \#104833 with the upstream Troc transaction-testing tool the observed state is $[10,1,10,20,10,20]$ and the reference state is $[10,20,10,20,10,20]$.}
+\caption{WriteCheck. Two overlapping transactions update table $t(a,b)$ under READ COMMITTED. The tool executes the schedule concurrently and compares the final state with a reference execution. If the two final states differ, the run is a candidate defect, pending the checks in Section~2. The figure uses the schedule 1-1-2-2-1-2 and an inferred reference order.}
 \label{fig:write}
 \end{figure*}
 

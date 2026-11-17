@@ -13,9 +13,9 @@
 ]
 
 % Panels: 0.4 cm gaps between panels, 0.4 cm padding to contents
-\path[pan=pblue]  (0,-1.2)    rectangle (5.8,8.4);
-\path[pan=pgrey]  (6.2,-1.2)  rectangle (10.5,8.4);
-\path[pan=pgreen] (10.9,-1.2) rectangle (16.5,8.4);
+\path[pan=pblue]  (0,-0.4)    rectangle (5.8,8.4);
+\path[pan=pgrey]  (6.2,-0.4)  rectangle (10.5,8.4);
+\path[pan=pgreen] (10.9,-0.4) rectangle (16.5,8.4);
 \node[title] at (0.4,8.0)  {Evolved database};
 \node[title] at (6.6,8.0)  {Introspect schema};
 \node[title] at (11.3,8.0) {Directly built database};
@@ -53,15 +53,10 @@
 \node[lab] at (11.38,3.35) {build};
 \draw[arr] (W.east) -| (cR.south);
 
-% Observed outcomes, below each database and above the workload route's lower edge
-\node[bug, text width=4.6cm] at (2.9,-0.35) {Insert t1 (1): ERROR 1452\\ FK cites stale t0};
-\node[ok, text width=4.6cm, text=cgreen] at (13.7,-0.35) {Insert t1 (1): accepted\\ value 1 stored};
-
-% Oracle
+% Oracle: both databases receive the same insert; compare the outcomes
 \node[draw=garnet, line width=1pt, fill=white, rounded corners=3pt, align=center,
-      inner sep=5pt, text width=15.4cm] (O) at (8.25,-2.6)
-  {\textbf{Oracle: compare the two observations}\\
-   Equal outcomes: no bug. Different outcomes: bug.\\[2pt]
-   {\color{garnet}\textbf{MySQL \#114904: evolved schema shows REFERENCES t2, insert fails citing stale t0; direct schema accepts the insert.}}};
+      inner sep=5pt, text width=15.4cm] (O) at (8.25,-1.35)
+  {\textbf{Oracle: same insert on both databases, compare outcomes}\\
+   Equal outcomes: ok. Different outcomes: candidate bug.};
 \end{tikzpicture}
 \end{document}

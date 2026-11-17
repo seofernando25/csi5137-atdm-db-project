@@ -5,17 +5,16 @@
 \begin{tikzpicture}[x=1cm,y=1cm]
 
 % ---- Left panel: database with metadata (x 0 .. 5 cm)
-\node[panel, fill=pblue, anchor=north west, minimum width=5cm, minimum height=5.2cm] at (0,0) {};
+\node[panel, fill=pblue, anchor=north west, minimum width=5cm, minimum height=4.5cm] at (0,0) {};
 \node[title] at (0.4,-0.4) {Database with metadata};
 \node[box, draw=orange, fill=white] (idx) at (2.5,-1.2) {index i0 on c0 DESC};
 \node[cylinder, shape aspect=0.35, draw=ink!70, fill=white, line width=0.7pt,
       minimum width=2cm, minimum height=0.9cm, inner sep=0pt] (t0L) at (2.5,-2.8) {t0};
 \draw[orange, line width=0.8pt, dashed] (idx.south) -- (t0L.north);
 \node[font=\footnotesize, text=ink!80] at (2.5,-3.95) {rows: c0 = 0};
-\node[bug, font=\footnotesize\bfseries, fill=white] (resL) at (2.5,-4.5) {result: 1 row};
 
 % ---- Middle panel: raw database construction (x 5.6 .. 10.9 cm)
-\node[panel, fill=pgrey, anchor=north west, minimum width=5.3cm, minimum height=5.2cm] at (5.6,0) {};
+\node[panel, fill=pgrey, anchor=north west, minimum width=5.3cm, minimum height=4.5cm] at (5.6,0) {};
 \node[title] at (6.0,-0.4) {Raw database construction};
 \node[draw=ink!60, dashed, rounded corners=3pt, anchor=north west,
       minimum width=4.5cm, minimum height=1.1cm] (inA) at (6.0,-0.9) {};
@@ -31,15 +30,14 @@
 \node[font=\footnotesize] at (6.9,-2.98) {0};
 \draw[cgreen, line width=1pt] (8.2,-2.8) -- (8.35,-2.95) -- (8.6,-2.6);
 \node[font=\footnotesize, anchor=west] at (8.72,-2.8) {kept};
-\node[font=\footnotesize, text=ink!80] at (8.25,-4.5) {same query $Q$ on both};
+\node[font=\footnotesize, text=ink!80] at (8.25,-4.0) {same query $Q$ on both};
 
 % ---- Right panel: raw database (x 11.5 .. 16.5 cm)
-\node[panel, fill=pgreen, anchor=north west, minimum width=5cm, minimum height=5.2cm] at (11.5,0) {};
+\node[panel, fill=pgreen, anchor=north west, minimum width=5cm, minimum height=4.5cm] at (11.5,0) {};
 \node[title] at (11.9,-0.4) {Raw database};
 \node[cylinder, shape aspect=0.35, draw=ink!70, fill=white, line width=0.7pt,
       minimum width=2cm, minimum height=0.9cm, inner sep=0pt] (t0R) at (14.0,-2.8) {t0};
 \node[font=\footnotesize, text=ink!80] at (14.0,-3.95) {no index; rows: c0 = 0};
-\node[ok, font=\footnotesize\bfseries, fill=white, text=cgreen] (resR) at (14.0,-4.5) {result: 0 rows};
 
 % ---- Flows between node anchors
 \draw[arr] (t0L.east) -- (inB.west);
@@ -47,19 +45,9 @@
 
 % ---- Oracle
 \node[draw=orange, line width=1.1pt, fill=porange, rounded corners=6pt, anchor=north west,
-      minimum width=16.5cm, minimum height=1.8cm] (orc) at (0,-5.7) {};
-\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (resL.south) -- (2.5,-5.7);
-\draw[dashed, orange, line width=0.9pt, -{Stealth[length=2mm]}] (resR.south) -- (14.0,-5.7);
-\node[font=\small\bfseries] at (8.25,-6.15) {Oracle: compare row counts of $Q$ on both databases};
-\node[font=\small] at (8.25,-6.55) {equal $\Rightarrow$ no bug \qquad differ $\Rightarrow$ bug};
-\node[font=\footnotesize, text=ink!85] at (8.25,-7.0)
-  {\texttt{SELECT COUNT(*) FROM t0 WHERE (IFNULL(-1123870957, '')) IN (t0.c0);}};
-
-% ---- Garnet callout from reproduction
-\node[draw=garnet, line width=1pt, fill=white, rounded corners=4pt, inner sep=6pt,
-      text width=15.4cm, align=left, font=\footnotesize] (call) at (8.25,-8.5)
-  {\textbf{\textcolor{garnet}{Our reproduction, MySQL \#110125 (8.0.32):}} DOUBLE ZEROFILL column c0.
-   Indexed copy returns 1 row, raw copy 0 rows. The raw count is correct; the indexed result is the bug.};
+      minimum width=16.5cm, minimum height=1.2cm] (orc) at (0,-5.0) {};
+\node[font=\small\bfseries] at (8.25,-5.3) {Oracle: compare row counts of $Q$ on both databases};
+\node[font=\small] at (8.25,-5.8) {equal $\Rightarrow$ ok \qquad differ $\Rightarrow$ candidate bug};
 
 \end{tikzpicture}
 \end{document}

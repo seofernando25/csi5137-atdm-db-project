@@ -72,15 +72,10 @@
 % Oracle frame
 \node[rounded corners=5pt,draw=ink,line width=.6pt,fill=white,anchor=south west,minimum width=16.5cm,minimum height=1.7cm] at (0,0) {};
 \node[font=\footnotesize\bfseries,anchor=west] at (0.4,1.42) {Oracle: compare the two results};
-\node[ovbox] at (2.6,0.7) {Original: \{id = 1\}};
+\node[ovbox] at (2.6,0.7) {Original result};
 \node[font=\footnotesize\bfseries] at (5.4,0.7) {=?};
-\node[ovbox] at (8.2,0.7) {Folded: \{id = 1\}};
-\node[font=\footnotesize\bfseries,text=ink,anchor=west] at (11.0,1.0) {toy example: equal $\rightarrow$ ok};
-\node[font=\footnotesize\bfseries,text=garnet,anchor=west] at (11.0,0.4) {MySQL replay: differ $\rightarrow$ bug};
-
-% Garnet callout (MySQL reproduction)
-\node[rounded corners=5pt,draw=garnet,line width=.8pt,fill=pgarnet,anchor=south west,minimum width=16.5cm,minimum height=1.1cm] at (0,-1.6) {};
-\node[anchor=center,align=left,text width=15.5cm,font=\footnotesize,text=ink] at (8.25,-1.05) {\textbf{\textcolor{garnet}{MySQL \#111241 (8.0.32)}}\\[2pt]constant form returns row 1; scalar-subquery form returns empty.};
+\node[ovbox] at (8.2,0.7) {Folded result};
+\node[font=\footnotesize\bfseries,text=ink,anchor=west] at (11.0,0.7) {equal $\rightarrow$ ok; differ $\rightarrow$ candidate bug};
 
 \end{tikzpicture}
 \end{document}

@@ -1,15 +1,22 @@
 \documentclass[11pt,letterpaper,twoside]{article}
 \usepackage[letterpaper,inner=0.75in,outer=0.55in,top=0.9in,bottom=0.85in,headheight=34pt,headsep=12pt,footskip=24pt]{geometry}
 \usepackage[table]{xcolor}
-\usepackage{newtxtext,newtxmath}   % Times-compatible, as the course guide requires
-\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{fontspec}
+% Course guide: Times New Roman 11. We build with Liberation Serif/Sans/Mono, which are metric-compatible
+% with Times New Roman/Arial/Courier New (same line breaks and page count). To use the Microsoft fonts on a
+% machine that has them, replace the three names below.
+\setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
+\setmonofont[Scale=0.88]{Liberation Mono}
+\usepackage{unicode-math}
+\setmathfont{texgyretermes-math.otf}
 \usepackage{microtype}
 \setlength{\columnsep}{0.25in}
 \emergencystretch=2em
 \usepackage{titlesec}
 \linespread{1.05}
 \definecolor{ICMLAccent}{HTML}{0072B2}\definecolor{HeadDark}{HTML}{222222}
-\renewcommand{\sfdefault}{lmss}
 \newcommand{\headingfont}{\sffamily\bfseries\color{HeadDark}}
 \titleformat{\section}{\headingfont\Large\raggedright}{\thesection}{0.8em}{}
 \titleformat{\subsection}{\headingfont\large\raggedright}{\thesubsection}{0.8em}{}
@@ -17,11 +24,11 @@
 \titlespacing*{\section}{0pt}{1.6ex plus .4ex}{0.8ex}
 \titlespacing*{\subsection}{0pt}{1.3ex plus .3ex}{0.6ex}
 \titlespacing*{\subsubsection}{0pt}{1ex}{0.4ex}
-\usepackage{graphicx,booktabs,array,tabularx,amsmath,enumitem}
+\usepackage{graphicx,booktabs,array,tabularx,enumitem}
 \usepackage[most]{tcolorbox}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black,pdfborder={0 0 0},pdftitle={Detecting Logic Bugs in Relational Database Systems},pdfauthor={Group 12, CSI 5137}]{hyperref}
 \usepackage{fancyhdr}
-\usepackage{fontawesome5}
+
 \usepackage[font=footnotesize,labelfont={bf,color=black!80},labelsep=period,skip=6pt]{caption}
 \usepackage[ruled]{algorithm}
 \usepackage{algpseudocode}
@@ -61,7 +68,7 @@
 \vspace{3pt}
 {\small $^{1}$University of Ottawa \qquad CSI 5137 A00, Group 12 \qquad Project 1 Report\par}
 \vspace{4pt}
-{\small\href{https://github.com/seofernando25/csi5137-atdm-db-project}{\textcolor{blue!60!black}{\faGithub\ \textbf{Code}}} \qquad Advanced Topics in Databases and Data Management\par}
+{\small Advanced Topics in Databases and Data Management\par}
 \end{center}
 \vspace{10pt}
 \begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,

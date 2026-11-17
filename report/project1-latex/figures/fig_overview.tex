@@ -2,11 +2,11 @@
 \input{tikzstyle.tex}
 
 % Card geometry (cm): four cards, width 3.75, gap 0.5, total 16.5.
-% Cards span y = 3.0 to 10.4. Inner text width 2.95 gives 4 mm padding per side.
+% Cards span y = 4.6 to 10.4. Inner text width 2.95 gives 4 mm padding per side.
 \newcommand{\Card}[8]{%
-  % #1 left x, #2 fill, #3 node name, #4 title, #5 subtitle (2 lines), #6 changed, #7 stays, #8 compared
-  \node[panel, fill=#2, minimum width=3.75cm, minimum height=7.4cm,
-    anchor=south west, inner sep=0pt] (#3) at (#1,3.0) {};
+  % #1 left x, #2 fill, #3 node name, #4 title, #5 subtitle (one word), #6 changed, #7 stays, #8 compared
+  \node[panel, fill=#2, minimum width=3.75cm, minimum height=5.8cm,
+    anchor=south west, inner sep=0pt] (#3) at (#1,4.6) {};
   \node[anchor=north west, inner sep=0pt, font=\bfseries\fontsize{9}{11}\selectfont]
     at (#1+0.4,10.05) {#4};
   \node[anchor=north west, align=left, text width=2.95cm, inner sep=0pt,
@@ -24,46 +24,38 @@
 
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  \Card{0}{pgrey}{cA}{CODDTest}{MySQL \#111241\\expression}
-    {expression replaced by its evaluated value}
+  \Card{0}{pgrey}{cA}{CODDTest}{expression}
+    {an expression is replaced by its evaluated value}
     {query meaning and database state}
     {result rows of both query forms}
-  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
-    font=\fontsize{7.5}{9}\selectfont] at (0.4,3.4) {constant: row 1;\\subquery: empty};
 
-  \Card{4.25}{pblue}{cB}{DDLCheck}{MySQL \#114904\\schema history}
-    {schema reached by evolution (t0 renamed to t2)}
+  \Card{4.25}{pblue}{cB}{DDLCheck}{schema history}
+    {the schema is reached by a different DDL history}
     {final visible schema and table data}
     {INSERT into the child table}
-  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
-    font=\fontsize{7.5}{9}\selectfont] at (4.65,3.4) {evolved: error cites t0;\\direct: accepted};
 
-  \Card{8.5}{porange}{cC}{WriteCheck}{MySQL \#104833\\transactions}
-    {two transactions run concurrently}
+  \Card{8.5}{porange}{cC}{WriteCheck}{transactions}
+    {two \mbox{transactions} run \mbox{concurrently}, then \mbox{serially}}
     {same transactions in inferred serial order}
     {final table state}
-  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
-    font=\fontsize{7.5}{9}\selectfont] at (8.9,3.4) {observed state $\neq$\\oracle state};
 
-  \Card{12.75}{pgreen}{cD}{Radar}{MySQL \#110125\\metadata}
-    {index i0 (c0 DESC) removed in raw copy}
+  \Card{12.75}{pgreen}{cD}{Radar}{metadata}
+    {an optional index is removed in a raw copy}
     {same data and identical query text}
     {query rows, indexed vs raw copy}
-  \node[bug, minimum width=2.95cm, text width=2.63cm, align=left, anchor=south west,
-    font=\fontsize{7.5}{9}\selectfont] at (13.15,3.4) {raw empty is correct;\\indexed row is bug};
 
-  % four converging arrows: card bottom (y = 3.0) to oracle top edge (y = 1.8)
-  \draw[arr] (cA.south) -- (5.35,1.8);
-  \draw[arr] (cB.south) -- (7.25,1.8);
-  \draw[arr] (cC.south) -- (9.25,1.8);
-  \draw[arr] (cD.south) -- (11.15,1.8);
+  % four converging arrows: card bottom (y = 4.6) to oracle top edge (y = 2.1)
+  \draw[arr] (cA.south) -- (5.35,2.1);
+  \draw[arr] (cB.south) -- (7.25,2.1);
+  \draw[arr] (cC.south) -- (9.25,2.1);
+  \draw[arr] (cD.south) -- (11.15,2.1);
 
-  % shared oracle box, full width, y = 0 to 1.8
+  % shared oracle box, full width, y = 0.3 to 2.1
   \node[rounded corners=4pt, draw=garnet, line width=0.8pt, fill=white,
-    minimum width=16.5cm, minimum height=1.8cm, inner sep=0pt] (oracle) at (8.25,0.9) {};
-  \node[font=\itshape\fontsize{8.5}{10}\selectfont] at (8.25,1.3)
+    minimum width=16.5cm, minimum height=1.8cm, inner sep=0pt] (oracle) at (8.25,1.2) {};
+  \node[font=\itshape\fontsize{8.5}{10}\selectfont] at (8.25,1.6)
     {different execution + same expected semantics};
-  \node[font=\bfseries\fontsize{8.5}{10}\selectfont] at (8.25,0.5)
+  \node[font=\bfseries\fontsize{8.5}{10}\selectfont] at (8.25,0.8)
     {compare observations: \textcolor{cgreen}{equal $\rightarrow$ fine}; \textcolor{garnet}{differ $\rightarrow$ candidate bug}};
 \end{tikzpicture}
 \end{document}

@@ -192,18 +192,6 @@ TxCheck & 16 & 1 & 4\\
 
 \textbf{Sufficiency.} The false positives show that a WSS mismatch is not an unconditional defect, and we cannot claim FCRFS holds under every isolation implementation or application transaction. Within restricted write workloads, the oracle is practically useful. The 12-hour tool comparison is only suggestive, because its counts are small.
 
-\subsection{Our own reproduction}
-
-Separately from this review, we replayed one reported MySQL 8.0.32 bug per paper (CODDTest \#111241, DDLCheck \#114904, WriteCheck \#104833, Radar \#110125); each replay asserts the bug-specific mismatch. The WriteCheck case ran through the Troc tool, not WriteCheck's own implementation, so it shows the bug and not the WriteCheck oracle. A fourth CODDTest case (\#111421) did not reproduce on 8.0.32 and is excluded. For Project~2 we also re-ran CODDTest's expression-depth sweep on SQLite 3.42.0.0 with three seeds and 40 s per depth instead of 24 h (Figure~\ref{fig:repro}). Completed tests fell 88.6\% from depth 1 to 15 (per-seed range 88.3 to 88.9\%; published: 89.4\%), and time per query rose 5.58 times (per-seed range 5.48 to 5.78; published: 9.91 times). Full details are in our Project~2 report.
-
-\begin{figure*}[!tb]
-\centering\includegraphics[width=\linewidth]{fig_repro}
-\caption{Our SQLite 3.42.0.0 re-run of the depth sweep (time per query and completed tests against MaxDepth; mean of three seeds, min-max bars) over the published curves of \cite[Fig.~2]{coddtest}. Our run reproduces the fall in completed tests but a weaker rise in time. Published values are read off the figure and approximate.}
-\label{fig:repro}
-\end{figure*}
-
-\textbf{Sufficiency.} Three seeds at 40 s per depth are enough to see the qualitative trend, a steep fall in completed tests and a rise in time per query. They are not enough to pin down the magnitudes, and we would not offer our 5.58 as a replacement for the published 9.91.
-
 \section{Cross-study discussion and threats to validity}\label{sec:discussion}
 
 Table~\ref{tab:summary} lists publication-time outcomes with consistent labels. The columns keep different reporting stages and are not a ranking. The studies show that each method exposes real defects in mature systems. They do not allow adding the counts, because versions and periods differ, overlap across the four campaigns is unknown, and confirmation and fix counts are snapshots from publication.
