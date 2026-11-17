@@ -23,13 +23,24 @@ Figures in this report are the submission artifact, not decoration. A figure tha
 - One visual job per element. If a graphic encodes a fact the prose or the caption also states, delete one encoding (the report once triple-encoded "96.9% use one initial table" across prose, bar label, and caption).
 - Arrow/comparison grammar is consistent everywhere: `⇒` = "is folded/simplified to" (directional transformation only); `vs` = "these two executions are being compared". Do not mix without that meaning.
 
+### Diagram composition (fan-in / compare patterns)
+
+These rules exist because the report's own redesign burned several review rounds learning them; they generalize:
+
+- Exactly one decision/comparison locus per compare stage. Never repeat the decision diamond in four cards *and* again in the shared box — the diamond is a routing node, not a decoration. Cards carry their dichotomy and their observation; the shared stage carries the branch.
+- Shared invariants go in ONE shared element (a bus/conduit bar, a common oracle box) — never copied into each sibling.
+- Fan-in from N branches to one shared stage: use ONE orthogonal conduit (vertical drops at uniform x, one horizontal bus, a single centered arrow). Diagonal converging arrows with varied angles read as imbalance; uniform orthogonal drops read as "all feed the same oracle".
+- Converging-to-shared is the report's visual motif — reuse it instead of inventing per-figure connector vocabularies.
+- Parallel structures with three or more reads (e.g., method/scope → dichotomy → observation) take faint left-gutter tier labels in italic ink!60; they orient skimmers without adding in-card clutter.
+- Balance by content width, not by leftover space: pills and pill-like outcomes are compact (minimum width ~2.6 cm), centered under their diamond, and the composition is centered on the figure's optical middle.
+
 ### Palette and color
 
-House palette (five re-plots and all TikZ figures):
-
 - Text/axes/borders: ink `#2D2D2C`, borders `#B8B8B8`, grid `#DDDDDD` on the value axis only.
-- Garnet `#8F001A` is reserved for bug/mismatch semantics. Never use it for data categories, never put anything maroon near it.
+- Garnet `#8F001A` is reserved for bug/mismatch semantics — never a data category, never a frame around a neutral stage. A neutral comparison box uses a white fill and ink!60 border; the bug color appears only on the bug outcome text/pill.
+- Green vs pink contrast: use forest `#1E5631` for "fine/ok" text on pale red backgrounds (≥ 4.5:1), not mid-tone cgreen.
 - Primary series `#0072B2` or `#2B6CB0`; secondary series `#D55E00` or `#D9822B`; `#009E73` / `#CC79A7` only as non-text fills.
+- Connectors that carry no semantic weight default to ink!60, not saturated orange; reserve orange for accent/arrow meaning.
 - Shares/sequential data: single-hue blue scale `#C6DBEF`/`#6BAED6`/`#2B6CB0`. Never rainbow. Stacked bars only for genuine part-to-whole with every segment ≥ 3%.
 - No red/green adjacency (CVD-hostile). No off-system hues.
 - Contrast floor: any text (including 7–8 pt labels) needs ≥ 4.5:1 against its fill or the white page. White on `#D9822B` (2.9:1) or `#E69F00` (2.2:1) is a defect. Black on all fills except `#0072B2` (white OK at 5.2:1). Colored text on white needs ≥ 4.5:1 or it is `#1A1A1A`.
@@ -39,6 +50,7 @@ House palette (five re-plots and all TikZ figures):
 - Serif (Liberation Serif) for prose, titles and captions; mono (Liberation Mono) only for literal code chips; never mix heavy serif + italic serif + thin mono arbitrarily in the same figure — pick the role per element.
 - Every label ≥ 7 pt; caveats and footnotes ≥ 6.5 pt.
 - Counts are integers: no one-decimal fake precision (1 case in 35 ≈ 2.9 pp; print "1/35" or round to integers).
+- Two-line chips: first line operand/expression, second line the muted rule (e.g., a small low-chroma "vs" at 6.5 pt). Uniform line count across siblings; center-anchored, identical fonts.
 - Ship vector PDFs sized to their include width (`\columnwidth`); check the render at 100% zoom.
 
 ### Charts vs tables (hard rule)
@@ -52,7 +64,7 @@ House palette (five re-plots and all TikZ figures):
 
 - No repeated bold lead-ins such as "Changed: / Stays equivalent: / Compared:" — show with icons/chips and one short line.
 - Hoist shared invariants into one common element (e.g., the shared oracle bar) instead of repeating them per card.
-- Captions carry what the figure cannot (source, caveat, validation note); they never restate data labels or prose.
+- Captions carry what the figure cannot (source, caveat, validation note); they never restate data labels or prose. If fixing a figure leaves the caption restating it, cut the caption in the same commit.
 
 ## Review output format
 
@@ -74,15 +86,19 @@ Visual Rating: X / 10
 1. ...
 ```
 
-Scoring: ≤ 5 = encoding broken (contrast, semantics, illegibility); 6–7 = real defects; 7–8 = polish; 9+ = ship-ready. Name the single biggest defect first; never inflate. A figure can lose "points" for retaining redundant prose as easily as for bad color.
+Scoring: ≤ 5 = encoding broken (contrast, semantics, illegibility); 6–7 = real defects; 7–8 = polish; 9+ = ship-ready. Name the single biggest defect first; never inflate. A figure can lose "points" for retaining redundant prose as easily as for bad color. If the rating stays below 8, the author owes another adversarial pass after fixes; aggregate the fix round instead of tackling nits one at a time.
 
 ## Anti-slop checklist (before any commit that touches figures)
 
-1. Dead space eliminated? 2. Shared baselines across sibling cards? 3. All text ≥ 7 pt? 4. Text contrast ≥ 4.5:1? 5. Garnet reserved for bug? 6. No red/green pair? 7. No white-on-amber/orange text? 8. Chart vs table rule honored? 9. Caption restates figure/prose? 10. `⇒` vs `vs` grammar consistent? 11. `xelatex` twice, pdfinfo page count acceptable, zero Overfull? 12. Every data claim checked against the source paper (grep the PDF, don't assume)? 13. Affected pages re-rendered to PNG and eyeballed?
+1. Dead space eliminated? 2. Shared baselines across sibling cards? 3. All text ≥ 7 pt? 4. Text contrast ≥ 4.5:1? 5. Garnet reserved for bug (not frames of neutral stages)? 6. No red/green pair? 7. No white-on-amber/orange text? 8. Chart vs table rule honored? 9. Caption restates figure/prose? 10. `⇒` vs `vs` grammar consistent? 11. No duplicated decision nodes; one locus per comparison?
+12. **`xelatex` exit code is 0** — the engine may still write the PDF at `! Emergency stop.` and exit 1; a "successful render" with exit≠0 means a stale PDF may be committed. Check `grep -n "^!" log`, rebuild twice, then `pdfinfo | grep Pages`, zero Overfull.
+13. Build chains with `&&`, not `;` — never let a failed XeLaTeX pass silently skip rebuilds and let `pdfinfo` inspect a stale file.
+14. Affected pages re-rendered to PNG and eyeballed including edges; check for clipped/crawling text and cropped frames.
+15. Every data claim checked against the source paper (grep the PDF, don't assume)?
 
 ## Project context
 
-- Report: `report/project1-latex/` — build with `xelatex -interaction=nonstopmode -halt-on-error main.tex` (run twice), then `pdfinfo main.pdf | grep Pages`; render pages with `pdftoppm -r 110 -png main.pdf /tmp/opencode/pg`.
+- Report: `report/project1-latex/` — build with `xelatex -interaction=nonstopmode -halt-on-error main.tex` (run twice), then `pdfinfo main.pdf | grep Pages`; render pages with `pdftoppm -r 150 -png main.pdf /tmp/opencode/pg`. At 150–200 dpi, zoom on the smallest glyphs (e.g., subscripts in chips).
 - House style: `figures/tikzstyle.tex` (panel fills `pblue`/`porange`/`pgreen`/`pgrey`/`pgarnet`, one accent per meaning) and `figures/paper.mplstyle` for matplotlib (serif, x-only grid, no top/right spines).
 - Figures are included at `\columnwidth` (single-column, LeJEPA-style) unless they are wide TikZ explainers (`figure*`, `\linewidth`).
 - The PDF is the submission artifact: never commit a figure change without rebuilding and re-rendering every affected page.
