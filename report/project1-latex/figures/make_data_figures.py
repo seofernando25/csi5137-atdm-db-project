@@ -27,52 +27,6 @@ def luminance_text(c):
     return "white" if 0.299 * r + 0.587 * g + 0.114 * b < 0.62 else "black"
 
 
-# ---------- fig1 ----------
-def fig1():
-    rows = [
-        ("(a) Tables", [("1 (96.9%)", 96.9), ("2", 3.1)]),
-        ("(b) Rows", [("0 (12.1%)", 12.1), ("1–5 (84.9%)", 84.9), ("6–50", 2.0), ("50+", 1.0)]),
-        ("(c) Transactions", [("1 (12.5%)", 12.5), ("2 (56.2%)", 56.2), ("3 (21.9%)", 21.9), ("4", 3.1), ("5", 6.3)]),
-        ("(d) Statements", [("1 (45.3%)", 45.3), ("2–3 (26.7%)", 26.7), ("4–5 (24.0%)", 24.0), ("6–10", 4.0)]),
-    ]
-    cols = [BLUE, ORANGE, GREEN, PURPLE, GREY]
-    fig, ax = plt.subplots(figsize=(W, 2.5))
-    # leader offsets (dx, dy) in data units for narrow segments, keyed by (row, seg)
-    lead = {(0, 1): (6, 0), (1, 0): (-1, 0.52), (1, 2): (-1, -0.52), (1, 3): (6.5, 0), (2, 0): (-1, 0.52),
-            (2, 3): (-2, -0.52), (3, 2): (0, -0.52), (3, 3): (6.5, 0)}
-    for y, (_, segs) in enumerate(rows):
-        left = 0.0
-        for i, (lab, w) in enumerate(segs):
-            c = cols[i]
-            ax.barh(y, w, left=left, height=0.5, color=c, edgecolor="white", linewidth=0.6)
-            mid = left + w / 2
-            if (y, i) in lead:
-                dx, dy = lead[(y, i)]
-                tx, ty = mid + dx, y + dy
-                ax.annotate(lab, xy=(mid, y + (0.25 if dy < 0 else 0)), xytext=(tx, ty),
-                            ha="center", va="center", fontsize=8,
-                            arrowprops=dict(arrowstyle="-", lw=0.5, color=GREY,
-                                            shrinkA=1, shrinkB=0))
-            else:
-                ax.text(mid, y, lab, ha="center", va="center", fontsize=8, color=luminance_text(c))
-            left += w
-    ax.set_yticks(range(4)); ax.set_yticklabels([r[0] for r in rows])
-    ax.invert_yaxis(); ax.set_xlim(0, 112); ax.set_ylim(3.85, -0.75)
-    ax.set_xticks(range(0, 101, 20))
-    ax.set_xlabel("Share of test cases (%)")
-    ax.grid(False); ax.tick_params(axis="y", length=0)
-    ax.spines["left"].set_visible(False)
-    ax.grid(axis="x", color="#DDDDDD", lw=0.6)
-    save(fig, "fig1")
-
-
-DEPTH = list(range(1, 16, 2))
-
-
-def lineplot_axes(ax, xlabel="MaxDepth (nesting depth of generated expressions)"):
-    ax.set_xticks(DEPTH); ax.set_xlabel(xlabel)
-
-
 # ---------- fig2 ----------
 def fig2():
     us = [49, 58, 74, 98, 138, 207, 330, 535]
@@ -98,36 +52,6 @@ def fig3():
     save(fig, "fig3")
 
 
-# ---------- fig4 ----------
-def fig4():
-    types = ["CREATE TABLE", "ALTER TABLE", "INSERT", "REPLACE", "SELECT"]
-    cols = [GARNET, GREEN, PURPLE, ORANGE, BLUE]
-    data = [("MySQL", [1, 0, 1, 0, 12]), ("MariaDB", [1, 1, 1, 1, 3]),
-            ("CockroachDB", [0, 0, 0, 0, 1]), ("TiDB", [0, 0, 0, 0, 7]),
-            ("All DBMSs (29 bugs)", [2, 1, 2, 1, 23])]
-    fig, ax = plt.subplots(figsize=(W, 2.6))
-    for y, (_, cnt) in enumerate(data):
-        left = 0
-        for n, c in enumerate(cnt):
-            if not c:
-                continue
-            ax.barh(y, c, left=left, height=0.55, color=cols[n], edgecolor="white", linewidth=0.6)
-            ax.text(left + c / 2, y, str(c), ha="center", va="center", fontsize=8,
-                    color=luminance_text(cols[n]))
-            left += c
-        ax.text(left + 0.4, y, f"{left}", ha="left", va="center", fontsize=8, fontweight="bold")
-    ax.set_yticks(range(5)); ax.set_yticklabels([d[0] for d in data])
-    ax.invert_yaxis(); ax.set_xlim(0, 31)
-    ax.axhline(3.5, color=GREY, lw=0.6, ls=":")
-    ax.set_xlabel("Bug-revealing statements (count; bold = DBMS total)")
-    ax.grid(False); ax.grid(axis="x", color="#DDDDDD", lw=0.6); ax.tick_params(axis="y", length=0)
-    ax.spines["left"].set_visible(False)
-    ax.legend([plt.Rectangle((0, 0), 1, 1, color=c) for c in cols], types, ncol=3, loc="lower center",
-              bbox_to_anchor=(0.5, 1.0), handlelength=0.9, columnspacing=0.9, handletextpad=0.4,
-              fontsize=7)
-    save(fig, "fig4")
-
-
 # ---------- fig5 ----------
 def fig5():
     rt = [0.05, 0.1, 0.25, 0.4, 0.6, 0.9, 1.0, 1.05, 1.15, 1.5, 1.6, 1.9, 2.6, 4.2, 4.4, 5.8, 7.1, 10.8]
@@ -150,5 +74,5 @@ def fig5():
 
 
 if __name__ == "__main__":
-    for f in (fig1, fig2, fig3, fig4, fig5):
+    for f in (fig2, fig3, fig5):
         f()

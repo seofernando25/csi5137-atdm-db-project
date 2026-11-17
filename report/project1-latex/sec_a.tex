@@ -16,6 +16,8 @@ Take a database that stores product quantities. Two SQL executions that mean the
 \subsection{Formal definition and search objective}
 Let $E$ be a DBMS implementation. A database state is $D=(S,V,M,H)$: the visible schema $S$, the stored values $V$, the optional metadata and configuration $M$ that affect execution (indexes, constraints), and the construction history and internal state $H$. This split is analytical; a real DBMS may store these together. Let $W$ be a query, a statement sequence or a transaction workload, and let $C$ hold the SQL dialect, session settings and isolation mode. An observation $O(E,D,W,C)$ is what the oracle checks: query rows, statement success or failure, final table contents, or the resulting schema. A transformation $T$ maps $(D,W)$ to $(D',W')$, and a precondition $P$ states when the transformed execution asks the same semantic question.
 
+\begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,left=8pt,right=8pt,top=6pt,bottom=6pt,breakable]
+\small
 \paragraph{Given.} A DBMS $E$, a configuration $C$, a family of database states and workloads $(D,W)$, a transformation $T$ with $T(D,W)=(D',W')$, and a precondition $P(D,W,C)$ under which $T$ preserves meaning.
 
 \paragraph{Sought.} Triples $(D,W,T)$ with $P(D,W,C)$ true for which the expected property
@@ -23,6 +25,7 @@ Let $E$ be a DBMS implementation. A database state is $D=(S,V,M,H)$: the visible
 P(D,W,C)\;\Rightarrow\;O(E,D,W,C)\equiv O(E,D',W',C)
 \]
 fails. Each such triple is a candidate defect, reported with a reduced, reproducible test case.
+\end{tcolorbox}
 
 \paragraph{Scope of the model.} Candidate status is deliberate: a mismatch becomes a defect only after $P$ is validated, permitted nondeterminism is excluded, the case is reduced, and the DBMS documentation is checked. The model describes the shared testing task, not a formalism that all four papers use.
 
