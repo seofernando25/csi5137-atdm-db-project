@@ -1,18 +1,16 @@
 \documentclass[tikz,border=4pt]{standalone}
 \input{tikzstyle.tex}
 
-% Figure 1 v3: four cards (y 3.4-6.9) -> shared orthogonal bus (y 2.55)
-%   -> one equal? diamond (y ~1.55) branching to Fine / Candidate Bug pills (y 0.35).
-% Gutter x in [0,1.55] holds the three tier labels. Cards: x0=1.7, width 3.32, gap 0.5.
 \definecolor{okgreen}{HTML}{1E5631}
 \tikzset{
-  dia/.style={diamond, draw=ink!60, fill=white, aspect=2.0, minimum width=1.3cm,
-    inner sep=1pt, font=\fontsize{8}{9}\selectfont\bfseries, line width=0.7pt},
+  dia/.style={diamond, draw=ink!60, fill=white, aspect=2.0, minimum width=1.35cm,
+    inner sep=1pt, font=\bfseries\fontsize{8}{9}\selectfont, line width=0.7pt},
   pill/.style={rounded corners=7pt, minimum width=2.6cm, minimum height=0.72cm,
-    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.7pt},
+    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt},
   tierlab/.style={font=\itshape\fontsize{7.5}{9.5}\selectfont, text=ink!60,
-    align=center, text width=1.4cm},
+    align=right, text width=1.45cm},
 }
+
 \newcommand{\Card}[7]{%
   % #1 left x, #2 fill, #3 name, #4 title, #5 subtitle, #6 transform chip, #7 observation
   \node[panel, fill=#2, minimum width=3.32cm, minimum height=3.5cm,
@@ -23,16 +21,15 @@
     font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!70] at (#1+0.35,6.28) {#5};
   \node[anchor=center, align=center, text width=2.62cm, inner sep=0pt,
     font=\fontsize{7.5}{10}\selectfont\ttfamily, text=ink] at (#1+1.66,5.32) {#6};
-  \draw[dashed, rule, line width=0.5pt] (#1+0.35,4.5) -- (#1+2.97,4.5);
+  \draw[dashed, rule, line width=0.5pt] (#1+0.35,4.58) -- (#1+2.97,4.58);
   \node[anchor=center, font=\fontsize{8}{9.5}\selectfont, text=ink] at (#1+1.66,3.9) {#7};
 }
 
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  % tier labels (gutter, right-aligned toward the cards)
-  \node[tierlab, anchor=east] at (1.5,6.35) {Scope};
-  \node[tierlab, anchor=east] at (1.5,5.25) {Variant\\vs.\ Baseline};
-  \node[tierlab, anchor=east] at (1.5,3.9) {Oracle};
+  \node[tierlab, anchor=east] at (1.48,6.42) {Scope};
+  \node[tierlab, anchor=east] at (1.48,5.32) {Variant\\vs.\ Baseline};
+  \node[tierlab, anchor=east] at (1.48,3.90) {Oracle};
 
   % four cards: x0=1.7, pitch 3.82
   \Card{1.7}{pgrey}{cA}{CODDTest}{expression}
@@ -45,26 +42,28 @@
     {T1\,$\parallel$\,T2\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} T1\,$\rightarrow$\,T2}
     {final table state}
   \Card{13.16}{pgreen}{cD}{Radar}{metadata}
-    {D + i$_{0}$\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} raw(D)}
+    {D + i\textsubscript{0}\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} raw(D)}
     {query rows}
 
-  % shared conduit: card drops onto one bus
-  \draw[ink!60, line width=0.8pt] (cA.south) -- (3.36,2.55);
-  \draw[ink!60, line width=0.8pt] (cB.south) -- (7.18,2.55);
-  \draw[ink!60, line width=0.8pt] (cC.south) -- (11.00,2.55);
-  \draw[ink!60, line width=0.8pt] (cD.south) -- (14.82,2.55);
-  \draw[ink!60, line width=0.8pt] (3.36,2.55) -- (14.82,2.55);
-  \draw[-{Stealth[length=2.4mm]}, ink!60, line width=0.8pt] (9.09,2.55) -- (9.09,2.12);
+  % shared orthogonal bus anchored to card bottoms and diamond north
+  \foreach \c in {cA,cB,cC,cD} {
+    \draw[ink!60, line width=0.8pt] (\c.south) -- (\c.south |- 0,2.60);
+  }
+  \draw[ink!60, line width=0.8pt] (cA.south |- 0,2.60) -- (cD.south |- 0,2.60);
 
-  % one routing diamond, two outcome pills
-  \node[dia] (eq) at (9.09,1.55) {equal?};
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (4.55,0.35) {fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (13.65,0.35) {candidate bug};
-  \draw[ink!60, line width=0.8pt] (eq.west) -- (4.55,1.55);
-  \draw[-{Stealth[length=2.4mm]}, okgreen, line width=0.9pt] (4.55,1.55) -- (4.55,0.72);
-  \draw[ink!60, line width=0.8pt] (eq.east) -- (13.65,1.55);
-  \draw[-{Stealth[length=2.4mm]}, garnet, line width=0.9pt] (13.65,1.55) -- (13.65,0.72);
-  \node[anchor=south, font=\fontsize{7}{8.5}\selectfont\itshape, text=okgreen] at (5.9,1.6) {yes};
-  \node[anchor=south, font=\fontsize{7}{8.5}\selectfont\itshape, text=garnet] at (12.3,1.6) {no};
+  % one routing diamond, pills under the two card-pair midpoints
+  \node[dia] (eq) at (9.09,1.62) {equal?};
+  \draw[-{Stealth[length=2.4mm]}, ink!60, line width=0.8pt] (9.09,2.60) -- (eq.north);
+
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,0.42) {fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (12.91,0.42) {candidate bug};
+
+  \draw[-{Stealth[length=2.4mm]}, okgreen, line width=0.85pt] (eq.west) -| (fine.north);
+  \draw[-{Stealth[length=2.4mm]}, garnet, line width=0.85pt] (eq.east) -| (bug.north);
+
+  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=okgreen]
+    at (6.85,1.66) {yes};
+  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=garnet]
+    at (11.33,1.66) {no};
 \end{tikzpicture}
 \end{document}
