@@ -1,81 +1,105 @@
 \documentclass[tikz,border=6pt]{standalone}
 \input{tikzstyle.tex}
 
+\definecolor{okgreen}{HTML}{1E5631}
+\definecolor{accent}{HTML}{D97706}
+
+\tikzset{
+  card/.style={panel, minimum width=4.9cm, minimum height=3.8cm, anchor=south west, inner sep=0pt},
+  codebox/.style={
+    draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
+    fill=white!75, inner sep=6pt, align=left,
+    font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink
+  },
+  hlchip/.style={
+    draw=accent, fill=porange!65, rounded corners=3pt,
+    inner xsep=4pt, inner ysep=2pt, font=\ttfamily\fontsize{7.5}{9.5}\selectfont, align=left
+  },
+  resbox/.style={
+    draw=ink!50, fill=pgrey!60, rounded corners=4pt,
+    minimum width=2.9cm, minimum height=0.62cm,
+    font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
+  },
+  dia/.style={
+    diamond, draw=ink!60, fill=white, aspect=2.0,
+    minimum width=1.35cm, inner sep=1pt,
+    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
+  },
+  pill/.style={
+    rounded corners=7pt, minimum width=2.4cm, minimum height=0.66cm,
+    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
+  },
+  flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
+  busline/.style={ink!65, line width=0.8pt, line cap=round},
+  coll/.style={font=\fontsize{7}{8.5}\selectfont\itshape, text=ink!70, align=center},
+  ttl/.style={font=\bfseries\fontsize{9.5}{11}\selectfont, text=ink},
+}
+
 \begin{document}
-\begin{tikzpicture}[
-  dbox/.style={rounded corners=3pt,dashed,draw=ink,line width=.5pt},
-  sql/.style={font=\ttfamily\footnotesize,text=ink,anchor=west},
-  ttl/.style={font=\footnotesize\bfseries,text=ink,anchor=north west},
-  hdr/.style={font=\footnotesize\bfseries,text=ink},
-  cell/.style={font=\footnotesize,text=ink},
-  capt/.style={font=\scriptsize\itshape,text=ink,align=center},
-  ovbox/.style={box,fill=pgrey,minimum width=4cm},
-]
+\begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
+  % Cards: pblue baseline, pgrey derivation, porange transformed variant
+  \node[card, fill=pblue]   (c1) at (0,3.2) {};
+  \node[card, fill=pgrey]   (c2) at (5.8,3.2) {};
+  \node[card, fill=porange] (c3) at (11.6,3.2) {};
 
-% Panels (5.1 cm wide, 0.6 cm gaps, total 16.5 cm)
-\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=pgrey] (P1) at (0,2.3) {};
-\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=pblue] (P2) at (5.7,2.3) {};
-\node[panel,anchor=south west,minimum width=5.1cm,minimum height=5.7cm,fill=porange] (P3) at (11.4,2.3) {};
-\draw[arr] (P1.east) -- (P2.west);
-\draw[arr] (P2.east) -- (P3.west);
+  % ---- Card 1: Original query
+  \node[anchor=north west, ttl] at (0.35,6.72) {Original query};
+  \node[anchor=north west, font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink]
+    at (0.35,6.32) {SELECT id FROM Product};
+  \node[anchor=north west, font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink]
+    at (0.35,6.0) {WHERE quantity >};
+  \node[hlchip, anchor=north] at (2.45,5.68) {(SELECT AVG(quantity)\\ FROM Product)};
+  \node[coll] at (2.45,3.72) {highlighted: scalar subquery};
 
-% Panel 1: original query
-\node[ttl] at (0.4,7.6) {Original query};
-\node[dbox,minimum width=4.3cm,minimum height=2.15cm] at (2.55,5.875) {};
-\node[sql] at (0.6,6.6) {SELECT id FROM Product};
-\node[sql] at (0.6,6.22) {WHERE quantity >};
-\node[rounded corners=3pt,draw=orange,line width=1pt,fill=orange!18,minimum width=3.9cm,minimum height=0.92cm] at (2.55,5.45) {};
-\node[sql] at (0.8,5.62) {(SELECT AVG(quantity)};
-\node[sql] at (1.0,5.22) {FROM Product)};
-\node[capt] at (2.55,4.5) {highlighted: scalar subquery};
-\draw[ink,line width=.4pt] (0.4,3.13) rectangle (4.7,4.15);
-\draw[ink,line width=.4pt] (0.4,3.81) -- (4.7,3.81);
-\draw[ink,line width=.4pt] (0.4,3.47) -- (4.7,3.47);
-\draw[ink,line width=.4pt] (1.9,3.13) -- (1.9,4.15);
-\draw[ink,line width=.4pt] (3.3,3.13) -- (3.3,4.15);
-\node[hdr] at (1.15,3.98) {id};
-\node[hdr] at (2.6,3.98) {quantity};
-\node[hdr] at (4.0,3.98) {reserved};
-\node[cell] at (1.15,3.64) {1};
-\node[cell] at (2.6,3.64) {8};
-\node[cell] at (4.0,3.64) {3};
-\node[cell] at (1.15,3.30) {2};
-\node[cell] at (2.6,3.30) {4};
-\node[cell] at (4.0,3.30) {4};
-\node[capt] at (2.55,2.85) {Product rows};
+  % ---- Card 2: Auxiliary query
+  \node[anchor=north west, ttl] at (6.15,6.72) {Auxiliary query};
+  \node[codebox, anchor=north, minimum width=4.2cm, minimum height=1.05cm, align=left, anchor=north]
+    (aux) at (8.25,6.28) {SELECT AVG(quantity)\\ FROM Product;};
+  \node[draw=ink!60, fill=white, line width=.5pt, inner sep=0pt] (avgTab) at (8.25,4.6) {%
+    \renewcommand{\arraystretch}{1.15}%
+    \begin{tabular}{|c|}
+      \hline
+      \textbf{\ttfamily AVG} \\ \hline
+      \ttfamily 6 \\ \hline
+    \end{tabular}};
+  \draw[flow] (aux.south) -- (avgTab.north);
+  \node[coll, anchor=north] at (8.25,3.72) {evaluates subquery on snapshot;\\ fixed value 6 replaces expression};
 
-% Panel 2: auxiliary query
-\node[ttl] at (6.1,7.6) {Auxiliary query};
-\node[dbox,minimum width=4.3cm,minimum height=1.5cm] (aux) at (8.25,6.25) {};
-\node[sql] at (6.3,6.6) {SELECT AVG(quantity)};
-\node[sql] at (6.3,6.2) {FROM Product;};
-\node[draw=ink,fill=white,line width=.4pt,minimum width=1.8cm,minimum height=0.9cm,inner sep=0] (avg) at (8.25,4.5) {};
-\draw[arr] (aux.south) -- (avg.north);
-\draw[ink,line width=.4pt] (7.35,4.5) -- (9.15,4.5);
-\node[hdr] at (8.25,4.725) {AVG};
-\node[cell] at (8.25,4.275) {6};
-\draw[blue,line width=.8pt] (6.7,4.5) circle (0.16);
-\draw[blue,line width=1.3pt] (6.82,4.38) -- (7.0,4.2);
-\node[capt,text width=4.2cm,anchor=north] at (8.25,3.75) {evaluates the highlighted expression\\on the same snapshot\\value 6 is fixed for this snapshot};
+  % ---- Card 3: Folded query
+  \node[anchor=north west, ttl] at (11.95,6.72) {Folded query};
+  \node[anchor=north west, font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink]
+    at (11.95,6.28) {SELECT id FROM Product};
+  \node[anchor=north west, font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink]
+    at (11.95,5.98) {WHERE quantity > \textcolor{accent}{\textbf{6}}};
+  \node[coll] at (14.05,3.72) {subquery replaced by constant};
 
-% Panel 3: folded query
-\node[ttl] at (11.8,7.6) {Folded query};
-\node[dbox,minimum width=4.3cm,minimum height=2.05cm] at (13.95,5.925) {};
-\node[sql] at (12.0,6.6) {SELECT id FROM Product};
-\node[sql] at (12.0,6.22) {WHERE quantity >};
-\node[rounded corners=2pt,fill=orange!45,inner sep=1.5pt,font=\ttfamily\footnotesize,text=ink] at (14.75,6.22) {6};
-\node[capt] at (13.95,4.55) {subquery replaced by its value};
-\node[dbox,minimum width=4.3cm,minimum height=1.15cm] at (13.95,3.275) {};
-\node[capt] at (13.95,3.42) {Row-dependent expression:};
-\node[capt] at (13.95,3.13) {CASE maps row context to value};
+  % ---- Inter-card flows (card edges only)
+  \draw[flow] (c1.east) -- (c2.west);
+  \draw[flow] (c2.east) -- (c3.west);
 
-% Oracle frame
-\node[rounded corners=5pt,draw=ink,line width=.6pt,fill=white,anchor=south west,minimum width=16.5cm,minimum height=1.7cm] at (0,0) {};
-\node[font=\footnotesize\bfseries,anchor=west] at (0.4,1.42) {Oracle: compare the two results};
-\node[ovbox] at (2.6,0.7) {Original result};
-\node[font=\footnotesize\bfseries] at (5.4,0.7) {=?};
-\node[ovbox] at (8.2,0.7) {Folded result};
-\node[font=\footnotesize\bfseries,text=ink,anchor=west] at (11.0,0.7) {equal $\rightarrow$ ok; differ $\rightarrow$ candidate bug};
+  % ---- Oracle: drops from compared cards only (c1, c3)
+  \node[resbox] (r1) at (2.45,1.6) {original result};
+  \node[resbox] (r3) at (14.05,1.6) {folded result};
+  \draw[flow] (c1.south) -- (r1.north);
+  \draw[flow] (c3.south) -- (r3.north);
 
+  % ---- Shared bus and single routing diamond
+  \coordinate (busM) at ($(c1.south)!0.5!(c3.south)$);
+  \draw[busline] (r1.south) -- (2.45,2.25);
+  \draw[busline] (r1.south |- 0,2.25) -- (r3.south |- 0,2.25);
+  \draw[busline] (r3.south) -- (r3.south |- 0,2.25);
+  \node[dia] (eq) at (8.25,1.3) {equal?};
+  \draw[-{Stealth[length=2.2mm]}, busline] (8.25,2.25) -- (eq.north);
+
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,0.2) {fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,0.2) {candidate bug};
+  \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
+    (eq.west) -| (fine.north);
+  \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
+    (eq.east) -| (bug.north);
+  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=okgreen, yshift=1pt]
+    at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
+  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=garnet, yshift=1pt]
+    at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
 \end{tikzpicture}
 \end{document}
