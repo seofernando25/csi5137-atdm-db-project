@@ -1,7 +1,7 @@
 """Build all data figures (vector PDF, one style). Run: /usr/bin/python3.14 make_data_figures.py
 
 fig1-fig5: values read off the published figures (exact where printed in the
-papers). fig_repro: our 3-seed SQLite reproduction vs the published read-off.
+papers).
 """
 import json, sys
 from pathlib import Path
@@ -11,8 +11,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = Path(__file__).resolve().parent
-REPRO = HERE.parent.parent / "project2-reproduction" / "graph-reproduction"
-sys.path.insert(0, str(REPRO))
 plt.style.use(HERE / "paper.mplstyle")
 
 BLUE, ORANGE, GREEN, PURPLE, GREY, GARNET = "#2B6CB0", "#D9822B", "#2F855A", "#8E5EA2", "#7A7A7A", "#8F001A"
@@ -163,38 +161,6 @@ def fig5():
     save(fig, "fig5")
 
 
-# ---------- fig_repro ----------
-def fig_repro():
-    from common import load, PD, PUB_US, PUB_TESTS
-    us, tests = load(); n = len(us)
-    fits = json.loads((REPRO / "fits.json").read_text())
-    a_, b_, c_ = fits["ours_time_us"]["exp+const"]["params_rel_to_depth1"]
-    fig, axs = plt.subplots(1, 2, figsize=(W, 2.7))
-    for ax, y, pub, lab in ((axs[0], us, PUB_US, "(a)"), (axs[1], tests, PUB_TESTS, "(b)")):
-        r = y / y[:, [0]]; m = r.mean(0)
-        ax.plot(PD, pub / pub[0], color=BLUE, marker="o", label="published (read off)")
-        ax.errorbar(PD, m, yerr=[m - r.min(0), r.max(0) - m], color=ORANGE, marker="s",
-                    capsize=2.5, elinewidth=0.9, capthick=0.9, label=f"ours: mean, min–max of {n} seeds")
-        ax.set_xticks(PD); ax.set_xlabel("MaxDepth (expression nesting)")
-        ax.text(-0.02, 1.04, lab, transform=ax.transAxes, fontweight="bold", ha="right")
-    d = np.linspace(1, 15, 100)
-    axs[0].plot(d, a_ * np.exp(b_ * d) + c_, color=GREY, lw=0.8, ls="--", label=r"fit to ours: $a e^{bd}+c$")
-    axs[0].set_ylabel("Time per query (relative to depth 1)")
-    axs[1].set_ylabel("Completed tests (relative to depth 1)")
-    axs[0].legend(loc="upper left", fontsize=7.5)
-    axs[1].legend(loc="lower left", fontsize=7.5)
-    axs[1].set_ylim(0, 1.15)
-    tr = (us[:, -1] / us[:, 0]).mean(); pr = 9.91  # published text value (read-off curve gives ~10.9)
-    tc = 100 * ((tests[:, -1] / tests[:, 0]).mean() - 1); pc = -89.4  # published text value
-    axs[0].text(0.02, 0.58, f"depth 1→15:\ntime  ours ×{tr:.2f}, published ×{pr:.2f}",
-                transform=axs[0].transAxes, fontsize=7.5, va="top", color="black")
-    axs[1].text(0.98, 0.93, f"depth 1→15:\nours {tc:+.1f}%, published {pc:+.1f}%".replace("-", "−"),
-                transform=axs[1].transAxes, fontsize=7.5, va="top", ha="right")
-    fig.tight_layout(w_pad=1.5)
-    save(fig, "fig_repro")
-    print(f"time x{tr:.2f} vs x{pr:.2f}; tests {tc:.1f}% vs {pc:.1f}%")
-
-
 if __name__ == "__main__":
-    for f in (fig1, fig2, fig3, fig4, fig5, fig_repro):
+    for f in (fig1, fig2, fig3, fig4, fig5):
         f()
