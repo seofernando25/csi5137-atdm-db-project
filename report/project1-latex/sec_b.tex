@@ -65,7 +65,7 @@ CODDTest reports 45 previously unknown bugs across five DBMSs: 24 logic bugs, 14
 
 \textbf{Sufficiency (discovery and complementarity).} Sufficient for the goal ``finds logic bugs that other oracles miss'': the bugs are real, developer-accepted, and 11 of them escaped the compared oracles. Insufficient for any claim about relative detection rates, because the earlier oracles were applied by hand to supplied cases.
 
-Table~\ref{tab:codd} gives the 24-hour efficiency run. Its expression-only row (default MaxDepth 3) and the depth sweep in Figure~\ref{fig:depth} come from separate runs and differ by roughly a third (1.4 billion against about 1.0 billion tests at depth 3, 7,399 against about 6,400 plans), so absolute values vary between runs and only the trends should be compared. CODDTest completes about 4.2 times fewer tests than NoREC yet reaches 2,577,603 unique plans against 172,808, while branch coverage stays near 63\%. Throughput understates what the oracle explores, and coverage alone would hide the difference. Among the CODDTest variants, expression-only testing finishes the most tests but sees only 7,399 plans, so cheap tests are not the ones that reach the widest plan space.
+Table~\ref{tab:codd} gives the 24-hour efficiency run. Its expression-only row (default MaxDepth 3) and the depth sweep in Figure~\ref{fig:depth} come from separate runs and differ at depth 3 (1.4 billion against about 1.0 billion tests, about 30\% fewer; 7,399 against about 6,400 plans, about 13\% fewer), so absolute values vary between runs and only the trends should be compared. CODDTest completes about 4.2 times fewer tests than NoREC yet reaches 2,577,603 unique plans against 172,808, while branch coverage stays near 63\%. Throughput understates what the oracle explores, and coverage alone would hide the difference. Among the CODDTest variants, expression-only testing finishes the most tests but sees only 7,399 plans, so cheap tests are not the ones that reach the widest plan space.
 
 \begin{table}[!tb]
 \caption{Selected 24-hour efficiency values from \cite[Table~3]{coddtest} (tests converted from thousands to millions). Plan and coverage figures come from separate runs with matching configurations.}
@@ -146,7 +146,7 @@ Figure~\ref{fig:radarablation} shows the TiDB ablation. The metadata-guided curv
 \label{fig:radarablation}
 \end{figure}
 
-Table~\ref{tab:cap} gives the capability and end-to-end comparisons. On supplied metadata bugs, no other oracle exposes more than 13 of 30. In the end-to-end run Radar finds twenty of the 21 bugs found by all tools together, fifteen exclusively. Capability on supplied cases and realised discovery therefore differ inside one study. Code coverage barely moves, so it understates the effect of guidance.
+Table~\ref{tab:cap} gives the capability and end-to-end comparisons. On supplied metadata bugs, no other oracle exposes more than 13 of 30. In the end-to-end run Radar finds twenty of the 21 bugs found by all tools together, fifteen exclusively. Capability on supplied cases and realized discovery therefore differ inside one study. Code coverage barely moves, so it understates the effect of guidance.
 
 \begin{table}[!tb]
 \caption{Oracle comparisons from \cite[Sect.~4.2]{coddtest} and \cite[Tables~4 and~5]{radar}.}
