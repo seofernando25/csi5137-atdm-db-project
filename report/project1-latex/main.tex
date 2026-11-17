@@ -1,17 +1,28 @@
 \documentclass[11pt,letterpaper]{article}
-\usepackage[letterpaper,textwidth=7in,top=0.5in,bottom=0.75in,includehead,headheight=30pt,headsep=12pt,footskip=26pt]{geometry}
+\usepackage[letterpaper,left=0.65in,right=0.65in,top=0.9in,bottom=0.85in,headheight=30pt,headsep=12pt,footskip=24pt]{geometry}
 \usepackage{newtxtext,newtxmath}   % Times-compatible, as the course guide requires
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
+\usepackage{titlesec}
+\linespread{1.05}
+\definecolor{ICMLAccent}{HTML}{0072B2}\definecolor{HeadDark}{HTML}{222222}
+\renewcommand{\sfdefault}{lmss}
+\newcommand{\headingfont}{\sffamily\bfseries\color{HeadDark}}
+\titleformat{\section}{\headingfont\Large\raggedright}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\headingfont\large\raggedright}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\headingfont\normalsize\raggedright}{\thesubsubsection}{0.8em}{}
+\titlespacing*{\section}{0pt}{1.6ex plus .4ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.3ex plus .3ex}{0.6ex}
+\titlespacing*{\subsubsection}{0pt}{1ex}{0.4ex}
 \usepackage{graphicx,booktabs,array,tabularx,xcolor,amsmath,enumitem}
 \usepackage[most]{tcolorbox}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black,pdfborder={0 0 0},pdftitle={Detecting Logic Bugs in Relational Database Systems},pdfauthor={Group 12, CSI 5137}]{hyperref}
 \usepackage{fancyhdr}
 \usepackage{fontawesome5}
-\usepackage[font=small,labelfont=bf,labelsep=period,skip=6pt]{caption}
+\usepackage[font=footnotesize,labelfont={bf,color=black!80},labelsep=period,skip=6pt]{caption}
 \usepackage[ruled]{algorithm}
 \usepackage{algpseudocode}
-\setlength{\parskip}{0.4em}\setlength{\parindent}{0pt}
+\setlength{\parindent}{1.2em}\setlength{\parskip}{0pt plus 1pt}
 \renewcommand{\arraystretch}{1.15}
 \setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
 \setlength{\floatsep}{10pt plus 2pt minus 2pt}
@@ -21,8 +32,8 @@
 \graphicspath{{figures/}}
 \definecolor{abstractbg}{HTML}{EAF1FA}
 \definecolor{abstractborder}{HTML}{B8C7DD}
-\definecolor{panelbg}{HTML}{EAF1FA}
-\definecolor{panelborder}{HTML}{C9D6EA}
+\definecolor{panelbg}{HTML}{E5F0F8}
+\definecolor{panelborder}{HTML}{B3D4EA}
 % Running header: short title plus a clickable section map; the current section is bold.
 
 
@@ -32,7 +43,7 @@
 \renewcommand{\subsectionmark}[1]{\markright{\thesection}}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\headrule}{\hbox to\headwidth{\color{panelborder}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{ICMLAccent}\leaders\hrule height \headrulewidth\hfill}}
 \fancyhead[C]{\footnotesize\textbf{Detecting Logic Bugs in Relational Database Systems}\\[2pt]
 \hdrentry{intro}{1}{Intro} $|$ \hdrentry{problem}{2}{Problem} $|$ \hdrentry{motivation}{3}{Motivation} $|$ \hdrentry{related}{4}{Related} $|$ \hdrentry{experiments}{5}{Experiments} $|$ \hdrentry{discussion}{6}{Discussion} $|$ \hdrentry{conclusions}{7}{Conclusion}}
 \fancyfoot[C]{\small\thepage}
