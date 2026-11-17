@@ -1,114 +1,36 @@
-\documentclass[tikz,border=6pt]{standalone}
+\documentclass[tikz,border=4pt]{standalone}
 \input{tikzstyle.tex}
-
-\definecolor{okgreen}{HTML}{1E5631}
-\definecolor{accent}{HTML}{D97706}
-
-\tikzset{
-  card/.style={panel, minimum width=4.3cm, minimum height=3.8cm, anchor=south west, inner sep=0pt},
-  codebox/.style={
-    draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-    fill=white!75, inner sep=6pt, align=left,
-    font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink
-  },
-  hlchip/.style={
-    draw=accent, fill=porange!65, rounded corners=3pt,
-    inner xsep=5pt, inner ysep=2pt, font=\ttfamily\fontsize{7.5}{9.5}\selectfont
-  },
-  idxbadge/.style={
-    draw=ink!35, dash pattern=on 2pt off 2pt, rounded corners=3pt,
-    inner xsep=6pt, inner ysep=2pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!55
-  },
-  resbox/.style={
-    draw=ink!50, fill=pgrey!60, rounded corners=4pt,
-    minimum width=2.9cm, minimum height=0.6cm,
-    font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
-  },
-  dia/.style={
-    diamond, draw=ink!60, fill=white, aspect=2.0,
-    minimum width=1.35cm, inner sep=1pt,
-    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
-  },
-  pill/.style={
-    rounded corners=7pt, minimum height=0.66cm, inner xsep=10pt,
-    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
-  },
-  flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
-  busline/.style={ink!65, line width=0.8pt, line cap=round},
-  coll/.style={font=\fontsize{7}{8.5}\selectfont\itshape, text=ink!70, align=center},
-  ttl/.style={font=\bfseries\fontsize{9.5}{11}\selectfont, text=ink},
-  cyl/.style={
-    cylinder, shape border rotate=90, draw=ink!60, fill=white,
-    aspect=0.22, minimum height=1.35cm, minimum width=0.85cm,
-    font=\ttfamily\fontsize{8}{9}\selectfont, line width=0.75pt
-  }
-}
-
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  % Cards: pblue baseline / pgrey derivation / porange transformed variant
-  \node[card, fill=pblue]   (d1) at (0,3.55) {};
-  \node[card, fill=pgrey]   (d2) at (6.1,3.55) {};
-  \node[card, fill=porange] (d3) at (12.2,3.55) {};
+  \def\itemw{4.15cm}
+  \StagePanel{P1}{0}{0}{4.9}{4.15}{base}{1}{Database with metadata}{table t\textsubscript{0} with an optional index}
+  \StagePanel{P2}{5.85}{0}{4.9}{4.15}{derive}{2}{Raw database build}{copies the rows and drops optional metadata}
+  \StagePanel{P3}{11.7}{0}{4.9}{4.15}{variant}{3}{Raw database}{the same rows without the index}
 
-  % ---- Card 1: Database with metadata
-  \node[anchor=north west, ttl] at (0.35,7.24) {\stepnum{1}Database with metadata};
-  \node[hlchip] (idx1) at (2.15,6.2) {index i\textsubscript{0} on c\textsubscript{0} DESC};
-  \node[cyl] (cyl1) at (2.15,4.62) {t\textsubscript{0}};
-  \draw[dash pattern=on 2pt off 2pt, accent, line width=0.75pt] (idx1.south) -- (cyl1.north);
-  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (2.15,3.72) {rows: \texttt{c\textsubscript{0} = 0}};
+  \node[item, text width=\itemw, anchor=north, align=center] (i1) at (P1-in)
+    {{\color{stepblue}\faTag}\enspace index i\textsubscript{0} on c\textsubscript{0} DESC};
+  \node[cyl, below=4mm of i1] (db1) {t\textsubscript{0}};
+  \node[note, below=1.5mm of db1] {rows: \texttt{c\textsubscript{0} = 0}};
+  \draw[flow, dashed] (i1) -- (db1);
 
-  % ---- Card 2: Raw database build
-  \node[anchor=north west, ttl] at (6.45,7.24) {\stepnum{2}Raw database build};
-  \node[draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-        fill=white!75, minimum width=3.66cm, minimum height=0.9cm] (stripTop) at (8.25,6.2) {};
-  \node[draw=ink!35, fill=pgrey!50, rounded corners=3pt, inner xsep=5pt, inner ysep=1.5pt,
-        font=\ttfamily\fontsize{7}{8.5}\selectfont, text=ink!50] at (7.1,6.2) {index i\textsubscript{0}};
-  \node[font=\bfseries\fontsize{7.5}{9}\selectfont, text=garnet, anchor=west] at (8.35,6.2) {$\times$ removed};
+  \node[item, text width=\itemw, anchor=north, font=\fontsize{7.5}{9}\selectfont] (k1) at (P2-in)
+    {\faTimes\enspace index \texttt{i\textsubscript{0}}\hfill dropped};
+  \node[item, text width=\itemw, below=1.6mm of k1, font=\fontsize{7.5}{9}\selectfont] (k2)
+    {{\color{okgreen}\faCheck}\enspace rows \texttt{c\textsubscript{0} = 0}\hfill copied};
 
-  \node[draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-        fill=white!75, minimum width=3.66cm, minimum height=1.16cm] (stripBot) at (8.25,4.62) {};
-  \node[inner sep=0pt] at (7.05,4.62) {%
-    \renewcommand{\arraystretch}{1.0}\fontsize{6.5}{8.5}\selectfont%
-    \begin{tabular}{|c|}
-      \hline
-      \textbf{\ttfamily c\textsubscript{0}} \\ \hline
-      \ttfamily 0 \\ \hline
-    \end{tabular}};
-  \draw[okgreen, line width=1.3pt] (8.42,4.68) -- (8.6,4.46) -- (9.1,4.92);
-  \node[font=\bfseries\fontsize{7.5}{9}\selectfont, text=okgreen, anchor=west] at (9.22,4.6) {kept};
+  \node[item, text width=\itemw, anchor=north, align=center, font=\itshape\fontsize{7.5}{9}\selectfont] (i3) at (P3-in)
+    {no index};
+  \node[cyl, below=4mm of i3] (db3) {t\textsubscript{0}};
+  \node[note, below=1.5mm of db3] {rows: \texttt{c\textsubscript{0} = 0}};
 
-  % ---- Card 3: Raw database (mirrored slot geometry to card 1)
-  \node[anchor=north west, ttl] at (12.55,7.24) {\stepnum{3}Raw database};
-  \node[idxbadge] (idx3) at (14.35,6.2) {no index};
-  \node[cyl] (cyl3) at (14.35,4.62) {t\textsubscript{0}};
-  \node[anchor=center, font=\fontsize{7.5}{9}\selectfont, text=ink!80] at (14.35,3.72) {rows: \texttt{c\textsubscript{0} = 0}};
+  \draw[flow] (P1.east) -- node[elab, above] {copy} (P2.west);
+  \draw[flow] (P2.east) -- node[elab, above] {build} (P3.west);
 
-  % ---- Inter-card flows (card edges only)
-  \draw[flow] (d1.east) -- (d2.west);
-  \draw[flow] (d2.east) -- (d3.west);
+  \node[outcome] (o1) at ($(P1.south)+(0,-0.95)$) {row count of \textit{Q}};
+  \node[outcome] (o3) at ($(P3.south)+(0,-0.95)$) {row count of \textit{Q}};
+  \draw[flow] (P1.south) -- node[elab, right] {run \textit{Q}} (o1.north);
+  \draw[flow] (P3.south) -- node[elab, left] {run \textit{Q}} (o3.north);
 
-  % ---- Oracle: result boxes first, then bus
-  \node[resbox] (q1) at (2.15,2.17) {Row count of $Q$};
-  \node[resbox] (q3) at (14.35,2.17) {Row count of $Q$};
-  \draw[flow] (d1.south) -- node[right=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {run $Q$} (q1.north);
-  \draw[flow] (d3.south) -- node[left=3pt, font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75] {run $Q$} (q3.north);
-
-  \draw[busline] (q1.south) -- (q1.south |- 0,1.56);
-  \draw[busline] (q1.south |- 0,1.56) -- (q3.south |- 0,1.56);
-  \draw[busline] (q3.south) -- (q3.south |- 0,1.56);
-  \node[dia] (eq) at (8.25,0.86) {equal?};
-  \draw[-{Stealth[length=2.2mm]}, busline] (8.25,1.56) -- (eq.north);
-
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,-0.14) {\faCheck\enspace fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,-0.14) {\faBug\enspace candidate bug};
-  \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
-    (eq.west) -| (fine.north);
-  \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
-    (eq.east) -| (bug.north);
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=okgreen, yshift=1pt]
-    at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=garnet, yshift=1pt]
-    at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
+  \CompareFooter{o1}{o3}{candidate bug}
 \end{tikzpicture}
 \end{document}

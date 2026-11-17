@@ -1,113 +1,34 @@
-\documentclass[tikz,border=6pt]{standalone}
+\documentclass[tikz,border=4pt]{standalone}
 \input{tikzstyle.tex}
-
-\definecolor{okgreen}{HTML}{1E5631}
-\definecolor{accent}{HTML}{D97706}
-
-\tikzset{
-  card/.style={panel, minimum width=4.9cm, minimum height=3.8cm, anchor=south west, inner sep=0pt},
-  sqlbox/.style={
-    draw=ink!45, dash pattern=on 2pt off 2pt, rounded corners=4pt,
-    fill=white!75, align=left, text=ink
-  },
-  codetxt/.style={font=\ttfamily\fontsize{7.5}{10}\selectfont, text=ink, align=left},
-  subqtxt/.style={font=\ttfamily\fontsize{7.5}{10}\selectfont, text=accent, align=left},
-  resbox/.style={
-    draw=ink!50, fill=pgrey!60, rounded corners=4pt,
-    minimum width=2.9cm, minimum height=0.6cm,
-    font=\bfseries\fontsize{7.5}{9}\selectfont, text=ink
-  },
-  dia/.style={
-    diamond, draw=ink!60, fill=white, aspect=2.0,
-    minimum width=1.35cm, inner sep=1pt,
-    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
-  },
-  pill/.style={
-    rounded corners=7pt, minimum height=0.66cm, inner xsep=10pt,
-    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
-  },
-  flow/.style={-{Stealth[length=2.2mm]}, ink!65, line width=0.8pt, rounded corners=3pt},
-  busline/.style={ink!65, line width=0.8pt, line cap=round},
-  coll/.style={font=\fontsize{7}{8.5}\selectfont\itshape, text=ink!70, align=center},
-  ttl/.style={font=\bfseries\fontsize{9.5}{11}\selectfont, text=ink},
-}
-
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  % Cards: pblue baseline / pgrey derivation / porange transformed variant
-  \node[card, fill=pblue]   (c1) at (0,3.55) {};
-  \node[card, fill=pgrey]   (c2) at (5.8,3.55) {};
-  \node[card, fill=porange] (c3) at (11.6,3.55) {};
+  \def\itemw{4.15cm}
+  \newcommand{\hl}[1]{{\color{vartext}\bfseries #1}}
+  \StagePanel{P1}{0}{0}{4.9}{4.8}{base}{1}{Original query}{contains a scalar subquery}
+  \StagePanel{P2}{5.85}{0}{4.9}{4.8}{derive}{2}{Auxiliary query}{evaluates the subquery once on the stored rows}
+  \StagePanel{P3}{11.7}{0}{4.9}{4.8}{variant}{3}{Folded query}{the subquery is replaced by its value}
 
-  % ---- Card 1: Original query (uniform dashed SQL container)
-  \node[anchor=north west, ttl] at (0.35,7.24) {\stepnum{1}Original query};
-  \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=2.0cm, align=left]
-    (sql1) at (2.45,6.62) {};
-  \node[codetxt, anchor=north west] at (0.65,6.32) {SELECT id FROM Product};
-  \node[codetxt, anchor=north west] at (0.65,6.0)  {WHERE quantity >};
-  \node[subqtxt, anchor=north west] at (0.65,5.66) {(SELECT AVG(quantity)};
-  \node[subqtxt, anchor=north west] at (0.65,5.36) {FROM Product)};
-  \node[coll] at (2.45,3.92) {highlighted: scalar subquery};
+  \node[item, text width=\itemw, anchor=north] (q1) at (P1-in)
+    {SELECT id FROM Product\\WHERE quantity >\\\quad\hl{(SELECT AVG(quantity)}\\\quad\hl{\ FROM Product)}};
 
-  % ---- Card 2: Auxiliary query
-  \node[anchor=north west, ttl] at (6.15,7.24) {\stepnum{2}Auxiliary query};
-  \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=0.92cm]
-    (aux) at (8.25,6.62) {SELECT AVG(quantity)\\ FROM Product;};
-  \node[draw=ink!60, fill=white, line width=.5pt, inner sep=0pt] (avgTab) at (8.25,4.9) {%
-    \renewcommand{\arraystretch}{1.12}%
-    \begin{tabular}{|c|}
-      \hline
-      \textbf{\ttfamily AVG} \\ \hline
-      \ttfamily 6 \\ \hline
-    \end{tabular}};
-  \draw[flow] (aux.south) -- (avgTab.north);
-  \node[coll] at (8.25,3.92) {evaluates subquery on snapshot;\\ fixed value 6 replaces expression};
+  \node[item, text width=\itemw, anchor=north, align=center, font=\ttfamily\fontsize{6.8}{8.4}\selectfont] (rows) at (P2-in)
+    {{\normalfont\bfseries stored rows of Product}\\[1pt]
+     \begin{tabular}{@{}ccc@{}}id & quantity & reserved\\1 & 8 & 3\\2 & 4 & 4\end{tabular}};
+  \node[item, text width=\itemw, below=1.6mm of rows] (aux) {SELECT AVG(quantity)\\FROM Product;};
+  \node[item, below=3.5mm of aux, align=center, font=\ttfamily\bfseries\fontsize{7.5}{9}\selectfont] (val) {AVG = 6};
+  \draw[flow] (aux) -- (val);
 
-  % ---- Card 3: Folded query
-  \node[anchor=north west, ttl] at (11.95,7.24) {\stepnum{3}Folded query};
-  \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=0.95cm, align=left]
-    (sql3) at (13.95,6.62) {};
-  \node[codetxt, anchor=north west] at (12.25,6.32) {SELECT id FROM Product};
-  \node[codetxt, anchor=north west] at (12.25,6.0)  {WHERE quantity > \textcolor{accent}{\textbf{6}}};
-  \node[coll] at (14.05,3.92) {subquery replaced by constant};
+  \node[item, text width=\itemw, anchor=north] (q3) at (P3-in)
+    {SELECT id FROM Product\\WHERE quantity > \hl{6}};
 
-  % ---- Inter-card flows (card edges only)
-  \draw[flow] (c1.east) -- (c2.west);
-  \draw[flow] (c2.east) -- (c3.west);
+  \draw[flow] (P1.east) -- node[elab, above] {extract} (P2.west);
+  \draw[flow] (P2.east) -- node[elab, above] {fold} (P3.west);
 
-  % ---- Product snapshot in the central bay (above the collector bus)
-  \node[anchor=center, inner sep=0pt] (prodTbl) at (8.25,2.4) {%
-    \renewcommand{\arraystretch}{1.02}\fontsize{6.5}{8.5}\selectfont%
-    \begin{tabular}{|c|c|c|}
-      \hline
-      \textbf{\ttfamily id} & \textbf{\ttfamily quantity} & \textbf{\ttfamily reserved} \\ \hline
-      \ttfamily 1 & \ttfamily 8 & \ttfamily 3 \\ \hline
-      \ttfamily 2 & \ttfamily 4 & \ttfamily 4 \\ \hline
-    \end{tabular}};
+  \node[outcome] (o1) at ($(P1.south)+(0,-0.95)$) {original result};
+  \node[outcome] (o3) at ($(P3.south)+(0,-0.95)$) {folded result};
+  \draw[flow] (P1.south) -- node[elab, right] {run} (o1.north);
+  \draw[flow] (P3.south) -- node[elab, left] {run} (o3.north);
 
-  \node[coll, anchor=south] at (prodTbl.north) {{\color{accent}\faDatabase}\enspace snapshot of \texttt{Product}};
-
-  % ---- Oracle: result boxes first, then collector bus
-  \node[resbox] (r1) at (2.45,2.17) {Original result};
-  \node[resbox] (r3) at (14.05,2.17) {Folded result};
-  \draw[flow] (c1.south) -- (r1.north);
-  \draw[flow] (c3.south) -- (r3.north);
-
-  \draw[busline] (r1.south) -- (r1.south |- 0,1.56);
-  \draw[busline] (r1.south |- 0,1.56) -- (r3.south |- 0,1.56);
-  \draw[busline] (r3.south) -- (r3.south |- 0,1.56);
-  \node[dia] (eq) at (8.25,0.86) {equal?};
-  \draw[-{Stealth[length=2.2mm]}, busline] (8.25,1.56) -- (eq.north);
-
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,-0.14) {\faCheck\enspace fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,-0.14) {\faBug\enspace candidate bug};
-  \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
-    (eq.west) -| (fine.north);
-  \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
-    (eq.east) -| (bug.north);
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=okgreen, yshift=1pt]
-    at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=garnet, yshift=1pt]
-    at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
+  \CompareFooter{o1}{o3}{candidate bug}
 \end{tikzpicture}
 \end{document}

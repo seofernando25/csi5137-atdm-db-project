@@ -5,6 +5,8 @@ description: Use for ANY creation, edit, or review of figures, charts, diagrams,
 
 # Image Review — figure craft standard for this report
 
+To draw or redraw a figure, start from the `academic-illustration` skill (kit, templates, mistake checklist); this skill rates the result.
+
 Figures in this report are the submission artifact, not decoration. A figure that is illegible, misleading, or redundant with prose damages the report more than a missing figure. Apply the rules below while drawing, and the rated format when reviewing.
 
 ## When this fires
