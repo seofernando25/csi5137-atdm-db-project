@@ -1,5 +1,6 @@
-# Project 1 report — LaTeX version
+# Project 1 report: LaTeX source
 
-- [main.pdf](main.pdf) — 16 pages, Times-compatible 11 pt. Build: `pdflatex main.tex` twice.
-- Sources: `main.tex`, `sec_a.tex` (sections 1–4), `sec_b.tex` (sections 5–7), `refs.tex` (references and LLM disclosure), `figures/` (TikZ explainers `fig_*.tex/pdf`; data re-plots `fig1–5.png`; `fig_repro.png` is our CODDTest Fig. 2 reproduction).
-- Editing pass: rewritten against the course guide and an LLM-based review, then an adversarial editor pass for facts, terseness, and stock phrasing.
+- `main.pdf` is the submission PDF (14 pages, two columns, 11 pt).
+- Build: `xelatex main.tex` twice. Fonts are Liberation Serif/Sans/Mono, the metric twins of Times New Roman/Arial/Courier New; the names are set at the top of `main.tex`.
+- `sec_a.tex` holds sections 1 to 4, `sec_b.tex` sections 5 to 7, `refs.tex` the references and the LLM disclosure.
+- `figures/`: TikZ explainers (`fig_*.tex`, built with XeLaTeX and `tikzstyle.tex`) and data plots (`make_data_figures.py`, `paper.mplstyle`).
