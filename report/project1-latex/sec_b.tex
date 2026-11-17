@@ -13,7 +13,7 @@ The studies use two kinds of evidence. Generated SQL workloads test whether an o
 The generators are bounded; Table~\ref{tab:work} gives the defaults. These are upper bounds, not claims that every test reaches them.
 
 \begin{table*}[!tb]
-\caption{Workload construction and main bounds, as reported by each paper.}
+\caption{\textbf{Workload construction and main bounds,} as reported by each paper.}
 \label{tab:work}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}lXX@{}}
@@ -31,7 +31,7 @@ WriteCheck & Small typed tables, explicit and autocommit transactions & 5 transa
 WriteCheck's historical dataset starts from 140 real transaction bugs reported between January 2018 and December 2022. Of these, 35 can produce incorrect database states and form the study set. Table~\ref{tab:trigger} shows what those cases look like: almost all involve one initial table, most involve two transactions and two to three statements. Small generated states are a reasonable starting point for this bug class. The table says nothing about larger states or longer histories.
 
 \begin{table}[!tb]
-\caption{Triggering conditions of the 35 historical WriteCheck cases, re-plotted as a table from \cite[Fig.~2]{writecheck}; values are approximate.}
+\caption{\textbf{Triggering conditions of the 35 historical WriteCheck cases,} re-plotted as a table from \cite[Fig.~2]{writecheck}; values are approximate.}
 \label{tab:trigger}
 \centering\footnotesize
 \begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.7cm}>{\raggedright\arraybackslash}X@{}}
@@ -58,37 +58,25 @@ CODDTest reports 45 previously unknown bugs across five DBMSs: 24 logic bugs, 14
 
 \textbf{Evidence for CODDTest.} Is it enough to say CODDTest finds logic bugs other oracles miss? For existence, yes: the bugs are real, developers accepted them, and 11 escaped the compared oracles. For relative detection rates, no, because the earlier oracles were applied by hand to supplied cases.
 
-Table~\ref{tab:codd} gives the 24-hour efficiency run. Its expression-only row (default MaxDepth 3) and the depth sweep in Figure~\ref{fig:depth} come from separate runs and differ at depth 3. Table~\ref{tab:codd} gives 1.42 billion tests and 7,399 plans. The sweep values at depth 3, read off the published figures, are about 1.0 billion tests and about 6,400 plans, roughly 30\% and 13\% fewer. Absolute values thus vary between runs, and only the trends should be compared. CODDTest completes about 4.2 times fewer tests than NoREC yet reaches far more unique plans, while branch coverage stays near 63\%. Throughput understates what the oracle explores, and coverage alone would hide the difference. Among the CODDTest variants, expression-only testing finishes the most tests but sees the fewest plans, so cheap tests are not the ones that reach the widest plan space.
+Figure~\ref{fig:codd} plots the 24-hour efficiency run. Its expression-only row (default MaxDepth 3) and the depth sweep in Figure~\ref{fig:depth} come from separate runs and differ at depth 3. The efficiency run gives 1.42 billion tests and 7,399 plans. The sweep values at depth 3, read off the published figures, are about 1.0 billion tests and about 6,400 plans, roughly 30\% and 13\% fewer. Absolute values thus vary between runs, and only the trends should be compared. CODDTest completes about 4.2 times fewer tests than NoREC yet reaches far more unique plans, while branch coverage stays near 63\%. Throughput understates what the oracle explores, and coverage alone would hide the difference. Among the CODDTest variants, expression-only testing finishes the most tests but sees the fewest plans, so cheap tests are not the ones that reach the widest plan space.
 
-\begin{table*}[!tb]
-\caption{Selected 24-hour efficiency values from \cite[Table~3]{coddtest} (tests converted from thousands to millions). Plan and coverage figures come from separate runs with matching configurations.}
-\label{tab:codd}
-\centering\small
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-\textbf{Configuration} & \textbf{Tests (24 h, millions)} & \textbf{Unique plans} & \textbf{Branch cov.} \\
-\midrule
-NoREC & 2,086.6 & 172,808 & 63.18\%\\
-TLP & 976.2 & 137,743 & 63.63\%\\
-DQE & 441.4 & 486 & 46.71\%\\
-CODDTest (full) & 497.1 & 2,577,603 & 63.06\%\\
-CODDTest, expressions only & 1,423.1 & 7,399 & ---\\
-CODDTest, subqueries only & 423.3 & 2,755,619 & ---\\
-\bottomrule
-\end{tabular}
-\end{table*}
+\begin{figure}[!tb]
+\centering\includegraphics[width=\columnwidth]{fig4}
+\caption{\textbf{Tests run and unique plans reached in 24 hours, one point per oracle configuration.} Values from \cite[Table~3]{coddtest}; plan counts come from separate runs with matching configurations. Branch coverage is about 63\% for NoREC, TLP and full CODDTest and 46.7\% for DQE; it is not reported for the single-component variants.}
+\label{fig:codd}
+\end{figure}
 
-Figure~\ref{fig:depth} shows the depth sweep. Raising MaxDepth from 1 to 15 in the expression-only configuration multiplies time per query by 9.91 and cuts completed tests by 89.4\%. The left panel rises as the right panel falls: deeper expressions cost more under a fixed budget. Figure~\ref{fig:plans} shows unique plans falling too. That is odd at first, but fewer completed tests mean fewer plans seen in a fixed window, and the curve does not isolate plans per test.
+Figure~\ref{fig:depth} shows the depth sweep. Raising MaxDepth from 1 to 15 in the expression-only configuration multiplies time per query by 9.91 and cuts completed tests by 89.4\%. Panel a rises as panel b falls: deeper expressions cost more under a fixed budget. Figure~\ref{fig:plans} shows unique plans falling too. That is odd at first, but fewer completed tests mean fewer plans seen in a fixed window, and the curve does not isolate plans per test.
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig2}
-\caption{CODDTest expression-depth sweep, MaxDepth 1 to 15. Top: execution time per query; bottom: completed tests. Deeper expressions cost more time and finish fewer tests under a fixed budget. Re-plot of \cite[Fig.~2]{coddtest} from values read off the published figure; curve values are approximate.}
+\caption{\textbf{CODDTest expression-depth sweep.} Time per query (a) and completed tests (b) for MaxDepth 1 to 15 in the expression-only configuration. Re-plot of \cite[Fig.~2]{coddtest} from values read off the published figure; curve values are approximate.}
 \label{fig:depth}
 \end{figure}
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig3}
-\caption{Unique query plans against MaxDepth in the fixed-budget expression-only run. Plans fall with depth, mostly because fewer tests complete. Re-plot of \cite[Fig.~3]{coddtest} from values read off the published figure; curve values are approximate.}
+\caption{\textbf{Unique query plans against MaxDepth.} Fixed-budget expression-only run. Re-plot of \cite[Fig.~3]{coddtest} from values read off the published figure; curve values are approximate.}
 \label{fig:plans}
 \end{figure}
 
@@ -103,7 +91,7 @@ DDLCheck submits 34 bugs, of which 29 are confirmed as new: 21 schema-related lo
 Table~\ref{tab:ddlstatements} shows which statement reveals each bug. The aggregate row holds 23 SELECT cases and six revealed by CREATE TABLE, ALTER TABLE, INSERT, or REPLACE. SELECT dominating is consistent with schema histories creating states that later reads expose. The six other cases show that a query-only comparison cannot cover the scope. The counts name the revealing statement, not the faulty component.
 
 \begin{table}[!tb]
-\caption{Bug-revealing statement types per DBMS, re-plotted as a table from \cite[Fig.~6]{ddlcheck}; values are approximate. PostgreSQL and SQLite reported no confirmed bugs and are omitted.}
+\caption{\textbf{Bug-revealing statement types per DBMS, re-plotted as a table from \cite[Fig.~6]{ddlcheck}; values are approximate.} PostgreSQL and SQLite reported no confirmed bugs and are omitted.}
 \label{tab:ddlstatements}
 \centering\footnotesize\setlength{\tabcolsep}{4.5pt}
 \begin{tabular}{@{}lrrrrrr@{}}
@@ -121,7 +109,7 @@ TiDB & 0 & 0 & 0 & 0 & 7 & \textbf{7} \\
 \end{table}
 
 \begin{table*}[!tb]
-\caption{24-hour-per-DBMS ablation from \cite[Table~3]{ddlcheck}, summed over six DBMSs. These are not the discovery-campaign totals.}
+\caption{\textbf{24-hour-per-DBMS ablation from \cite[Table~3]{ddlcheck}, summed over six DBMSs.} These are not the discovery-campaign totals.}
 \label{tab:ddl}
 \centering\small
 \begin{tabular}{@{}lrr@{}}
@@ -147,14 +135,14 @@ Figure~\ref{fig:radarablation} shows the TiDB ablation. The metadata-guided curv
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig5}
-\caption{Cumulative unique bugs on TiDB over 12 hours, with and without metadata-oriented optimization (each curve is flat after its last discovery). The guided run ends at 19 bugs against 12. Re-plot of \cite[Fig.~7]{radar} from values read off the published figure; curve values are approximate.}
+\caption{\textbf{Radar on TiDB with and without metadata guidance.} Cumulative unique bugs over 12 hours; each curve is flat after its last discovery. Re-plot of \cite[Fig.~7]{radar} from values read off the published figure; curve values are approximate.}
 \label{fig:radarablation}
 \end{figure}
 
 Table~\ref{tab:cap} gives the capability and end-to-end comparisons. On supplied metadata bugs, no other oracle exposes more than 13 of 30. In the end-to-end run Radar finds twenty of the 21 bugs found by all tools together, fifteen exclusively. Capability on supplied cases and realized discovery therefore differ inside one study. Code coverage barely moves (20.3\% with guidance against 19.7\% without), so it is a weak proxy for the effect of guidance here.
 
 \begin{table*}[!tb]
-\caption{Oracle comparisons from \cite[Sect.~4.2]{coddtest} and \cite[Tables~4 and~5]{radar}.}
+\caption{\textbf{Oracle comparisons} from \cite[Sect.~4.2]{coddtest} and \cite[Tables~4 and~5]{radar}.}
 \label{tab:cap}
 \centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.1cm}>{\raggedright\arraybackslash}X@{}}
@@ -180,7 +168,7 @@ In discovery, WriteCheck flags 101 violations, which group into 22 unique cases.
 Table~\ref{tab:wc} separates two evaluations that should not be merged. Given the relevant cases, WriteCheck exposes all 29 known critical bugs and the other tools expose fewer. Those tools are DT\textsuperscript{2} (``Differentially Testing Database Transactions'', which runs the same transaction cases on several DBMSs and compares them), Troc (Transaction Oracle Construction, which runs each transaction of a pair on its own database view under a chosen isolation level), and TxCheck (which generates equivalent test cases from statement dependencies). In 12 hours of end-to-end generation, WriteCheck finds four critical bugs, at least twice as many as any other tool, with five false positives. The five false positives stem from semi-consistent reads and missing gap locks: at lower isolation levels a surprising final state alone does not prove a defect.
 
 \begin{table}[!tb]
-\caption{Known-case capability and 12-hour end-to-end comparison from \cite[Tables~3 and~4]{writecheck}. Tools run on their supported DBMSs.}
+\caption{\textbf{Known-case capability and 12-hour end-to-end comparison from \cite[Tables~3 and~4]{writecheck}.} Tools run on their supported DBMSs.}
 \label{tab:wc}
 \centering\small
 \begin{tabularx}{\columnwidth}{@{}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
@@ -200,7 +188,7 @@ TxCheck & 16 & 1 & 4\\
 \section{Cross-study discussion and threats to validity}\label{sec:discussion}
 
 \begin{table*}[!t]
-\caption{Publication-time discovery results. Reporting stages differ across rows; this is not a performance ranking.}
+\caption{\textbf{Publication-time discovery results.} Reporting stages differ across rows; this is not a performance ranking.}
 \label{tab:summary}
 \centering\footnotesize
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}

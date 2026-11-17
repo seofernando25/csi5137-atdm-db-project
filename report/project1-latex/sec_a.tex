@@ -101,7 +101,7 @@ Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_codd}
-\caption{CODDTest on a \texttt{Product} table. An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated. In the figure the average over the \texttt{Product} rows folds to 6.}
+\caption{\textbf{CODDTest on a \texttt{Product} table.} An auxiliary query evaluates the highlighted subquery (here an average) on the stored rows, and its value replaces the subquery in the original query. For row-dependent expressions the replacement is a CASE mapping instead of a constant. The original and the folded query should select the same rows; a difference is a candidate logic bug to be validated. In the figure the average over the \texttt{Product} rows folds to 6.}
 \label{fig:codd}
 \end{figure*}
 
@@ -110,7 +110,7 @@ Figure~\ref{fig:codd} shows plain folding: an average subquery over the Product 
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_radar}
-\caption{Radar. The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated.}
+\caption{\textbf{Radar.} The same rows are stored twice: once with an index (here \texttt{i0} on \texttt{c0} DESC) and once without optional metadata (the raw copy). The same deterministic query runs on both. A difference is a candidate bug in the path that uses the metadata, to be validated.}
 \label{fig:radar}
 \end{figure*}
 
@@ -122,7 +122,7 @@ The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB c
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_ddl}
-\caption{DDLCheck. The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause.}
+\caption{\textbf{DDLCheck.} The left database is built by a history of DDL statements (here a rename of \texttt{t0} to \texttt{t2} under a foreign key). The right one is created directly in the resulting final schema. Both receive the same later INSERT. If the evolved database fails or behaves differently while the direct one succeeds, the construction history is the likely cause.}
 \label{fig:ddl}
 \end{figure*}
 
@@ -134,14 +134,14 @@ The validity condition is that FCRFS fits the DBMS's conflict handling. It is no
 \begin{figure*}[!tb]
 \centering
 \includegraphics[width=\linewidth]{fig_write}
-\caption{WriteCheck. A DBMS executes the six-step concurrent schedule while a reference run replays the same transactions in an inferred serial (FCRFS) order. A mismatch between the two final states flags a candidate defect, pending the checks in Section~2.}
+\caption{\textbf{WriteCheck.} A DBMS executes the six-step concurrent schedule while a reference run replays the same transactions in an inferred serial (FCRFS) order. A mismatch between the two final states flags a candidate defect, pending the checks in Section~2.}
 \label{fig:write}
 \end{figure*}
 
 \subsection{Comparison and earlier methods}
 \begin{table*}[!tb]
 \centering\small
-\caption{Qualitative comparison of the four oracles, grouped by what changes between the two executions. Conditions are summaries, not full implementation specifications.}
+\caption{\textbf{Qualitative comparison of the four oracles, grouped by what changes between the two executions.} Conditions are summaries, not full implementation specifications.}
 \label{tab:compare}
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule

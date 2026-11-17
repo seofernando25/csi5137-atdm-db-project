@@ -47,7 +47,10 @@ These rules exist because the report's own redesign burned several review rounds
 
 ### Typography
 
-- Serif (Liberation Serif) for prose, titles and captions; mono (Liberation Mono) only for literal code chips; never mix heavy serif + italic serif + thin mono arbitrarily in the same figure — pick the role per element.
+- Figure labels are sans (Liberation Sans, set as the default family in `tikzstyle.tex` and `paper.mplstyle`); prose and captions stay serif; mono (Liberation Mono) only for literal code chips. Pick the role per element, never mix arbitrarily.
+- Panel titles in multi-stage explainers carry a step badge (`\stepnum{n}`, blue disc, white number) in pipeline order; tier rows in the overview use `badge`. Icons come from `fontawesome5`, one per concept, in `stepblue` or ink, never decorative.
+- Captions open with a bold one-line title (what the figure shows, not a claim), then source and caveat.
+- Plots follow the explainers: horizontal grid replaces the y spine, no y tick marks, direct end labels instead of legends, panel letters `a`/`b` with a short title.
 - Every label ≥ 7 pt; caveats and footnotes ≥ 6.5 pt.
 - Counts are integers: no one-decimal fake precision (1 case in 35 ≈ 2.9 pp; print "1/35" or round to integers).
 - Two-line chips: first line operand/expression, second line the muted rule (e.g., a small low-chroma "vs" at 6.5 pt). Uniform line count across siblings; center-anchored, identical fonts.

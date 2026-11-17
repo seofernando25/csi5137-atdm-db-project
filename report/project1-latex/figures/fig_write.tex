@@ -50,7 +50,7 @@
   \node[topcard, fill=pgrey] (sched) at (0.00,5.65) {};
 
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (0.35,9.12) {Workload and schedule};
+    at (0.35,9.12) {\stepnum{1}Workload and schedule};
   \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
     at (0.35,8.72) {Two transactions on table \texttt{t(a, b)}, \texttt{READ COMMITTED}};
   \node[anchor=north east, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
@@ -86,7 +86,7 @@
 
   % Left card: Reference execution
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (1.12,4.64) {Reference execution};
+    at (1.12,4.64) {\stepnum{2}Reference execution};
   \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
     at (1.12,4.26) {same transactions, inferred serial order (\texttt{T1 $\rightarrow$ T2})};
   \node[statebox] at (3.95,3.38) {rows of t(a, b)};
@@ -95,7 +95,7 @@
 
   % Right card: DBMS concurrent run
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (9.12,4.64) {DBMS: concurrent run};
+    at (9.12,4.64) {\stepnum{3}DBMS: concurrent run};
   \node[anchor=north west, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
     at (9.12,4.26) {same transactions, schedule \texttt{1-1-2-2-1-2}};
   \node[statebox] at (11.95,3.38) {rows of t(a, b)};
@@ -131,9 +131,9 @@
   \draw[-{Stealth[length=2.2mm]}, busline] (busM) -- (eq.north);
 
   \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine)
-    at ($(busM) + (-3.15,-1.58)$) {fine};
+    at ($(busM) + (-3.15,-1.58)$) {\faCheck\enspace fine};
   \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug)
-    at ($(busM) + (3.15,-1.58)$) {candidate defect};
+    at ($(busM) + (3.15,-1.58)$) {\faBug\enspace candidate defect};
 
   \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
     (eq.west) -| (fine.north);

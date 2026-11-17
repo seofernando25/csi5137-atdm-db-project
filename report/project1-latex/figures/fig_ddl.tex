@@ -56,7 +56,7 @@
 
   % ---------- Card 1: Evolved database (baseline history) ----------
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (0.32,8.00) {Evolved database};
+    at (0.32,8.00) {\stepnum{1}Evolved database};
 
   \node[ddlbox, minimum width=3.30cm] (s1) at (2.25,7.12) {%
     \textbf{CREATE TABLE t0}\\
@@ -76,7 +76,7 @@
 
   % ---------- Card 2: Introspect schema (intermediate derivation) ----------
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (6.02,8.00) {Introspect schema};
+    at (6.02,8.00) {\stepnum{2}Introspect schema};
   \node[anchor=center, align=center, font=\itshape\fontsize{7.5}{9.5}\selectfont, text=ink!75]
     at (7.95,7.22) {\texttt{SHOW CREATE TABLE}\\on evolved database};
 
@@ -94,7 +94,7 @@
 
   % ---------- Card 3: Directly built database (derived variant) ----------
   \node[anchor=north west, font=\bfseries\fontsize{9.5}{11}\selectfont]
-    at (11.72,8.00) {Directly built database};
+    at (11.72,8.00) {\stepnum{3}Directly built database};
 
   \node[draw=ink!40, dash pattern=on 2pt off 2pt, rounded corners=4pt,
     fill=white!40, minimum width=3.86cm, minimum height=1.96cm] (ddlR) at (13.65,6.22) {};
@@ -151,8 +151,8 @@
   \node[dia] (eq) at ($(busM) - (0,0.62)$) {equal?};
   \draw[-{Stealth[length=2.2mm]}, busline] (busM) -- (eq.north);
 
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.45,-0.78) {fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (10.45,-0.78) {candidate bug};
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.45,-0.78) {\faCheck\enspace fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (10.45,-0.78) {\faBug\enspace candidate bug};
 
   \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
     (eq.west) -| (fine.north);

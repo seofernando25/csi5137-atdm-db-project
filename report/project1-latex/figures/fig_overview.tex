@@ -4,92 +4,84 @@
 \definecolor{okgreen}{HTML}{1E5631}
 
 \tikzset{
-  dia/.style={
-    diamond, draw=ink!60, fill=white, aspect=2.0,
-    minimum width=1.4cm, inner sep=1pt,
-    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt
-  },
-  pill/.style={
-    rounded corners=7pt, minimum width=2.6cm, minimum height=0.72cm,
-    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt
-  },
-  tierlab/.style={
-    font=\itshape\fontsize{7.5}{9.5}\selectfont, text=ink!60,
-    align=right, text width=1.45cm
-  },
+  dia/.style={diamond, draw=ink!60, fill=white, aspect=2.0, minimum width=1.4cm, inner sep=1pt,
+    font=\bfseries\fontsize{8}{9}\selectfont, line width=0.75pt},
+  pill/.style={rounded corners=7pt, minimum width=2.6cm, minimum height=0.72cm,
+    font=\bfseries\fontsize{8}{9.5}\selectfont, line width=0.8pt},
+  tiertext/.style={font=\itshape\fontsize{7}{8.5}\selectfont, text=ink!75, align=center,
+    text width=1.2cm, anchor=north},
   busline/.style={ink!60, line width=0.8pt, line cap=round},
+  drop/.style={-{Stealth[length=1.8mm,width=1.6mm]}, ink!60, line width=0.7pt},
+  card/.style={panel, fill=white, draw=ink!40, minimum width=3.55cm, minimum height=2.95cm,
+    anchor=north west, inner sep=0pt},
 }
 
-\newcommand{\Card}[7]{%
-  % #1 left x, #2 fill, #3 node name, #4 title, #5 subtitle, #6 expression pair, #7 oracle
-  \node[panel, fill=#2, minimum width=3.32cm, minimum height=3.5cm,
-    anchor=south west, inner sep=0pt] (#3) at (#1,3.4) {};
-  \node[anchor=north west, inner sep=0pt, font=\bfseries\fontsize{10}{12}\selectfont]
-    at (#1+0.35,6.72) {#4};
-  \node[anchor=north west, align=left, text width=2.62cm, inner sep=0pt,
-    font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!70]
-    at (#1+0.35,6.28) {#5};
-  \node[anchor=center, align=center, text width=2.62cm, inner sep=0pt,
-    font=\fontsize{7.5}{10}\selectfont\ttfamily, text=ink]
-    at (#1+1.66,5.32) {#6};
+% #1 left x, #2 node name, #3 icon, #4 method, #5 what changes, #6 baseline chip, #7 variant chip,
+% #8 what is compared
+\newcommand{\Method}[8]{%
+  \node[card] (#2) at (#1,-1.35) {};
+  \node[anchor=north west, inner sep=0pt, font=\bfseries\fontsize{9.5}{11}\selectfont]
+    at ($(#2.north west)+(0.25,-0.22)$) {{\color{stepblue}#3}\enspace #4};
+  \node[anchor=north west, inner sep=0pt, font=\itshape\fontsize{7.5}{9}\selectfont, text=ink!75]
+    at ($(#2.north west)+(0.25,-0.62)$) {varies #5};
+  \node[basechip, minimum width=2.95cm] (#2b) at ($(#2.north)+(0,-1.25)$) {#6};
+  \node[font=\itshape\fontsize{6.5}{8}\selectfont, text=ink!70] at ($(#2.north)+(0,-1.64)$) {vs};
+  \node[varchip, minimum width=2.95cm] (#2v) at ($(#2.north)+(0,-2.0)$) {#7};
   \draw[rule, line width=0.5pt, dash pattern=on 2pt off 2pt]
-    (#1+0.35,4.58) -- (#1+2.97,4.58);
-  \node[anchor=center, align=center, text width=2.62cm, inner sep=0pt,
-    font=\fontsize{8}{9.5}\selectfont, text=ink]
-    at (#1+1.66,3.92) {#7};
+    ($(#2.north west)+(0.25,-2.43)$) -- ($(#2.north east)+(-0.25,-2.43)$);
+  \node[font=\fontsize{7.5}{9}\selectfont] at ($(#2.north)+(0,-2.68)$)
+    {{\color{ink!70}\faEye[regular]}\enspace #8};
 }
 
 \begin{document}
 \begin{tikzpicture}[font=\fontsize{7.5}{9}\selectfont, text=ink]
-  \node[tierlab, anchor=east] at (1.48,6.38) {Scope};
-  \node[tierlab, anchor=east] at (1.48,5.32) {Variant\\vs.\ Baseline};
-  \node[tierlab, anchor=east] at (1.48,3.92) {Oracle};
+  % ---- tier 1: one starting point ----
+  \node[panel, fill=pgrey, draw=ink!35, minimum width=15.1cm, minimum height=0.78cm,
+    anchor=north west, inner sep=0pt] (band) at (1.25,0) {};
+  \node[font=\fontsize{8.5}{10}\selectfont] at (band.center)
+    {{\color{stepblue}\faDatabase}\enspace the same starting data \textit{D} and workload
+     \textit{W}, run two ways that should give the same answer};
 
-  % four cards: x0=1.7, pitch 3.82
-  \Card{1.70}{pgrey}{cA}{CODDTest}{expression}
-    {folded\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} original}
-    {result rows}
-  \Card{5.52}{pblue}{cB}{DDLCheck}{schema history}
-    {ALTER...RENAME\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} CREATE t2}
-    {INSERT into child}
-  \Card{9.34}{porange}{cC}{WriteCheck}{transactions}
-    {T1\,$\parallel$\,T2\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} T1\,$\rightarrow$\,T2}
-    {final table state}
-  \Card{13.16}{pgreen}{cD}{Radar}{metadata}
-    {D + i\textsubscript{0}\\{\fontsize{6.5}{8}\selectfont\color{ink!65}vs} raw(D)}
-    {query rows}
+  % ---- tier 2: four methods, each a baseline and a variant ----
+  \Method{1.25}{cA}{\faCalculator}{CODDTest}{the expression}
+    {original query}{folded query}{result rows}
+  \Method{5.10}{cB}{\faHistory}{DDLCheck}{the schema history}
+    {CREATE t2}{ALTER...RENAME}{INSERT outcome}
+  \Method{8.95}{cC}{\faRandom}{WriteCheck}{the schedule}
+    {T1\,$\rightarrow$\,T2}{T1\,$\parallel$\,T2}{final table state}
+  \Method{12.80}{cD}{\faTags}{Radar}{the metadata}
+    {raw(D)}{D + i\textsubscript{0}}{query rows}
 
-  % shared orthogonal collector bus (busM derived, symmetry locked)
-  \coordinate (busL) at (cA.south |- 0,2.65);
-  \coordinate (busR) at (cD.south |- 0,2.65);
+  \foreach \c in {cA,cB,cC,cD} {\draw[drop] (band.south -| \c.north) -- (\c.north);}
+
+  % ---- tier 3: one comparison ----
+  \coordinate (busL) at (cA.south |- 0,-4.75);
+  \coordinate (busR) at (cD.south |- 0,-4.75);
   \coordinate (busM) at ($(busL)!0.5!(busR)$);
-
-  \foreach \c in {cA,cB,cC,cD} {
-    \draw[busline] (\c.south) -- (\c.south |- 0,2.65);
-  }
+  \foreach \c in {cA,cB,cC,cD} {\draw[busline] (\c.south) -- (\c.south |- busL);}
   \draw[busline] (busL) -- (busR);
-
-  % decision diamond + symmetric pills under the card-pair midpoints
-  \node[dia] (eq) at ($(busM) - (0,0.92)$) {equal?};
+  \node[dia] (eq) at ($(busM)-(0,0.92)$) {equal?};
   \draw[-{Stealth[length=2.2mm]}, busline] (busM) -- (eq.north);
-
   \coordinate (leftCol)  at ($(cA.south)!0.5!(cB.south)$);
   \coordinate (rightCol) at ($(cC.south)!0.5!(cD.south)$);
-
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine)
-    at (leftCol |- 0,0.52) {fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug)
-    at (rightCol |- 0,0.52) {candidate bug};
-
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (leftCol |- 0,-6.55)
+    {\faCheck\enspace fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (rightCol |- 0,-6.55)
+    {\faBug\enspace candidate bug};
   \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
     (eq.west) -| (fine.north);
   \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
     (eq.east) -| (bug.north);
-
-  % Mathematically centered branch labels
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=okgreen, yshift=1pt]
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=okgreen, yshift=1pt]
     at ($(eq.west)!0.5!(eq.west -| fine.north)$) {yes};
-  \node[anchor=south, font=\fontsize{7.5}{9}\selectfont\itshape, text=garnet, yshift=1pt]
+  \node[anchor=south, font=\itshape\fontsize{7.5}{9}\selectfont, text=garnet, yshift=1pt]
     at ($(eq.east)!0.5!(eq.east -| bug.north)$) {no};
+
+  % ---- tier badges ----
+  \node[badge] (t1) at (0.5,-0.39) {1};
+  \node[badge] (t2) at (0.5,-2.45) {2};
+  \node[tiertext] at ($(t2.south)+(0,-0.08)$) {baseline vs variant};
+  \node[badge] (t3) at (0.5,-5.67) {3};
+  \node[tiertext] at ($(t3.south)+(0,-0.08)$) {compare};
 \end{tikzpicture}
 \end{document}

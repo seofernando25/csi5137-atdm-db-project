@@ -6,12 +6,15 @@
 % >= 4 mm padding between content and panel border; one accent colour per meaning (garnet = mismatch/bug).
 \usepackage{fontspec}
 \setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
 \setmonofont[Scale=0.9]{Liberation Mono}
+\renewcommand{\familydefault}{\sfdefault}% figure labels in sans; code chips stay mono
+\usepackage{fontawesome5}
 \usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc,shapes.geometric,shapes.symbols,decorations.pathreplacing}
 \definecolor{garnet}{HTML}{8F001A}\definecolor{ink}{HTML}{2D2D2C}
 \definecolor{cblue}{HTML}{2B6CB0}\definecolor{corange}{HTML}{D9822B}\definecolor{cgreen}{HTML}{2F855A}
 \definecolor{pblue}{HTML}{EAF1FA}\definecolor{porange}{HTML}{FCEFE1}\definecolor{pgreen}{HTML}{E6F3EC}
-\definecolor{pgrey}{HTML}{F2F2F2}\definecolor{pgarnet}{HTML}{F7E6E9}\definecolor{rule}{HTML}{B8B8B8}
+\definecolor{accent}{HTML}{0072B2}\definecolor{stepblue}{HTML}{0072B2}\definecolor{pgrey}{HTML}{F2F2F2}\definecolor{pgarnet}{HTML}{F7E6E9}\definecolor{rule}{HTML}{B8B8B8}
 \tikzset{
   every node/.style={font=\footnotesize,text=ink},
   small/.style={font=\scriptsize},
@@ -22,4 +25,17 @@
   arr/.style={-{Stealth[length=2.2mm,width=1.8mm]},line width=.7pt,draw=corange},
   lab/.style={font=\scriptsize\itshape,fill=white,inner sep=1.5pt,text=ink!80},
   title/.style={font=\footnotesize\bfseries,anchor=north west},
+  % Step badge: filled accent disc with a white number (white on #0072B2 is 5.2:1).
+  badge/.style={circle,fill=stepblue,text=white,font=\bfseries\fontsize{8}{8}\selectfont,
+    inner sep=0pt,minimum size=4.4mm},
+  stepbadge/.style={circle,fill=stepblue,text=white,font=\bfseries\fontsize{7}{7}\selectfont,
+    inner sep=0pt,minimum size=3.5mm},
+  % Role chips: baseline execution = blue, transformed variant = orange, neutral = grey.
+  basechip/.style={rounded corners=2pt,draw=cblue,fill=pblue,line width=.5pt,inner sep=2.5pt,
+    font=\ttfamily\fontsize{7}{8.5}\selectfont,align=center,minimum height=5mm},
+  varchip/.style={rounded corners=2pt,draw=corange,fill=porange,line width=.5pt,inner sep=2.5pt,
+    font=\ttfamily\fontsize{7}{8.5}\selectfont,align=center,minimum height=5mm},
 }
+
+% Inline step badge for panel titles: \stepnum{1}Original query
+\newcommand{\stepnum}[1]{\tikz[baseline=0pt]\node[stepbadge,anchor=base](sn){#1};\enspace}

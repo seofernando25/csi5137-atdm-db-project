@@ -40,7 +40,7 @@
   \node[card, fill=porange] (c3) at (11.6,3.55) {};
 
   % ---- Card 1: Original query (uniform dashed SQL container)
-  \node[anchor=north west, ttl] at (0.35,7.07) {Original query};
+  \node[anchor=north west, ttl] at (0.35,7.24) {\stepnum{1}Original query};
   \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=2.0cm, align=left]
     (sql1) at (2.45,6.62) {};
   \node[codetxt, anchor=north west] at (0.65,6.32) {SELECT id FROM Product};
@@ -50,7 +50,7 @@
   \node[coll] at (2.45,3.92) {highlighted: scalar subquery};
 
   % ---- Card 2: Auxiliary query
-  \node[anchor=north west, ttl] at (6.15,7.07) {Auxiliary query};
+  \node[anchor=north west, ttl] at (6.15,7.24) {\stepnum{2}Auxiliary query};
   \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=0.92cm]
     (aux) at (8.25,6.62) {SELECT AVG(quantity)\\ FROM Product;};
   \node[draw=ink!60, fill=white, line width=.5pt, inner sep=0pt] (avgTab) at (8.25,4.9) {%
@@ -64,7 +64,7 @@
   \node[coll] at (8.25,3.92) {evaluates subquery on snapshot;\\ fixed value 6 replaces expression};
 
   % ---- Card 3: Folded query
-  \node[anchor=north west, ttl] at (11.95,7.07) {Folded query};
+  \node[anchor=north west, ttl] at (11.95,7.24) {\stepnum{3}Folded query};
   \node[sqlbox, anchor=north, minimum width=4.2cm, minimum height=0.95cm, align=left]
     (sql3) at (13.95,6.62) {};
   \node[codetxt, anchor=north west] at (12.25,6.32) {SELECT id FROM Product};
@@ -76,7 +76,7 @@
   \draw[flow] (c2.east) -- (c3.west);
 
   % ---- Product snapshot in the central bay (above the collector bus)
-  \node[anchor=center, inner sep=0pt] (prodTbl) at (8.25,3.12) {%
+  \node[anchor=center, inner sep=0pt] (prodTbl) at (8.25,2.4) {%
     \renewcommand{\arraystretch}{1.02}\fontsize{6.5}{8.5}\selectfont%
     \begin{tabular}{|c|c|c|}
       \hline
@@ -84,6 +84,8 @@
       \ttfamily 1 & \ttfamily 8 & \ttfamily 3 \\ \hline
       \ttfamily 2 & \ttfamily 4 & \ttfamily 4 \\ \hline
     \end{tabular}};
+
+  \node[coll, anchor=south] at (prodTbl.north) {{\color{accent}\faDatabase}\enspace snapshot of \texttt{Product}};
 
   % ---- Oracle: result boxes first, then collector bus
   \node[resbox] (r1) at (2.45,2.17) {Original result};
@@ -97,8 +99,8 @@
   \node[dia] (eq) at (8.25,0.86) {equal?};
   \draw[-{Stealth[length=2.2mm]}, busline] (8.25,1.56) -- (eq.north);
 
-  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,-0.14) {fine};
-  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,-0.14) {candidate bug};
+  \node[pill, draw=okgreen, fill=pgreen, text=okgreen] (fine) at (5.27,-0.14) {\faCheck\enspace fine};
+  \node[pill, draw=garnet, fill=pgarnet, text=garnet] (bug) at (11.23,-0.14) {\faBug\enspace candidate bug};
   \draw[-{Stealth[length=2.2mm]}, okgreen, line width=0.85pt, rounded corners=3pt]
     (eq.west) -| (fine.north);
   \draw[-{Stealth[length=2.2mm]}, garnet, line width=0.85pt, rounded corners=3pt]
