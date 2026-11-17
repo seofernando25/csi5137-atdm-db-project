@@ -15,12 +15,6 @@ plt.style.use(HERE / "paper.mplstyle")
 
 BLUE, ORANGE, GREEN, PURPLE, GREY, GARNET = "#2B6CB0", "#D9822B", "#2F855A", "#8E5EA2", "#7A7A7A", "#8F001A"
 W = 3.3
-NOTE = "values read off the published figure"
-
-
-def note(ax, text=NOTE):
-    ax.text(0.995, 0.02, text, transform=ax.transAxes, ha="right", va="bottom",
-            fontsize=6.5, style="italic", color=GREY)
 
 
 def save(fig, name):
@@ -69,8 +63,6 @@ def fig1():
     ax.grid(False); ax.tick_params(axis="y", length=0)
     ax.spines["left"].set_visible(False)
     ax.grid(axis="x", color="#DDDDDD", lw=0.6)
-    note(ax, NOTE + "; row (b) tail labels uncertain")
-    ax.texts[-1].set_position((0.995, 0.0))
     save(fig, "fig1")
 
 
@@ -93,9 +85,6 @@ def fig2():
         lineplot_axes(ax, "" if l == "(a)" else "MaxDepth (expression nesting)")
         ax.text(-0.02, 1.04, l, transform=ax.transAxes, fontweight="bold", ha="right")
     a.tick_params(axis="x", labelbottom=False, length=0)
-    note(a, NOTE); note(b, NOTE)
-    a.texts[-1].set_position((0.02, 0.88)); a.texts[-1].set_va("top"); a.texts[-1].set_ha("left")
-    b.texts[-1].set_position((0.98, 0.88)); b.texts[-1].set_va("top")
     fig.tight_layout(h_pad=0.8)
     save(fig, "fig2")
 
@@ -106,7 +95,6 @@ def fig3():
     fig, ax = plt.subplots(figsize=(W, 2.6))
     ax.plot(DEPTH, plans, color=BLUE, marker="o")
     lineplot_axes(ax, "MaxDepth (nesting depth)"); ax.set_ylabel("Unique query plans (count)"); ax.set_ylim(0, 8800)
-    note(ax)
     save(fig, "fig3")
 
 
@@ -158,7 +146,6 @@ def fig5():
     ax.set_xlabel("Time on TiDB (hours)"); ax.set_ylabel("Unique bugs found (count)")
     ax.grid(axis="x", color="#DDDDDD", lw=0.6)
     ax.legend(loc="upper left", bbox_to_anchor=(0.0, 0.98))
-    note(ax)
     save(fig, "fig5")
 
 
