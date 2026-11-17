@@ -157,13 +157,13 @@ In discovery, WriteCheck flags 101 violations, which group into 22 unique cases.
 
 Table~\ref{tab:wc} separates two evaluations that should not be merged. Given the relevant cases, WriteCheck exposes all 29 known critical bugs and the other tools expose fewer. Those tools are DT\textsuperscript{2} (``Differentially Testing Database Transactions'', which runs the same transaction cases on several DBMSs and compares them), Troc (Transaction Oracle Construction, which runs each transaction of a pair on its own database view under a chosen isolation level), and TxCheck (which generates equivalent test cases from statement dependencies). In 12 hours of end-to-end generation, WriteCheck finds four critical bugs, at least twice as many as any other tool, with five false positives. The five false positives stem from semi-consistent reads and missing gap locks: at lower isolation levels a surprising final state alone does not prove a defect.
 
-\begin{table*}[!tb]
+\begin{table}[!tb]
 \caption{Known-case capability and 12-hour end-to-end comparison from \cite[Tables~3 and~4]{writecheck}. Tools run on their supported DBMSs.}
 \label{tab:wc}
 \centering\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
+\begin{tabularx}{\columnwidth}{@{}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
 \toprule
-\textbf{Approach} & \textbf{Known cases (of 29)} & \textbf{Critical bugs, 12 h} & \textbf{False positives, 12 h} \\
+\textbf{Approach} & \textbf{Known (of 29)} & \textbf{Critical, \mbox{12 h}} & \textbf{False pos., \mbox{12 h}} \\
 \midrule
 WriteCheck & 29 & 4 & 5\\
 DT\textsuperscript{2} & 23 & 2 & 24\\
@@ -171,7 +171,7 @@ Troc & 14 & 2 & 4\\
 TxCheck & 16 & 1 & 4\\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{table}
 
 \textbf{WriteCheck's limits.} The false positives show that a WSS mismatch is not an unconditional defect, and we cannot claim FCRFS holds under every isolation implementation or application transaction. Within restricted write workloads, the evidence is sufficient to call the oracle practically useful. The 12-hour tool comparison is only suggestive, because its counts are small.
 
