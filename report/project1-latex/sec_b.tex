@@ -108,20 +108,20 @@ TiDB & 0 & 0 & 0 & 0 & 7 & \textbf{7} \\
 \end{tabular}
 \end{table}
 
-\begin{table*}[!tb]
+\begin{table}[!tb]
 \caption{\textbf{24-hour-per-DBMS ablation from \cite[Table~3]{ddlcheck}, summed over six DBMSs.} These are not the discovery-campaign totals.}
 \label{tab:ddl}
 \centering\small
 \begin{tabular}{@{}lrr@{}}
 \toprule
-\textbf{DDLCheck variant} & \textbf{Unique DDL sequences} & \textbf{Unique bugs} \\
+\textbf{DDLCheck variant} & \textbf{Unique sequences} & \textbf{Unique bugs} \\
 \midrule
 Original & 20,468 & 8\\
 Random & 14,994 & 5\\
 Strict & 17,967 & 4\\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 Table~\ref{tab:ddl} compares the diversity filter variants. The original strategy produces about 36.5\% more unique sequences than the random variant and finds eight unique bugs against five. The original and strict variants both record nine bug occurrences, but the strict one finds four unique bugs, so raw failure volume would hide the difference. No analyzed NoREC transformation reaches any of the 21 logic bugs.
 
