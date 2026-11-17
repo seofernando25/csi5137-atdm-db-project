@@ -114,7 +114,7 @@ In Product, one row has availability 5 and the other 0, so the predicate on \mbo
 \subsection{Schema history equivalence}
 \paragraph{DDLCheck.} The method generates a sequence of CREATE, ALTER and DROP statements, then synthesizes a shorter sequence that creates the intended final schema directly~\cite{ddlcheck}. The same later statements run on both databases, and differences in results, stored data or schema behavior mark a candidate bug. The validity condition is that both schemas are equivalent in every relevant property, with matching data. Internal differences such as hidden columns are legitimate unless they change the semantics of operations that should agree.
 
-The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows the same pattern in our MySQL \#114904 replay. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
+The motivating case is MariaDB MDEV\#35122. A table with an integer and a BLOB column under \texttt{ROW\_FORMAT\allowbreak=REDUNDANT} (a legacy InnoDB row layout) has the BLOB dropped, and a later insert into the remaining column fails with a row-size error. A table created directly with only the integer column accepts it~\cite[Listing~1]{ddlcheck}. Figure~\ref{fig:ddl} shows the same pattern in our MySQL \#114904 replay. The revealing statement is an INSERT, so a fresh-table suite and a query-only oracle both miss it.
 
 \begin{figure}[!tb]
 \centering
