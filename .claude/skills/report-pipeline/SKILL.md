@@ -24,7 +24,7 @@ Related skills: `academic-illustration` (draw figures), `image-review` (rate fig
 | 5 | **Prose** | Rewritten `sec_*.tex` | The prose gate in this file passes on a full read |
 | 6 | **Gate** | `check_report.sh` output | Zero FAIL lines |
 | 7 | **Review** | Adversarial read as the grader | No open item in the rubric below; fixes go back to stage 4 or 5 |
-| — | **COMPLETE** | Commit with rebuilt PDF; docs refreshed | Stages 0 to 7 all passed on the same build |
+| — | **COMPLETE** | Commit on `main` (no branches) with the rebuilt PDF, docs refreshed, then `git push origin main` | Stages 0 to 7 all passed on the same build |
 
 Run the gate from the repository root:
 

@@ -3,6 +3,13 @@
 Newest first. Each entry gives the steer, the rule it produced, and where that rule is
 enforced.
 
+## 2026-11-18: "Work on main, commit and push"
+
+- **Steer:** Do not create branches for this repository. Commit directly on `main` and push
+  when the pipeline completes.
+- **Rule:** Stage COMPLETE ends with a commit on `main` followed by `git push origin main`.
+- **Enforced in:** `SKILL.md` (COMPLETE row).
+
 ## 2026-11-18: "Improve the whole deliverable"
 
 - **Steer:**
