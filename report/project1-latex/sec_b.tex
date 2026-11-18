@@ -130,7 +130,7 @@ Taken together, the four papers convincingly show that each method finds real bu
 \paragraph{Summary of the evidence.} Table~\ref{tab:scorecard} collects the verdicts: the first two claims are supported in every paper, the others are at best directional.
 
 \begin{table*}[!tb]
-\caption{\textbf{Evidence for each type of claim across the four papers.} \yes\ supported; \half\ directional, small or conditional; \no\ not shown; \nt\ not tested. Our assessment.}
+\caption{\textbf{Evidence for each type of claim across the four papers.} Our assessment.}
 \label{tab:scorecard}
 \centering\small\renewcommand{\arraystretch}{1.12}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{5.1cm}*{4}{>{\centering\arraybackslash}p{1.2cm}}>{\raggedright\arraybackslash}X@{}}
@@ -146,6 +146,7 @@ Results hold across DBMSs & \yes & \half & \half & \half & Radar 24/30 and Write
 Variance across repeated runs is reported & \no & \no & \no & \no & 10 and 5 rounds run, no spread given \\
 \bottomrule
 \end{tabularx}
+\symkey{\yes/supported, \half/{directional, small or conditional}, \no/not shown, \nt/not tested}
 \end{table*}
 
 \paragraph{Threats to validity.} The main threat to internal validity is a violated precondition: nondeterminism, implicit type conversion or an incomplete schema recreation can produce a mismatch without a defect. Construct validity is limited because a unique query plan does not imply a unique semantic path and because high coverage can coexist with undetected faults; SQLite reaches full branch coverage with its own test suite and still contains logic bugs~\cite[Sec.~4.3]{coddtest}. External validity is limited because deployments differ even for one system (WriteCheck tests a single-node CockroachDB, Radar a three-node cluster), because small generated states do not represent long production histories, and because of where the bugs were found. Figure~\ref{fig:dbms} shows that only CODDTest's findings are spread evenly across systems; DDLCheck's are concentrated in MySQL, and Radar's and WriteCheck's in TiDB. The papers do not separate possible causes such as dialect fit, effort per system or system maturity, so the distribution says nothing about which DBMS is more reliable.

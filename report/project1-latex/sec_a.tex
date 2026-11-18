@@ -101,7 +101,7 @@ We group the four papers by how they construct the reference execution, in the s
 Table~\ref{tab:coverage} summarizes which classes of failure each method can observe. Every method covers at least one row that no other method covers, so the four complement each other. Where they overlap, the overlap is partial. Radar's half mark for schema changes, for example, reflects DDLCheck's own finding that Radar could expose 13 of its 21 schema bugs, because the faulty state is later read by a SELECT~\cite[Table~4]{ddlcheck}. The last row is empty for all four methods.
 
 \begin{table}[!tb]
-\caption{\textbf{Failure classes each method can observe.} \yes\ in scope; \half\ partly or indirectly; \no\ out of scope. Only failures exposed by the pairwise comparison are counted, not crash detection. Our reading of each paper's design and stated limitations.}
+\caption{\textbf{Failure classes each method can observe.} Only failures exposed by the pairwise comparison are counted, not crash detection. Our reading of each paper's design and stated limitations.}
 \label{tab:coverage}
 \centering\footnotesize\setlength{\tabcolsep}{1.6pt}\renewcommand{\arraystretch}{1.08}
 \begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
@@ -119,6 +119,7 @@ Read anomalies under isolation & \no & \no & \no & \no \\
 Reference independent of the DBMS & \no & \no & \no & \no \\
 \bottomrule
 \end{tabularx}
+\symkey{\yes/in scope, \half/partly or indirectly, \no/out of scope}
 \end{table}
 
 \paragraph{Earlier methods.} Figure~\ref{fig:lineage} places the four papers among the methods they build on. The oracles proposed in 2020 all work on a single query over a fixed database. NoREC rewrites a query so that the optimizer cannot apply the optimizations under test and compares the number of qualifying rows~\cite{norec}. TLP splits a query into three parts according to whether a predicate is true, false or NULL, and checks that the parts add up to the original result~\cite{tlp}. PQS checks that a query built to retrieve a chosen row returns it~\cite{pqs}. Later oracles compare one predicate across SELECT, UPDATE and DELETE (DQE~\cite{dqe}), force different plans for one query (DQP~\cite{dqp}), or add tautologies to expressions (EET~\cite{eet}). Transaction testing developed in parallel: DT\textsuperscript{2} runs the same transactions on several DBMSs and compares them~\cite{dt2}, Troc executes each transaction of a pair on its own view of the database~\cite{troc}, and TxCheck derives equivalent test cases from statement dependencies~\cite{txcheck}.

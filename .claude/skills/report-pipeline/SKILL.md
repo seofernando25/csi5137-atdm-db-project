@@ -117,8 +117,9 @@ Write like a careful graduate student explaining to a smart reader, not like a t
 - Color by role, not by paper. The reviewed tool is blue `#0072B2` and baselines are grey
   `#8A8A8A`. Per-paper colors would clash with the explainers' blue-baseline/orange-variant
   grammar.
-- Use symbols for verdicts and coverage: ● (yes), ◐ (partial or conditional), ○ (no), each
-  with a legend in the caption.
+- Use symbols for verdicts and coverage: ● (yes), ◐ (partial or conditional), ○ (no). Put the
+  legend in a separate key line under the table (`\symkey`), never inside the caption text,
+  where the symbols read as punctuation.
 - White text on a colored chip needs a dark fill: `vartext` `#A84800`, not `corange`.
 - Do not use labelled callout boxes. A plain closing sentence carries the point.
 - Caption titles describe the content ("Raw reports per unique bug"). Never use a slogan

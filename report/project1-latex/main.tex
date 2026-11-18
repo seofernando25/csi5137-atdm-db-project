@@ -47,9 +47,11 @@
 \definecolor{panelbg}{HTML}{E5F0F8}
 \definecolor{panelborder}{HTML}{B3D4EA}
 % Verdict and coverage symbols (Harvey balls): yes / partial or conditional / no / not tested.
-\DeclareRobustCommand{\yes}{\tikz[baseline=-0.6ex]\fill[ICMLAccent](0,0)circle(0.85ex);}
-\DeclareRobustCommand{\half}{\tikz[baseline=-0.6ex]{\fill[white](0,0)circle(0.85ex);\fill[ICMLAccent](0,0)--(90:0.85ex)arc(90:270:0.85ex)--cycle;\draw[ICMLAccent,line width=0.55pt](0,0)circle(0.85ex);}}
-\DeclareRobustCommand{\no}{\tikz[baseline=-0.6ex]\draw[black!50,line width=0.55pt](0,0)circle(0.85ex);}
+\DeclareRobustCommand{\yes}{\tikz[baseline=-0.6ex]\fill[ICMLAccent](0,0)circle(0.95ex);}
+\DeclareRobustCommand{\half}{\tikz[baseline=-0.6ex]{\fill[white](0,0)circle(0.95ex);\fill[ICMLAccent](0,0)--(90:0.85ex)arc(90:270:0.85ex)--cycle;\draw[ICMLAccent,line width=0.55pt](0,0)circle(0.95ex);}}
+\DeclareRobustCommand{\no}{\tikz[baseline=-0.6ex]\draw[black!50,line width=0.55pt](0,0)circle(0.95ex);}
+% Legend line under a table: \symkey{\yes/in scope, \half/partly, ...}
+\newcommand{\symkey}[1]{\par\vspace{3pt}{\sffamily\footnotesize\color{black!80}\foreach \s/\t in {#1}{\mbox{\s\enspace\t}\hspace{1.4em}}\par}}
 \DeclareRobustCommand{\nt}{\textcolor{black!55}{\textsf{--}}}
 % One finding per main section, two lines at most (see the report-pipeline skill).
 \newtcolorbox{takeaway}{enhanced,colback=panelbg!55,colframe=ICMLAccent,boxrule=0pt,leftrule=2.4pt,
