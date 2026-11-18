@@ -74,14 +74,14 @@
 
 % ---- left gutter row labels -------------------------------------------------------------
 \node[gut] at ($(aw.west)+(-0.12,0)$) {same\\input};
-\node[gut] at ($(ab.west)+(-0.12,0)$) {baseline\\run};
-\node[gut] at ($(av.west)+(-0.12,0)$) {transformed\\run};
-\node[gut] at ($(am.west)+(-0.12,-0.12)$) {mismatch\\= bug};
+\node[gut] at ($(ab.west)+(-0.12,0)$) {original\\execution};
+\node[gut] at ($(av.west)+(-0.12,0)$) {transformed\\execution};
+\node[gut] at ($(am.west)+(-0.12,-0.12)$) {differing\\results};
 
 % ---- shared rule ------------------------------------------------------------------------
 \coordinate (L) at ($(am.south west)+(0,-0.52)$);
 \draw[ink!35, line width=.5pt] (L) -- (L -| dv.east);
 \node[anchor=north, font=\fontsize{7.4}{9}\selectfont, text=ink!85] at ($(L)!0.5!(L -| dv.east)+(0,-0.08)$)
-  {Each pair runs on the same DBMS with the same data and the same meaning, so the results must match. All four mismatches are confirmed bugs.};
+  {Both executions run on the same DBMS over the same data and have the same meaning, so their results must be equal. All four differences were confirmed as bugs.};
 \end{tikzpicture}
 \end{document}

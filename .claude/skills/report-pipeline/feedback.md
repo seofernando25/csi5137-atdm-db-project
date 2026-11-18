@@ -3,6 +3,28 @@
 Newest first. Each entry gives the steer, the rule it produced, and where that rule is
 enforced.
 
+## 2026-11-18: "Slogan captions, 'Back to the shop', text too small"
+
+- **Steer:**
+  - "Four oracles, four real bugs." reads as AI slop.
+  - "Back to the shop." is not something a person writes.
+  - Figure 2's labels are too small to read.
+  - Re-review the whole paper for slop. Over-compressed prose, where sentences lose their
+    connections, is itself slop (Every, "AI & I", 2026-11-17).
+- **Rules:**
+  - Caption titles describe what is shown, as a noun phrase or plain sentence. No slogans,
+    parallel punchlines or verdicts.
+  - No cute openers ("Picture", "Imagine", "Back to") and no slang metaphors ("trick",
+    "home turf", "pile of").
+  - Each sentence states how it connects to the previous one, using "because", "so",
+    "however" or "which". Keep articles and subjects; no fragment chains.
+  - Cut length by removing repeated content, never by compressing sentences.
+  - Draw figures at their final width so that labels print at 7 pt or more. Never shrink a
+    figure to fit.
+  - No labelled "Takeaway" boxes.
+- **Enforced in:** `SKILL.md` prose gate; `check_report.sh` (banned openers and metaphors,
+  fragment-sentence ratio of 8% or less, slogan-caption heuristic).
+
 ## 2026-11-18: "Shrink to 10 pages, more wow figures, less prose"
 
 - **Steer:**

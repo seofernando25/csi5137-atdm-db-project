@@ -62,6 +62,11 @@ PaperOrchestra literature-review and overall-quality rubrics (arXiv:2604.05018, 
 
 ## Prose gate (stage 5)
 
+Over-compression is slop too. A paragraph of short, clipped clauses with the logical links
+removed is as bad as padding. Every sentence must say how it relates to the one before it.
+When the page budget is tight, cut repeated content, not connective words.
+
+
 Write like a careful graduate student explaining to a smart reader, not like a template.
 
 - **Open each section with its takeaway.** The first sentence states the point. The rest
@@ -115,8 +120,10 @@ Write like a careful graduate student explaining to a smart reader, not like a t
 - Use symbols for verdicts and coverage: ● (yes), ◐ (partial or conditional), ○ (no), each
   with a legend in the caption.
 - White text on a colored chip needs a dark fill: `vartext` `#A84800`, not `corange`.
-- Callout boxes (`takeaway`) are rationed: at most one per main section, two lines or fewer,
-  stating a finding rather than a slogan.
+- Do not use labelled callout boxes. A plain closing sentence carries the point.
+- Caption titles describe the content ("Raw reports per unique bug"). Never use a slogan
+  ("Fewer tests, far more plans").
+- Draw each figure at its final printed width. Every label must print at 7 pt or more.
 
 ## Build
 

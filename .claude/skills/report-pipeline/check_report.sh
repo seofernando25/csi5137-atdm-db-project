@@ -62,6 +62,8 @@ text = re.sub(r"%.*", "", prose)
 banned = ["crucial", "delve", "landscape", "leverage", "underscore", "seamless", "robust",
           "comprehensive", "cutting-edge", "state-of-the-art", "paramount", "pivotal",
           "In summary", "Moreover", "Furthermore", "Notably", "Importantly", "plays a key role",
+          "Picture a", "Imagine a", "Back to the", "trick", "home turf", "pile of", "secret sauce",
+          "the catch", "Here is", "Enter ", "game", "magic", "boils down", "at the end of the day",
           "it is important to note", "in order to", "groundbreaking", "game-changer", "tapestry"]
 hits = [(w, len(re.findall(r"\b" + re.escape(w) + r"\b", text, re.I))) for w in banned]
 hits = [h for h in hits if h[1]]
@@ -76,6 +78,14 @@ rq = len(re.findall(r"\?\s", plain))
 out("PASS" if rq <= 8 else "WARN", f"rhetorical questions: {rq} (budget 8)")
 boxes = len(re.findall(r"\\begin\{takeaway\}", text))
 out("PASS" if boxes <= 7 else "WARN", f"takeaway boxes: {boxes} (budget 7)")
+sents = [x for x in re.split(r"(?<=[.!?])\s+(?=[A-Z])", plain) if len(x.split()) > 0]
+short = sum(1 for x in sents if len(x.split()) < 7)
+ratio = short / max(1, len(sents))
+out("PASS" if ratio <= 0.08 else "FAIL", f"fragment sentences (<7 words): {ratio:.0%} of {len(sents)} (budget 8%)")
+caps = re.findall(r"\\caption(?:of)?\{figure\}\{\\textbf\{([^}]*)\}|\\caption\{\\textbf\{([^}]*)\}", src)
+caps = [a or b for a, b in caps]
+slogan = [c for c in caps if len(c.split()) <= 6 and "," in c.rstrip(",. ")]
+out("PASS" if not slogan else "WARN", "caption titles describe content" if not slogan else f"slogan-like caption titles: {slogan}")
 print(f"INFO  prose words: {words}")
 sys.exit(1 if fails else 0)
 PY

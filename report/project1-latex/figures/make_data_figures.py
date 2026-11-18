@@ -54,7 +54,7 @@ def fig_homeset():
          [("WriteCheck", 29, True), ("DT²", 23, False), ("TxCheck", 16, False),
           ("Troc", 14, False), ("Elle, Cobra, Emme", 0, False)]),
     ]
-    fig, axes = plt.subplots(1, 4, figsize=(7.0, 1.75), sharex=True)
+    fig, axes = plt.subplots(1, 4, figsize=(7.0, 1.55), sharex=True)
     for ax, (paper, sub, n, how, rows) in zip(axes, panels):
         names = [r[0] for r in rows][::-1]
         vals = [r[1] for r in rows][::-1]
@@ -101,7 +101,7 @@ def fig4():
         ("expressions only", 1423.1, 7_399, True, (6, 0)),
         ("subqueries only", 423.3, 2_755_619, True, (-6, 6)),
     ]
-    fig, ax = plt.subplots(figsize=(W, 2.45))
+    fig, ax = plt.subplots(figsize=(W, 2.0))
     for name, tests, plans, ours, (dx, dy) in rows:
         color = BLUE if ours else GREY
         ax.scatter(tests, plans, s=34 if ours else 26, color=color, edgecolor="white", lw=0.7,
@@ -158,7 +158,7 @@ def fig_ablation():
     rb = list(range(2, 20)) + [19]
     qt = [0.0, 0.05, 0.1, 0.5, 0.6, 1.7, 1.9, 2.5, 4.3, 5.0, 11.4, 11.9, 12.0]
     qb = list(range(1, 13)) + [12]
-    fig, (a, b) = plt.subplots(2, 1, figsize=(W, 3.25), gridspec_kw=dict(height_ratios=[1.35, 1]))
+    fig, (a, b) = plt.subplots(2, 1, figsize=(W, 2.95), gridspec_kw=dict(height_ratios=[1.3, 1]))
     a.step([0] + rt, [0] + rb, where="post", color=BLUE, lw=1.6)
     a.step([0] + qt, [0] + qb, where="post", color=GREY, lw=1.6)
     end_label(a, 12, 19, "guided  19", BLUE, fontweight="bold", fontsize=7.4)
@@ -353,5 +353,5 @@ def fig_triage():
 
 
 if __name__ == "__main__":
-    for build in (fig_depth, fig4, fig_ablation, fig_homeset, fig_units, fig_trigger, fig_dbms, fig_triage):
+    for build in (fig_depth, fig4, fig_ablation, fig_homeset, fig_units, fig_dbms, fig_triage):
         build()

@@ -16,7 +16,7 @@
 \emergencystretch=2em
 \raggedbottom
 \usepackage{titlesec}
-\linespread{1.05}
+\linespread{1.03}
 \definecolor{ICMLAccent}{HTML}{0072B2}\definecolor{HeadDark}{HTML}{222222}
 \newcommand{\headingfont}{\sffamily\bfseries\color{HeadDark}}
 \titleformat{\section}{\headingfont\Large\raggedright}{\thesection}{0.8em}{}
@@ -85,12 +85,12 @@
 \begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,
   left=9pt,right=9pt,top=6pt,bottom=6pt,boxsep=0pt]
 \small
-\textbf{Abstract.} Logic bugs make a database system return a wrong answer or store a wrong state without raising an error. This report reviews four 2024--2025 papers that hunt such bugs automatically: CODDTest, DDLCheck, Radar and WriteCheck. All four run two executions that must agree and treat a disagreement as a bug (Figure~\ref{fig:oracles}); they differ in what they change between the two runs. We cast the four as one search problem, map what each can and cannot observe, and audit each paper's experiments against its claims. Every paper shows that its oracle finds real bugs that earlier oracles miss. None shows by how much: headline counts sit at different reporting stages, capability studies score the baselines on the new tool's own bugs, and no experiment reports variance across runs. We therefore compare the oracles by validity and reach, not by bug count.
+\textbf{Abstract.} Logic bugs cause a database system to return wrong results or store a wrong state without reporting an error. This report reviews four papers from 2024 and 2025 that detect such bugs automatically: CODDTest, DDLCheck, Radar and WriteCheck. Each method runs two executions that must produce the same result and reports any difference as a candidate bug (Figure~\ref{fig:oracles}); the methods differ in what they change between the two executions. We describe all four with one formal model, map the failures each can and cannot observe, and check each paper's experiments against its claims. Every paper shows that its method finds real bugs that earlier oracles miss, but none shows by how much. The headline bug counts refer to different reporting stages, the capability studies measure the baselines on the new tool's own bugs, and no experiment reports variation across repeated runs. We therefore compare the methods by the validity of their oracles and by what each can observe, not by the number of bugs found.
 \end{tcolorbox}
 \vspace{6pt}
 \centering\includegraphics[width=\textwidth]{fig_oracles}
 \captionsetup{type=figure,font=footnotesize,skip=3pt}
-\captionof{figure}{\textbf{Four oracles, four real bugs.} Each column shows one bug from its paper: the input both runs share, the baseline run (blue), the transformed run (orange) and the mismatch. From CODDTest Listing~8, DDLCheck Listing~1, Radar Listing~2 and WriteCheck Listing~4, lightly abridged.}
+\captionof{figure}{\textbf{One confirmed bug found by each method, shown as the two executions its oracle compares.} Each column gives the input shared by both executions, the original execution (blue), the transformed execution (orange) and the differing results. From CODDTest Listing~8, DDLCheck Listing~1, Radar Listing~2 and WriteCheck Listing~4, slightly abridged.}
 \label{fig:oracles}
 \vspace{10pt}
 }]
