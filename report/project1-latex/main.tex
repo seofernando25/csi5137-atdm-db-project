@@ -6,7 +6,12 @@
 % Course guide: Times New Roman 11. We build with Liberation Serif/Sans/Mono, which are metric-compatible
 % with Times New Roman/Arial/Courier New (same line breaks and page count). To use the Microsoft fonts on a
 % machine that has them, replace the three names below.
-\setmainfont{Liberation Serif}
+% Times New Roman (course requirement) when installed locally: report/project1-latex/fonts/
+% holds the licensed times.ttf (git-ignored, Monotype licence forbids redistribution). Only the
+% Regular face is available, so bold and italic use Liberation Serif, which has identical metrics.
+\IfFontExistsTF{Times New Roman}{%
+  \setmainfont{Times New Roman}[BoldFont={Liberation Serif Bold},ItalicFont={Liberation Serif Italic},BoldItalicFont={Liberation Serif Bold Italic}]}{%
+  \setmainfont{Liberation Serif}}
 \setsansfont{Liberation Sans}
 \setmonofont[Scale=0.88]{Liberation Mono}
 \usepackage{unicode-math}

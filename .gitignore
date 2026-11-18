@@ -34,3 +34,6 @@ results/tmp/
 # Obsidian local workspace state
 obsidian/.obsidian/workspace*.json
 __pycache__/
+
+# Licensed fonts (Monotype Times New Roman): local use only, never commit
+report/project1-latex/fonts/*.ttf
