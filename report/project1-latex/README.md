@@ -1,11 +1,7 @@
 # Project 1 report: LaTeX source
 
 - `main.pdf` is the submission PDF: 12 pages, two columns, 11 pt Times New Roman.
-- Font: the licensed Monotype `times.ttf` (Regular face only) is committed in `fonts/`.
-  - Register it with `ln -sf "$PWD/fonts/times.ttf" ~/.local/share/fonts/ && fc-cache -f`.
-  - Bold and italic use Liberation Serif, which has identical metrics.
-  - Without the font, the build falls back to Liberation Serif with the same layout.
-- Build and check: `bash .claude/skills/report-pipeline/check_report.sh` from the repository root. The procedure is the `report-pipeline` skill.
+- Font: `fonts/times.ttf` (Times New Roman, Regular). Register it with `ln -sf "$PWD/fonts/times.ttf" ~/.local/share/fonts/ && fc-cache -f`. Bold and italic use Liberation Serif, which has identical metrics; without the font, the build falls back to Liberation Serif.
 - Sources:
   - `sec_a.tex`: Sections 1 to 4.
   - `sec_b.tex`: Sections 5 to 7.
