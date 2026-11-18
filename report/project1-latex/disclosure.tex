@@ -2,16 +2,16 @@
 \section*{Disclosure of LLM use}\phantomsection\label{sec:llm}
 \addcontentsline{toc}{section}{Disclosure of LLM use}
 {\footnotesize
-We used Claude (Anthropic), through the Claude Code assistant with access to our project repository, at several stages of this report. The table lists each use. The authors chose the papers, read them, verified the results, and are responsible for the final text and every claim in it.
+We used Claude Opus 5.5 (Anthropic) through Claude Code, an assistant that can read and edit the files of our project repository and run commands, in November 2026. We worked with it iteratively. We gave it the four papers, our notes, an earlier draft and the course guide, and we reviewed each version of the PDF and returned written criticism, for example about unclear sentences, unreadable figures or unsupported claims. The model then revised the text, figures and checks. The table lists each use and how the result was checked. The authors chose the papers, read them, verified the results, and are responsible for the final text and every claim in it.
 
 \smallskip
-\noindent\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.75cm}>{\raggedright\arraybackslash}X@{}}
+\noindent\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.45cm}>{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Task} & \textbf{What the model did} \\
+\textbf{Task} & \textbf{What the model did, and how it was checked} \\
 \midrule
-Prose & Drafted and rewrote paragraphs from our notes and earlier drafts; converted the draft to \LaTeX{}. \\
-Fact checks & Compared every number against the source PDFs and recorded each source in a fact sheet kept with the report source. This found five errors in earlier drafts, all corrected here. \\
-Figures & Wrote the TikZ diagrams and the matplotlib scripts. Values read off published plots are marked as approximate in each caption. \\
-Review & Checked the draft against the course guide and flagged unclear passages and unreferenced floats. \\
+Prose & Drafted and rewrote paragraphs from our notes and earlier drafts, and converted the draft to \LaTeX{}. We reviewed each version and requested rewrites where the text was unclear or unsupported. \\
+Numbers & Extracted text from the paper PDFs and compared every number in the report with its source table or section, recording each source in a fact sheet kept with the report source. This found five errors in earlier drafts, all corrected here. \\
+Figures & Wrote the TikZ diagrams and the matplotlib scripts. Values read off published plots are marked as approximate in each caption; all other values come from the papers' tables or text. \\
+Checks & Wrote a build script that checks page count, fonts, references, required sections and some style rules, and checked the draft against the course guide. \\
 \bottomrule
 \end{tabularx}\par}

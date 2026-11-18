@@ -80,6 +80,7 @@ def fig_homeset():
         ax.set_xlim(0, 100)
         ax.set_xticks([0, 50, 100])
         ax.set_xticklabels(["0", "50", "100%"])
+        ax.set_xlabel("share of bug set exposed", fontsize=6.8, labelpad=1)
         ax.grid(axis="y", visible=False)
         ax.grid(axis="x", color="#E3E3E3", lw=0.6)
         ax.spines["bottom"].set_visible(False)
@@ -87,7 +88,7 @@ def fig_homeset():
         ax.set_title(paper, fontsize=8, loc="left", fontweight="bold", pad=14, x=-0.02)
         ax.text(-0.02, 1.03, f"{sub}; {how}", transform=ax.transAxes, fontsize=6.6,
                 style="italic", color="#5A5A59", va="bottom")
-    fig.subplots_adjust(wspace=1.0, left=0.085, right=0.985, top=0.78, bottom=0.12)
+    fig.subplots_adjust(wspace=1.0, left=0.085, right=0.985, top=0.78, bottom=0.2)
     save(fig, "fig_homeset")
 
 
@@ -170,6 +171,7 @@ def fig_ablation():
     a.set_ylim(0, 21)
     a.set_xticks(range(0, 13, 2))
     a.set_xlabel("hours on TiDB", labelpad=1)
+    a.set_ylabel("unique bugs")
     panel_title(a, "a", "Radar, cumulative unique bugs")
     rows = [("DDLCheck filter, 6 DBMSs, 24 h each", 5, 8), ("Radar guidance, 5 DBMSs, 12 h each", 14, 22),
             ("Radar guidance, TiDB alone", 12, 19)]

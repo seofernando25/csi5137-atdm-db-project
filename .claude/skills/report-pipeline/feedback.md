@@ -3,6 +3,25 @@
 Newest first. Each entry gives the steer, the rule it produced, and where that rule is
 enforced.
 
+## 2026-11-18: "Use the course zip to be certain"
+
+- **Steer:** The real course guide is in the course-content zip in ~/Downloads. Check the
+  report against it, not against the summary in `ROADMAP.md`.
+- **Rule:**
+  - Stage 0 reads the actual guide PDF.
+  - `requirements.md` lists every guide bullet with an ID.
+  - The guide's items that the summary had missed are now required, for example:
+    - the context of the broad area in the introduction;
+    - deficiencies linked to the challenges;
+    - per-work limitations in the related work;
+    - software and versions in the setup;
+    - the roles of real and synthetic data;
+    - the experiment series with their purposes and default parameters;
+    - labelled axes on every graph;
+    - a conclusions paragraph after the experiments;
+    - a detailed description of how the LLM was used.
+- **Enforced in:** `requirements.md`, stage 7 rubric.
+
 ## 2026-11-18: "Slogan captions, 'Back to the shop', text too small"
 
 - **Steer:**
