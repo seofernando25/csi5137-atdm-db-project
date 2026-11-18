@@ -1,0 +1,17 @@
+% disclosure.tex: detailed acknowledgment of LLM use (course requirement)
+\section*{Disclosure of LLM use}\phantomsection\label{sec:llm}
+\addcontentsline{toc}{section}{Disclosure of LLM use}
+{\small
+We used Claude (Anthropic), through the Claude Code assistant with access to our project repository, at several stages of this report. The table lists each use. The authors chose the papers, read them, verified the results, and are responsible for the final text and every claim in it.
+
+\smallskip
+\noindent\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.75cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Task} & \textbf{What the model did} \\
+\midrule
+Prose & Drafted and rewrote paragraphs from our notes and earlier drafts; converted the draft to \LaTeX{}. \\
+Fact checks & Compared every number against the source PDFs and recorded each source in a fact sheet kept with the report source. This found four errors in an earlier draft, all corrected here. \\
+Figures & Wrote the TikZ diagrams and the matplotlib scripts. Values read off published plots are marked as approximate in each caption. \\
+Review & Checked the draft against the course guide and flagged unclear passages and unreferenced floats. \\
+\bottomrule
+\end{tabularx}\par}

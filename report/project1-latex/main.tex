@@ -14,6 +14,7 @@
 \usepackage{microtype}
 \setlength{\columnsep}{0.25in}
 \emergencystretch=2em
+\raggedbottom
 \usepackage{titlesec}
 \linespread{1.05}
 \definecolor{ICMLAccent}{HTML}{0072B2}\definecolor{HeadDark}{HTML}{222222}
@@ -44,6 +45,19 @@
 \definecolor{abstractborder}{HTML}{B8C7DD}
 \definecolor{panelbg}{HTML}{E5F0F8}
 \definecolor{panelborder}{HTML}{B3D4EA}
+% Verdict and coverage symbols (Harvey balls): yes / partial or conditional / no / not tested.
+\DeclareRobustCommand{\yes}{\tikz[baseline=-0.6ex]\fill[ICMLAccent](0,0)circle(0.85ex);}
+\DeclareRobustCommand{\half}{\tikz[baseline=-0.6ex]{\fill[white](0,0)circle(0.85ex);\fill[ICMLAccent](0,0)--(90:0.85ex)arc(90:270:0.85ex)--cycle;\draw[ICMLAccent,line width=0.55pt](0,0)circle(0.85ex);}}
+\DeclareRobustCommand{\no}{\tikz[baseline=-0.6ex]\draw[black!50,line width=0.55pt](0,0)circle(0.85ex);}
+\DeclareRobustCommand{\nt}{\textcolor{black!55}{\textsf{--}}}
+% One finding per main section, two lines at most (see the report-pipeline skill).
+\newtcolorbox{takeaway}{enhanced,colback=panelbg!55,colframe=ICMLAccent,boxrule=0pt,leftrule=2.4pt,
+  arc=0pt,outer arc=0pt,left=7pt,right=7pt,top=4pt,bottom=4pt,fontupper=\small,
+  before skip=9pt plus 2pt,after skip=9pt plus 2pt,
+  before upper={\textsf{\textbf{\color{ICMLAccent}Takeaway.}}\enspace}}
+% Per-paper evidence verdicts: \verdict{symbol}{claim}{reason}
+\newenvironment{verdicts}{\par\medskip\noindent{\sffamily\bfseries\small\color{ICMLAccent}Is the evidence sufficient?}\par\nobreak\smallskip\noindent\begin{tabular}{@{}c@{\enspace}>{\raggedright\arraybackslash}p{\dimexpr\columnwidth-2.2em}@{}}}{\end{tabular}\par\smallskip}
+\newcommand{\verdict}[3]{#1 & \textbf{#2} #3\\[2pt]}
 % Running header: short title plus a clickable section map; the current section is bold.
 
 
@@ -73,7 +87,7 @@
 \begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,
   left=10pt,right=10pt,top=9pt,bottom=9pt,boxsep=0pt]
 \small
-Logic bugs make a relational database return a wrong answer or keep a wrong state without crashing, so nothing signals the failure. This report reviews four papers from 2024--2025: CODDTest, DDLCheck, WriteCheck and Radar. Each detects such bugs by running two executions that should agree and flagging a mismatch, but they vary different things: expression evaluation, schema construction history, optional metadata, and transaction schedules. We compare their test oracles, equivalence assumptions, supported features and published experiments. The evaluations show that every method finds real bugs. Differences in workloads, DBMS versions, time budgets and confirmation procedures still rule out a ranking by bug count, so we compare the methods by the validity of their oracles and by what each one can and cannot reach.
+Logic bugs make a database system return a wrong answer or store a wrong state without raising an error, so nothing tells the user that anything failed. This report reviews four papers from 2024 and 2025 that find such bugs automatically: CODDTest, DDLCheck, Radar and WriteCheck. All four rely on one idea. They run two executions that must agree and treat a disagreement as a candidate bug (Figure~\ref{fig:overview}). What they change between the two executions differs: how an expression is evaluated, how a schema was built, which optional metadata exist, or how transactions interleave. We cast the four oracles as one search problem, map what each one can and cannot observe, and check each paper's experiments against its claims. Every paper shows that its oracle finds real bugs that earlier oracles miss. None shows by how much. Headline counts come from different reporting stages, each capability study scores the baselines on the new tool's own bugs, and no experiment reports variance across runs. We therefore compare the methods by the validity of their oracles and by what each can reach, and we do not rank them by bug count.
 \medskip
 
 \begin{tcolorbox}[colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=3pt,bottom=3pt,boxsep=0pt]
@@ -89,5 +103,6 @@ Logic bugs make a relational database return a wrong answer or keep a wrong stat
 \twocolumn
 \input{sec_a}
 \input{sec_b}
+\input{disclosure}
 \input{refs}
 \end{document}
