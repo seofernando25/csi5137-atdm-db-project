@@ -53,7 +53,7 @@ In a fresh 24-hour run on SQLite 3.30.0, an older release in which NoREC and TLP
 \begin{verdicts}
 \verdict{\yes}{CODDTest finds new logic bugs in mature systems.}{24 were confirmed, spread over five DBMSs.}
 \verdict{\half}{It reaches bugs that other oracles miss.}{The 11 of 24 are measured on its own bugs (Figure~\ref{fig:homeset}); the fresh run shows complementarity, not superiority.}
-\verdict{\no}{Deep expressions are not worth generating.}{The depth sweep measures cost only, not the number of bugs found.}
+\verdict{\no}{Deep expressions are unnecessary, as the authors suggest.}{The depth sweep measures cost; it does not measure how many bugs each depth finds.}
 \end{verdicts}
 
 \subsection{DDLCheck results}
@@ -64,7 +64,7 @@ DDLCheck submitted 34 bugs, and 29 were confirmed as previously unknown; 21 of t
 \begin{verdicts}
 \verdict{\yes}{Schema history exposes bugs that query oracles miss.}{29 confirmed, no false positives, 7 invisible to queries.}
 \verdict{\half}{The diversity filter improves detection.}{8 against 5 bugs, from one 24-hour run per DBMS.}
-\verdict{\no}{PostgreSQL and SQLite are free of schema bugs.}{Finding nothing in a bounded search is not evidence of absence.}
+\verdict{\no}{Coverage of PostgreSQL and SQLite.}{No bugs were found there, which a bounded search cannot interpret as absence of bugs.}
 \end{verdicts}
 
 \subsection{Radar results}
@@ -87,7 +87,7 @@ Radar's ten testing rounds produced 1,663 reports. After about three weeks of re
 \subsection{WriteCheck results}
 WriteCheck reports an empirical study of 35 historical bugs, a discovery campaign of five rounds, a capability comparison on 29 known bugs, and a fresh 12-hour comparison with DT\textsuperscript{2}, Troc and TxCheck.
 
-WriteCheck grounds its design in the historical study. Of the 35 critical bugs, 32 (91.4\%) violate WSS, and 29 of those 32 can be triggered by executing the statements in a fixed order, which justifies controlling statement order. In discovery, its 101 flagged violations reduce to 22 unique cases: 13 confirmed critical bugs (11 new) and 9 false positives. The comparison with other tools uses a different set of 29 bugs, despite the identical count: it combines the 13 bugs found by WriteCheck with 16 found earlier by DT\textsuperscript{2}, Troc and TxCheck~\cite[Sec.~6.5.1]{writecheck}. WriteCheck exposes all 29, and the other tools at most 23 (Figure~\ref{fig:homeset}). Since most of this set comes from the competing tools, it is the fairest of the four capability studies. In the fresh 12-hour run, WriteCheck found 4 critical bugs and the other tools 1 or 2 each, although they also found non-critical bugs outside WriteCheck's scope.
+WriteCheck grounds its design in the historical study. Of the 35 critical bugs, 32 (91.4\%) violate WSS, and 29 of those 32 can be triggered by executing the statements in a fixed order, which justifies controlling statement order. In discovery, its 101 flagged violations reduce to 22 unique cases: 13 confirmed critical bugs (11 new) and 9 false positives. The comparison with other tools uses a different set of 29 bugs, despite the identical count: it combines the 13 bugs found by WriteCheck with 16 found earlier by DT\textsuperscript{2}, Troc and TxCheck~\cite[Sec.~6.5.1]{writecheck}. WriteCheck exposes all 29, and the other tools at most 23 (Figure~\ref{fig:homeset}). Since most of this set comes from the competing tools, it is the most balanced of the four capability studies. In the fresh 12-hour run, WriteCheck found 4 critical bugs and the other tools 1 or 2 each, although they also found non-critical bugs outside WriteCheck's scope.
 
 \begin{table}[!tb]
 \caption{\textbf{Results of the fresh end-to-end runs.} Unique bugs found, with the number found by that tool alone in parentheses and false positives after the slash. From \cite[Sec.~4.2]{coddtest}, \cite[Table~6]{radar} and \cite[Table~4]{writecheck}.}
@@ -110,10 +110,10 @@ WriteCheck, 12\,h per DBMS & 4 / 5 FP & DT\textsuperscript{2} 2 / 24, Troc 2 / 4
 \verdict{\half}{A WSS violation indicates a defect.}{9 of the 22 unique violations were false positives caused by semi-consistent reads and missing gap locks.}
 \end{verdicts}
 
-\paragraph{Conclusions of the experimental study.} Across the four studies, the discovery campaigns show that each oracle finds bugs that developers confirm and fix, and the capability studies show that many of these bugs are out of reach for earlier oracles. The quantitative comparisons are weaker. The fresh runs and ablations rely on single runs with small counts, CODDTest finds fewer bugs in total than NoREC and TLP in its fresh run, and the efficiency results show that coverage barely separates oracles that differ greatly in the plans they exercise. The experiments are therefore sufficient for the papers' existence claims, but not for claims about how much better one method is than another.
+\paragraph{Conclusions of the experimental study.} Across the four studies, the discovery campaigns show that each oracle finds bugs that developers confirm and fix, and the capability studies show that many of these bugs are out of reach for earlier oracles. The quantitative comparisons are more tentative. The fresh runs and ablations rely on single runs with small counts, CODDTest finds fewer bugs in total than NoREC and TLP in its fresh run, and the efficiency results show that coverage barely separates oracles that differ greatly in the plans they exercise. The experiments therefore support the papers' main claims well, while comparisons of how much better one method is than another would need further runs.
 
 \section{Cross-study discussion and threats to validity}\label{sec:discussion}
-Taken together, the four papers convincingly show that each method finds real bugs, but they do not show how many more bugs one method finds than another. Three reporting practices explain most of this gap. Each is easy to overlook when a paper is read on its own.
+Taken together, the four papers convincingly show that each method finds real bugs. How many more bugs one method finds than another is harder to read from them. Three reporting practices explain most of this gap. Each is easy to overlook when a paper is read on its own.
 
 \begin{figure*}[!tb]
 \centering\includegraphics[width=\linewidth]{fig_homeset}
@@ -121,7 +121,7 @@ Taken together, the four papers convincingly show that each method finds real bu
 \label{fig:homeset}
 \end{figure*}
 
-\paragraph{Capability is measured on the new tool's own bugs.} Three of the four capability studies ask how many of the new tool's bugs the older tools could have found (Figure~\ref{fig:homeset}). Under this design the new tool reaches 100\% by construction, and the baselines can only score lower. The studies do establish that the new oracle reaches bugs the older ones cannot, but they cannot reveal what the new oracle misses. Only CODDTest's fresh SQLite run provides evidence in that direction, and in that run CODDTest missed 14 bugs that the other oracles found.
+\paragraph{Capability studies use the new tool's bugs.} Three of the four capability studies ask how many of the new tool's bugs the older tools could have found (Figure~\ref{fig:homeset}). Under this design the new tool reaches 100\% by construction. The studies establish that the new oracle reaches bugs the older ones cannot; what the new oracle misses is a separate question that this design does not address. Only CODDTest's fresh SQLite run provides evidence in that direction, and in that run CODDTest missed 14 bugs that the other oracles found.
 
 \paragraph{Headline counts refer to different stages.} Figure~\ref{fig:units} draws each reported bug as a square. Every abstract leads with the total of its row, but the totals contain different things. All 45 of CODDTest's bugs were confirmed, whereas 9 of WriteCheck's 22 violations are false positives and 2 were already known. Adding or ranking these numbers would therefore mix reporting stages. In addition, confirmation counts are snapshots taken at publication, and the overlap between the four campaigns is unknown.
 
@@ -131,7 +131,7 @@ Taken together, the four papers convincingly show that each method finds real bu
 \label{fig:units}
 \end{figure}
 
-\paragraph{The cost of triage is not measured.} Every unique bug starts as a set of raw reports that someone has to reduce and deduplicate. Figure~\ref{fig:triage} places the counts that the papers do report on a common scale. In CODDTest's SQLite run, NoREC and TLP produced more than 3,500 reports per unique bug, CODDTest about 280 and EET fewer than 3. Radar needed about 40 reports per bug and three weeks of manual work, and WriteCheck about 5. These ratios span three orders of magnitude, yet no paper treats triage effort as a metric, and only Radar reports how long it took. An oracle that finds one more bug but produces a hundred times as many reports may be less useful in practice.
+\paragraph{The cost of triage.} Every unique bug starts as a set of raw reports that someone has to reduce and deduplicate. Figure~\ref{fig:triage} places the counts that the papers do report on a common scale. In CODDTest's SQLite run, NoREC and TLP produced more than 3,500 reports per unique bug, CODDTest about 280 and EET fewer than 3. Radar needed about 40 reports per bug and three weeks of manual work, and WriteCheck about 5. These ratios span three orders of magnitude, and triage effort could be a useful additional metric; Radar is the only paper that reports how long it took. An oracle that produces many more reports per bug may cost more to use in practice.
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig_triage}
@@ -182,4 +182,4 @@ The four papers suggest organizing database testing around several independent s
 
 \paragraph{A neutral comparison.} The missing comparative evidence could come from a shared experimental protocol. Such a protocol would fix a set of DBMS revisions and seed a bug set from historical reports that none of the compared tools found, as WriteCheck partly did. Every tool would run with the same budget, several times and with recorded seeds, and the results would report unique bugs with their spread, false positives and raw reports per bug. It would also measure triage time and include negative controls, valid cases that look inconsistent, to measure precision. Each oracle would be scored only within the failure classes it claims to cover (Table~\ref{tab:coverage}), so that a transaction oracle is not penalized for missing an optimizer bug.
 
-\paragraph{Conclusion.} Each of the four methods makes a new part of database behavior testable by comparing two executions that must agree, and each comparison is valid only under its precondition: folding needs a stable value, recreation needs a preserved definition, metadata removal needs a query whose meaning does not depend on the metadata, and serial replay needs a conflict model that justifies the chosen order. Under those conditions, the evidence that each method finds real bugs missed by earlier oracles is strong. Evidence for ranking the methods against each other does not yet exist, and an experiment designed to provide it would be the most useful next step.
+\paragraph{Conclusion.} Each of the four methods makes a new part of database behavior testable by comparing two executions that must agree, and each comparison is valid only under its precondition: folding needs a stable value, recreation needs a preserved definition, metadata removal needs a query whose meaning does not depend on the metadata, and serial replay needs a conflict model that justifies the chosen order. Under those conditions, the evidence that each method finds real bugs missed by earlier oracles is strong. A direct comparison of the methods under a shared protocol would be a useful next step.
