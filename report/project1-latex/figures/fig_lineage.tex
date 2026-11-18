@@ -1,0 +1,73 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{tikzstyle.tex}
+% Lineage of logic-bug oracles, 2020-2025, in three lanes. Arcs: "compares against" in each
+% reviewed paper's evaluation. Venues from the four papers' reference lists.
+\tikzset{
+  lanelab/.style={anchor=east, font=\sffamily\bfseries\fontsize{8}{9.4}\selectfont, text=ink!80, align=right},
+  lanesub/.style={anchor=east, font=\sffamily\fontsize{6.8}{8}\selectfont, text=ink!55, align=right},
+  old/.style={circle, fill=white, draw=ink!55, line width=.7pt, inner sep=0pt, minimum size=2.1mm},
+  new/.style={circle, fill=accent, draw=accent, inner sep=0pt, minimum size=2.9mm},
+  oname/.style={font=\sffamily\fontsize{7.8}{9}\selectfont, text=ink!85, inner sep=1pt, align=center, fill=white, fill opacity=.85, text opacity=1},
+  nname/.style={font=\sffamily\bfseries\fontsize{8.6}{10}\selectfont, text=accent, inner sep=1pt, align=center, fill=white, fill opacity=.85, text opacity=1},
+  venue/.style={font=\sffamily\fontsize{5.9}{6.8}\selectfont, text=ink!55},
+  cmp/.style={accent!55, line width=.55pt, -{Stealth[length=1.3mm,width=1.1mm]}},
+}
+\newcommand{\yr}[1]{(#1-2020)*3.05+0.6}
+\begin{document}
+\begin{tikzpicture}
+% year axis
+\foreach \y in {2020,...,2025}{
+  \pgfmathsetmacro{\x}{\yr{\y}}
+  \draw[ink!12, line width=.5pt] (\x,-0.75) -- (\x,2.95);
+  \node[font=\sffamily\bfseries\fontsize{8}{9}\selectfont, text=ink!60] at (\x,-1.0) {\y};
+}
+% lanes
+\foreach \l/\t/\s/\yy in {q/query oracles/{one query, fixed state}/2.35, m/state and metadata/vary the database/1.15, t/transactions/vary the schedule/0}{
+  \draw[ink!25, line width=.6pt] (0.1,\yy) -- (17.0,\yy);
+  \node[lanelab] at (-0.05,\yy+0.1) {\t};
+  \node[lanesub] at (-0.05,\yy-0.2) {\s};
+}
+% older tools (hollow)  name, x, lane y, label side (1 above, -1 below), venue
+\newcommand{\Old}[6]{%
+  \pgfmathsetmacro{\xx}{#2}
+  \node[old] (#1) at (\xx,#3) {};
+  \ifnum#4>0 \node[oname, anchor=south] (#1l) at ($(#1.north)+(0,0.02)$) {#5\\[-1pt]{\venuefont #6}};
+  \else \node[oname, anchor=north] (#1l) at ($(#1.south)+(0,-0.02)$) {#5\\[-1pt]{\venuefont #6}};\fi
+}
+\newcommand{\venuefont}{\sffamily\fontsize{6.6}{7.6}\selectfont\color{ink!55}}
+\newcommand{\New}[6]{%
+  \pgfmathsetmacro{\xx}{#2}
+  \node[new] (#1) at (\xx,#3) {};
+  \ifnum#4>0 \node[nname, anchor=south] at ($(#1.north)+(0,0.02)$) {#5\\[-1pt]{\venuefont #6}};
+  \else \node[nname, anchor=north] at ($(#1.south)+(0,-0.02)$) {#5\\[-1pt]{\venuefont #6}};\fi
+}
+\Old{norec}{\yr{2020}-0.15}{2.35}{1}{NoREC}{ESEC/FSE}
+\Old{tlp}{\yr{2020}+0.75}{2.35}{-1}{TLP}{OOPSLA}
+\Old{pqs}{\yr{2020}+1.6}{2.35}{1}{PQS}{OSDI}
+\Old{dqe}{\yr{2023}}{2.35}{1}{DQE}{ICSE}
+\Old{dqp}{\yr{2024}-0.35}{2.35}{1}{DQP}{SIGMOD}
+\Old{eet}{\yr{2024}+0.55}{2.35}{-1}{EET}{OSDI}
+\Old{dt}{\yr{2022}}{0}{-1}{DT\textsuperscript{2}}{ASE}
+\Old{troc}{\yr{2023}-0.35}{0}{-1}{Troc}{ICSE}
+\Old{txc}{\yr{2023}+0.55}{0}{-1}{TxCheck}{OSDI}
+\New{codd}{\yr{2025}-0.3}{2.35}{1}{CODDTest}{SIGMOD}
+\New{radar}{\yr{2024}}{1.15}{-1}{Radar}{PVLDB}
+\New{ddl}{\yr{2025}-0.3}{1.15}{-1}{DDLCheck}{PVLDB}
+\New{wc}{\yr{2025}-0.3}{0}{-1}{WriteCheck}{PVLDB}
+% "compares against" arcs (drawn behind labels by order)
+\begin{scope}[on background layer]
+\foreach \a in {norec,tlp,dqe,eet}{ \draw[cmp] (codd) to[bend right=9] (\a); }
+\foreach \a in {norec,tlp,dqe}{ \draw[cmp] (radar) to[bend left=5] (\a); }
+\foreach \a in {norec,dqp}{ \draw[cmp] (ddl) to[bend left=6] (\a); }
+\draw[cmp] (ddl) to[bend left=30] (radar);
+\foreach \a in {dt,troc,txc}{ \draw[cmp] (wc) to[bend left=14] (\a); }
+\end{scope}
+% legend
+\node[new, minimum size=2.4mm] (k1) at (10.2,-1.55) {};
+\node[anchor=west, font=\sffamily\fontsize{7.2}{8}\selectfont] at ($(k1.east)+(0.05,0)$) {reviewed here};
+\node[old] (k2) at (12.6,-1.55) {};
+\node[anchor=west, font=\sffamily\fontsize{7.2}{8}\selectfont] at ($(k2.east)+(0.05,0)$) {earlier oracle};
+\draw[cmp] (14.85,-1.55) -- (15.5,-1.55);
+\node[anchor=west, font=\sffamily\fontsize{7.2}{8}\selectfont] at (15.55,-1.55) {compared against};
+\end{tikzpicture}
+\end{document}

@@ -25,7 +25,8 @@
 \titlespacing*{\section}{0pt}{1.6ex plus .4ex}{0.8ex}
 \titlespacing*{\subsection}{0pt}{1.3ex plus .3ex}{0.6ex}
 \titlespacing*{\subsubsection}{0pt}{1ex}{0.4ex}
-\usepackage{graphicx,booktabs,array,tabularx,enumitem}
+\titlespacing*{\paragraph}{0pt}{0.9ex plus .3ex minus .2ex}{0.6em}
+\usepackage{graphicx,booktabs,array,tabularx,enumitem,needspace}
 \usepackage[most]{tcolorbox}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black,pdfborder={0 0 0},pdftitle={Detecting Logic Bugs in Relational Database Systems},pdfauthor={Group 12, CSI 5137}]{hyperref}
 \usepackage{fancyhdr}
@@ -72,35 +73,28 @@
 \hdrentry{intro}{1}{Intro} $|$ \hdrentry{problem}{2}{Problem} $|$ \hdrentry{motivation}{3}{Motivation} $|$ \hdrentry{related}{4}{Related} $|$ \hdrentry{experiments}{5}{Experiments} $|$ \hdrentry{discussion}{6}{Discussion} $|$ \hdrentry{conclusions}{7}{Conclusion}}
 \fancyfoot[LE,RO]{\small\thepage}
 \begin{document}
-\thispagestyle{empty}
+\twocolumn[{%
 \begin{center}
-{\fontsize{22}{26}\selectfont\bfseries Detecting Logic Bugs in\\[2pt] Relational Database Systems\par}
-\vspace{14pt}
-\vspace{12pt}
-{\large Fernando Berti Cruz Nogueira$^{1}$ \qquad Saatvik Paul$^{1}$ \qquad Haekwon Ahn$^{1}$\par}
-\vspace{3pt}
-{\small $^{1}$University of Ottawa \qquad CSI 5137 A00, Group 12 \qquad Project 1 Report\par}
-\vspace{4pt}
-{\small Advanced Topics in Databases and Data Management\par}
-\end{center}
-\vspace{10pt}
-\begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,
-  left=10pt,right=10pt,top=9pt,bottom=9pt,boxsep=0pt]
-\small
-Logic bugs make a database system return a wrong answer or store a wrong state without raising an error, so nothing tells the user that anything failed. This report reviews four papers from 2024 and 2025 that find such bugs automatically: CODDTest, DDLCheck, Radar and WriteCheck. All four rely on one idea. They run two executions that must agree and treat a disagreement as a candidate bug (Figure~\ref{fig:overview}). What they change between the two executions differs: how an expression is evaluated, how a schema was built, which optional metadata exist, or how transactions interleave. We cast the four oracles as one search problem, map what each one can and cannot observe, and check each paper's experiments against its claims. Every paper shows that its oracle finds real bugs that earlier oracles miss. None shows by how much. Headline counts come from different reporting stages, each capability study scores the baselines on the new tool's own bugs, and no experiment reports variance across runs. We therefore compare the methods by the validity of their oracles and by what each can reach, and we do not rank them by bug count.
-\medskip
-
-\begin{tcolorbox}[colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=3pt,bottom=3pt,boxsep=0pt]
-\centering\includegraphics[width=\linewidth]{fig_overview}
-\end{tcolorbox}
+{\fontsize{21}{25}\selectfont\bfseries Detecting Logic Bugs in Relational Database Systems\par}
+\vspace{8pt}
+{\large Fernando Berti Cruz Nogueira \qquad Saatvik Paul \qquad Haekwon Ahn\par}
 \vspace{2pt}
-\captionsetup{type=figure,font=footnotesize,skip=0pt}
-\captionof{figure}{\textbf{Overview of the four oracles.} Each method runs two executions of the same data that should give the same observable result. A mismatch between the two observations is a candidate bug to be validated.}
-\label{fig:overview}
+{\small University of Ottawa \quad\textperiodcentered\quad CSI 5137 A00, Advanced Topics in Databases and Data Management \quad\textperiodcentered\quad Group 12, Project 1 Report\par}
+\end{center}
+\vspace{4pt}
+\begin{tcolorbox}[enhanced,colback=panelbg,colframe=panelborder,boxrule=0.5pt,arc=3pt,
+  left=9pt,right=9pt,top=6pt,bottom=6pt,boxsep=0pt]
+\small
+\textbf{Abstract.} Logic bugs make a database system return a wrong answer or store a wrong state without raising an error. This report reviews four 2024--2025 papers that hunt such bugs automatically: CODDTest, DDLCheck, Radar and WriteCheck. All four run two executions that must agree and treat a disagreement as a bug (Figure~\ref{fig:oracles}); they differ in what they change between the two runs. We cast the four as one search problem, map what each can and cannot observe, and audit each paper's experiments against its claims. Every paper shows that its oracle finds real bugs that earlier oracles miss. None shows by how much: headline counts sit at different reporting stages, capability studies score the baselines on the new tool's own bugs, and no experiment reports variance across runs. We therefore compare the oracles by validity and reach, not by bug count.
 \end{tcolorbox}
-\clearpage
-\setcounter{page}{2}
-\twocolumn
+\vspace{6pt}
+\centering\includegraphics[width=\textwidth]{fig_oracles}
+\captionsetup{type=figure,font=footnotesize,skip=3pt}
+\captionof{figure}{\textbf{Four oracles, four real bugs.} Each column shows one bug from its paper: the input both runs share, the baseline run (blue), the transformed run (orange) and the mismatch. From CODDTest Listing~8, DDLCheck Listing~1, Radar Listing~2 and WriteCheck Listing~4, lightly abridged.}
+\label{fig:oracles}
+\vspace{10pt}
+}]
+\thispagestyle{empty}
 \input{sec_a}
 \input{sec_b}
 \input{disclosure}

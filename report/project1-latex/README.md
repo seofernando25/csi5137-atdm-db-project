@@ -1,18 +1,24 @@
 # Project 1 report: LaTeX source
 
-- `main.pdf` is the submission PDF: 15 pages, two columns, 11 pt Liberation Serif (the metric twin of Times New Roman).
-- Build and check: `bash .claude/skills/report-pipeline/check_report.sh` from the repository root. It runs XeLaTeX twice and gates the page count, fonts, references, labels, the required sections and the prose style. The full procedure is the `report-pipeline` skill.
+- `main.pdf` is the submission PDF: 10 pages, two columns, 11 pt Liberation Serif (the metric twin of Times New Roman).
+- Build and check: `bash .claude/skills/report-pipeline/check_report.sh` from the repository root. The procedure is the `report-pipeline` skill.
 - Sources:
   - `sec_a.tex`: Sections 1 to 4.
   - `sec_b.tex`: Sections 5 to 7.
   - `disclosure.tex`: the LLM-use statement.
   - `refs.tex`: the references.
-  - `FACTS.md`: maps every number in the report to its source table or section in the four papers.
+  - `FACTS.md`: maps every number to its source in the papers.
 - `figures/`:
-  - TikZ explainers (`fig_*.tex`, built with XeLaTeX and `tikzstyle.tex`).
-  - Data charts, built by `python3 figures/make_data_figures.py`:
-    - `fig_depth`: CODDTest depth sweep;
+  - TikZ (XeLaTeX with `tikzstyle.tex`):
+    - `fig_oracles`: four real bugs, page 1;
+    - `fig_model`: where each oracle intervenes;
+    - `fig_lineage`: the oracle family, 2020 to 2025.
+  - Charts, built by `python3 figures/make_data_figures.py`:
     - `fig4`: CODDTest efficiency;
-    - `fig5`: Radar ablation;
+    - `fig_depth`: depth sweep;
+    - `fig_trigger`: WriteCheck triggering conditions;
+    - `fig_ablation`: ablations;
     - `fig_homeset`: capability studies;
-    - `fig_funnel`: reporting stages.
+    - `fig_units`: headline bug counts;
+    - `fig_triage`: reports per bug;
+    - `fig_dbms`: bugs per DBMS.

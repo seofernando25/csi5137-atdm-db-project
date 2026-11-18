@@ -58,6 +58,8 @@ The old text cited Radar "Tables 4 and 5" for the comparisons. They are Tables 5
 | Fact | Value | Source |
 |---|---|---|
 | Historical study | 140 transaction bugs, 35 critical; 32 (91.4%) violate WSS | Secs. 3.1 and 3.2 |
+| Triggering conditions (Fig. 2, n = 32) | all need ≤2 tables and ≤5 transactions; 97.0% of tables ≤5 rows; 71.9% need schema properties | Sec. 3.4 |
+| Critical bugs per DBMS (13) | MySQL 1, MariaDB 3, TiDB 9 | Table 3 |
 | Deterministic triggering | 29 of the 32 WSS violations (90.6%) | Sec. 3.4, Finding 5 |
 | Discovery | 101 WSS violations, 22 unique; 13 confirmed critical (11 new, 2 known); 9 false positives | Table 2, Sec. 6.2 |
 | Protocol | 5 rounds; 8 cores, 32 GB | Sec. 6.1 |
@@ -66,6 +68,12 @@ The old text cited Radar "Tables 4 and 5" for the comparisons. They are Tables 5
 | End-to-end, 12 h | critical / false positives: WriteCheck 4 / 5, DT² 2 / 24, Troc 2 / 4, TxCheck 1 / 4 | Table 4 (Sec. 6.5.2) |
 | Causes of WriteCheck's false positives | 2 semi-consistent reads, 3 missing gap locks | Sec. 6.5.2; analysis in Sec. 6.4 |
 | The other tools also report non-critical bugs | WriteCheck cannot detect non-critical bugs | Sec. 6.5.2 |
+
+## Errors fixed in the second pass
+
+5. WriteCheck's triggering-condition shares (its Fig. 2) are over the 32 WSS violations, with
+   rows counted per initial table and statements per transaction. They are not over the 35
+   critical bugs.
 
 ## Errors fixed in this pass
 

@@ -1,0 +1,87 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{tikzstyle.tex}
+% Headline figure: one real bug per oracle, in four aligned columns.
+% Rows (same height in every column): header | shared input | baseline run | variant run | mismatch.
+% Sources: CODDTest Listing 8, DDLCheck Listing 1, Radar Listing 2, WriteCheck Listing 4.
+\newlength{\colw}\setlength{\colw}{4.12cm}
+\tikzset{
+  hdr/.style={anchor=north west, inner sep=0pt, font=\bfseries\fontsize{9.5}{11}\selectfont},
+  sub/.style={anchor=north west, inner sep=0pt, font=\itshape\fontsize{7.2}{8.6}\selectfont, text=ink!75},
+  shared/.style={anchor=north west, fill=pgrey, draw=none, rounded corners=2pt, text width=\colw-8pt,
+    inner sep=4pt, align=left,
+    execute at begin node={\vbox to 0.78cm\bgroup}, execute at end node={\vfill\egroup}, font=\ttfamily\fontsize{6.3}{7.6}\selectfont},
+  card/.style={anchor=north west, fill=white, draw=ink!22, line width=.5pt, rounded corners=1.5pt,
+    text width=\colw-10pt, inner xsep=6pt, inner ysep=4pt, align=left,
+    execute at begin node={\vbox to 1.5cm\bgroup}, execute at end node={\vfill\egroup},
+    font=\ttfamily\fontsize{6.3}{7.6}\selectfont},
+  res/.style={anchor=south east, inner sep=1.5pt, font=\ttfamily\bfseries\fontsize{7.6}{8.6}\selectfont},
+  tag/.style={anchor=north west, inner sep=0pt, font=\fontsize{6.6}{8}\selectfont, text=ink!70},
+  mis/.style={anchor=north west, inner sep=0pt, font=\bfseries\fontsize{9}{10}\selectfont},
+  gut/.style={anchor=east, inner sep=0pt, font=\sffamily\fontsize{6.4}{7.6}\selectfont, text=ink!55, align=right},
+}
+\newcommand{\Rail}[2]{\draw[line width=2.4pt, #2, line cap=butt] ([yshift=-.6pt]#1.north west) -- ([yshift=.6pt]#1.south west);}
+\newcommand{\ctitle}{\sffamily\bfseries\fontsize{7.2}{8.6}\selectfont}
+\newcommand{\mneq}{\textcolor{garnet}{\,\(\neq\)\,}}
+
+\begin{document}
+\begin{tikzpicture}
+% ---- column macro (explicit calls below) -----------------------------------------------
+% #1 x, #2 id, #3 icon, #4 name, #5 what changes, #6 shared text,
+% #7 baseline title+code, #8 baseline result, #9 variant title+code
+\newcommand{\OracleCol}[9]{%
+  \node[hdr] (#2h) at (#1,0) {\textcolor{accent}{#3}\enspace #4};
+  \node[sub] (#2s) at ($(#2h.south west)+(0,-0.12)$) {#5};
+  \node[shared] (#2w) at (#1,-0.82) {#6};
+  \node[card] (#2b) at ($(#2w.south west)+(0,-0.16)$) {#7};
+  \Rail{#2b}{cblue}
+  \node[res, text=cblue] at ($(#2b.south east)+(-.05,.05)$) {#8};
+  \node[card] (#2v) at ($(#2b.south west)+(0,-0.16)$) {#9};
+  \Rail{#2v}{corange}
+}
+\newcommand{\Outcome}[4]{% #1 id, #2 variant result, #3 mismatch line, #4 source tag
+  \node[res, text=vartext] at ($(#1v.south east)+(-.05,.05)$) {#2};
+  \node[mis] (#1m) at ($(#1v.south west)+(0,-0.2)$) {#3};
+  \node[tag] at ($(#1m.south west)+(0,-0.09)$) {#4};
+}
+
+\OracleCol{0}{a}{\faCalculator}{CODDTest}{folds an expression into its value}
+ {same tables t1, vt0 and view v0\\[1pt]{\rmfamily\itshape\fontsize{6.6}{7.6}\selectfont auxiliary query: EXISTS(\ldots) is false, so it folds to 0}}
+ {{\ctitle\color{cblue}original query}\\SELECT vt0.c2 FROM t1 CROSS\\JOIN v0 ON (EXISTS (SELECT\\ v0.c0 FROM v0 WHERE false))\\FULL OUTER JOIN vt0 ON 1;}
+ {\{-1\}}
+ {{\ctitle\color{vartext}folded query}\\SELECT vt0.c2 FROM t1 CROSS\\JOIN v0 ON (0)\\FULL OUTER JOIN vt0 ON 1;}
+\Outcome{a}{\{\,\}}{\{-1\}\mneq\{\,\}}{SQLite bug (CODDTest, Listing 8)}
+
+\OracleCol{4.55}{b}{\faHistory}{DDLCheck}{rebuilds the schema without its history}
+ {same final schema t1(c1 INT), then\\INSERT INTO t1 (c1) VALUES (0);}
+ {{\ctitle\color{cblue}evolved schema}\\CREATE TABLE t1 (c1 INT, c2 BLOB)\\\ \ ROW\_FORMAT=REDUNDANT;\\ALTER TABLE t1 DROP c2;}
+ {error}
+ {{\ctitle\color{vartext}created directly}\\CREATE TABLE t1 (c1 INT)\\\ \ ROW\_FORMAT=REDUNDANT;}
+\Outcome{b}{\{0\}}{error\mneq\{0\}}{MariaDB MDEV-35122}
+
+\OracleCol{9.1}{c}{\faTags}{Radar}{drops optional metadata}
+ {same row, same query\\SELECT c1 FROM t1 WHERE\\\ \ (IFNULL(-1, '')) IN (c1);}
+ {{\ctitle\color{cblue}with index}\\CREATE TABLE t1 (c1\\\ \ DOUBLE ZEROFILL);\\CREATE INDEX i0 ON t1 (c1);\\INSERT INTO t1 VALUES (0);}
+ {\{0\}}
+ {{\ctitle\color{vartext}raw copy, no index}\\CREATE TABLE t1 (c1\\\ \ DOUBLE ZEROFILL);\\INSERT INTO t1 VALUES (0);}
+\Outcome{c}{\{\,\}}{\{0\}\mneq\{\,\}}{MySQL \#110125}
+
+\OracleCol{13.65}{d}{\faRandom}{WriteCheck}{replays transactions serially}
+ {table t starts as \{1\}\\T1: INSERT 2; COMMIT\\T2: DELETE FROM t; COMMIT}
+ {{\ctitle\color{cblue}concurrent run}\\T1 BEGIN \textbar{} T2 BEGIN\\T1 INSERT, COMMIT\\T2 DELETE, COMMIT {\rmfamily\itshape(should abort)}}
+ {\{2\}}
+ {{\ctitle\color{vartext}serial replay T1 \(\rightarrow\) T2}\\T1 INSERT, COMMIT\\T2 DELETE, COMMIT}
+\Outcome{d}{\{\,\}}{\{2\}\mneq\{\,\}}{TiDB \#42486}
+
+% ---- left gutter row labels -------------------------------------------------------------
+\node[gut] at ($(aw.west)+(-0.12,0)$) {same\\input};
+\node[gut] at ($(ab.west)+(-0.12,0)$) {baseline\\run};
+\node[gut] at ($(av.west)+(-0.12,0)$) {transformed\\run};
+\node[gut] at ($(am.west)+(-0.12,-0.12)$) {mismatch\\= bug};
+
+% ---- shared rule ------------------------------------------------------------------------
+\coordinate (L) at ($(am.south west)+(0,-0.52)$);
+\draw[ink!35, line width=.5pt] (L) -- (L -| dv.east);
+\node[anchor=north, font=\fontsize{7.4}{9}\selectfont, text=ink!85] at ($(L)!0.5!(L -| dv.east)+(0,-0.08)$)
+  {Each pair runs on the same DBMS with the same data and the same meaning, so the results must match. All four mismatches are confirmed bugs.};
+\end{tikzpicture}
+\end{document}

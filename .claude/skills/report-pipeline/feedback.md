@@ -3,6 +3,22 @@
 Newest first. Each entry gives the steer, the rule it produced, and where that rule is
 enforced.
 
+## 2026-11-18: "Shrink to 10 pages, more wow figures, less prose"
+
+- **Steer:**
+  - Fit the report on 10 pages.
+  - Prose-only pages are boring for the professor; add small diagrams in the style of
+    graphics.wsj.com.
+  - Rework big explainers that take a full page "with no purpose".
+- **Rules:**
+  - Target 10 pages, never below the guide's minimum.
+  - Lead page 1 with one striking figure that shows real data (here, one real bug per paper).
+  - Replace per-method explainer pages with small multiples.
+  - Each display must earn its space. Prefer compact charts (tile grid, unit chart, dumbbell,
+    index chart, log dot plot) over tables when the shape is the message.
+  - Cut prose by about 40% by moving comparisons into displays.
+- **Enforced in:** `SKILL.md` (display rules, page target), `check_report.sh` (page bounds).
+
 ## 2026-11-18: "Work on main, commit and push"
 
 - **Steer:** Do not create branches for this repository. Commit directly on `main` and push

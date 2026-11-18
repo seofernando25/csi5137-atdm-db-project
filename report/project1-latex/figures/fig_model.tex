@@ -1,0 +1,38 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{tikzstyle.tex}
+% Where each oracle intervenes in the model: D = (S, V, M, H), workload W, observation O.
+\tikzset{
+  cell/.style={minimum width=1.06cm, minimum height=0.56cm, inner sep=0pt, rounded corners=1.5pt},
+  keep/.style={cell, fill=pgrey},
+  chg/.style={cell, fill=vartext, text=white, font=\sffamily\bfseries\fontsize{6.6}{7}\selectfont},
+  colh/.style={font=\sffamily\bfseries\fontsize{7.4}{8.6}\selectfont, text=ink, align=center},
+  colsub/.style={font=\sffamily\fontsize{6.2}{7}\selectfont, text=ink!65, align=center},
+  rowh/.style={anchor=east, font=\sffamily\bfseries\fontsize{7.6}{9}\selectfont},
+  obs/.style={anchor=west, font=\sffamily\fontsize{6.8}{8}\selectfont, text=ink!85, align=left},
+}
+\begin{document}
+\begin{tikzpicture}
+\def\dx{1.14}
+% column headers
+\foreach \i/\h/\s in {0/S/schema,1/V/values,2/M/metadata,3/H/history,4/W/workload}{
+  \node[colh] at (\i*\dx,0.78) {\h};
+  \node[colsub] at (\i*\dx,0.50) {\s};
+}
+\node[colh, anchor=west] at (5*\dx-0.42,0.78) {O};
+\node[colsub, anchor=west] at (5*\dx-0.42,0.50) {what is compared};
+\draw[decorate, decoration={brace, amplitude=3pt}, ink!45, line width=.5pt]
+  (-0.45,1.0) -- node[above=2.5pt, font=\sffamily\fontsize{6.6}{8}\selectfont, text=ink!70] {database state $D$} (3*\dx+0.45,1.0);
+% rows: name / changed column / label / observation
+\foreach \r/\n/\c/\w/\o in {
+  0/CODDTest/4/fold/result rows,
+  1/DDLCheck/3/rebuild/{rows, errors, data, schema},
+  2/Radar/2/drop/result rows,
+  3/WriteCheck/4/serialize/final table state}{
+  \pgfmathsetmacro{\y}{-\r*0.68}
+  \node[rowh] at (-0.6,\y) {\n};
+  \foreach \i in {0,...,4}{ \node[keep] at (\i*\dx,\y) {}; }
+  \node[chg] at (\c*\dx,\y) {\w};
+  \node[obs] at (5*\dx-0.42,\y) {\o};
+}
+\end{tikzpicture}
+\end{document}

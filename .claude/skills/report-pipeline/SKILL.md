@@ -91,6 +91,17 @@ Write like a careful graduate student explaining to a smart reader, not like a t
 
 ## Display rules (stage 4)
 
+- Page target: 10 pages. The guide allows 10 to 20, so never go below 10. At the target, the
+  last page should hold more than the references.
+- Style:
+  - editorial graphics in the style of graphics.wsj.com;
+  - thin rules and direct labels;
+  - a one-line finding as the caption title ("Fewer tests, far more plans");
+  - real data or a real bug before an abstract box diagram.
+- Chart forms: small multiples, unit charts (one square per item), tile grids, dumbbells for
+  with/without pairs, index charts on a log scale for sweeps, and lollipops on a log scale for
+  ratios.
+
 - Every display must do one of three jobs: explain a mechanism (TikZ explainer), compare
   across papers (matrix or chart), or hold exact lookup values (table). If it does none of
   these, cut it.
@@ -103,6 +114,7 @@ Write like a careful graduate student explaining to a smart reader, not like a t
   grammar.
 - Use symbols for verdicts and coverage: ● (yes), ◐ (partial or conditional), ○ (no), each
   with a legend in the caption.
+- White text on a colored chip needs a dark fill: `vartext` `#A84800`, not `corange`.
 - Callout boxes (`takeaway`) are rationed: at most one per main section, two lines or fewer,
   stating a finding rather than a slogan.
 
@@ -120,6 +132,9 @@ xelatex -interaction=nonstopmode -halt-on-error main.tex && xelatex -interaction
 These came out of earlier passes. Add a lesson each time the user corrects the work, in
 `feedback.md`, and turn it into a rule here or in the gate script.
 
+- Re-derive the denominator of every percentage. WriteCheck's Fig. 2 shares are over its 32
+  WSS violations, with rows per table and statements per transaction, not over the 35 critical
+  bugs. 96.9% = 31/32 gives it away.
 - When a paper reports the same number for two different sets, check both definitions.
   WriteCheck has two different sets of 29 bugs: 29 of its 32 WSS violations trigger
   deterministically, and its tool-comparison set also has 29 bugs, 13 found by WriteCheck and
