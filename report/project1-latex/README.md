@@ -1,7 +1,7 @@
 # Project 1 report: LaTeX source
 
 - `main.pdf` is the submission PDF: 12 pages, two columns, 11 pt Times New Roman.
-- Font: the licensed Monotype `times.ttf` (Regular face only) goes in `fonts/`. It is git-ignored, because the licence forbids redistribution and this repository is public.
+- Font: the licensed Monotype `times.ttf` (Regular face only) is committed in `fonts/`.
   - Register it with `ln -sf "$PWD/fonts/times.ttf" ~/.local/share/fonts/ && fc-cache -f`.
   - Bold and italic use Liberation Serif, which has identical metrics.
   - Without the font, the build falls back to Liberation Serif with the same layout.
