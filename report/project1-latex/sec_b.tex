@@ -122,7 +122,7 @@ Each paper reads well on its own. Side by side, three reporting habits blur any 
 \label{fig:homeset}
 \end{figure*}
 
-\paragraph{Capability studies on the tool's own bugs.} Three of the four capability studies take the new tool's discoveries and ask how many older tools could catch them (Figure~\ref{fig:homeset}), guaranteeing the new tool 100\% by construction. That proves the new oracle reaches fresh territory, yet leaves the mirror question untouched: what does the new tool miss? Only CODDTest's fresh SQLite run answers that side, where CODDTest missed 14 bugs that competing oracles caught.
+\paragraph{Capability studies on the tool's own bugs.} Three of the four capability studies take the new tool's discoveries and ask how many older tools could catch them (Figure~\ref{fig:homeset}), guaranteeing the new tool 100\% by construction. That proves the new oracle reaches fresh territory, yet leaves the mirror question untouched: what does the new tool miss? CODDTest's fresh SQLite run shows that side most clearly, missing 14 of 39 bugs found collectively, while Radar also missed 1 of 21 metadata bugs in its comparison.
 
 \paragraph{Headline counts from different triage stages.} Figure~\ref{fig:units} draws each reported item as one square. Every abstract highlights its row total, yet those totals represent different stages: all 45 of CODDTest's bugs are confirmed, WriteCheck's 22 unique violations include 9 false positives and 2 known bugs, and Radar's 42 submissions include 1 duplicate and 3 false positives. Ranking abstracts mixes confirmed fixes with raw alarms. Confirmation counts are also frozen at submission, and overlap across the four campaigns is unchecked.
 
