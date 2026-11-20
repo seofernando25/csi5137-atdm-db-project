@@ -35,6 +35,7 @@ from the paper's text or tables.
 | Bug-revealing statements (29) | SELECT 23, CREATE 2, INSERT 2, ALTER 1, REPLACE 1 | Fig. 6 |
 | Conceptual comparison on the 21 schema bugs | NoREC 0, Radar 13, DQP 9 | Table 4 |
 | Ablation, 24 h per DBMS, six DBMSs | unique sequences 20,468 / 14,994 / 17,967; unique bugs 8 / 5 / 4; bug occurrences 9 / 6 / 9 | Table 3 |
+| Default max DDL length (`maxLength`) | 10 (5,000 statements per database pair) | Sec. 3.2, Sec. 4.1 |
 | Hardware | 8 cores, 32 GB | Sec. 4.1 |
 
 ## Radar (Song et al., PVLDB 17(8) 2024)
@@ -60,6 +61,8 @@ The old text cited Radar "Tables 4 and 5" for the comparisons. They are Tables 5
 | Historical study | 140 transaction bugs, 35 critical; 32 (91.4%) violate WSS | Secs. 3.1 and 3.2 |
 | Triggering conditions (Fig. 2, n = 32) | all need ≤2 tables and ≤5 transactions; 97.0% of tables ≤5 rows; 71.9% need schema properties | Sec. 3.4 |
 | Critical bugs per DBMS (13) | MySQL 1, MariaDB 3, TiDB 9 | Table 3 |
+| WSS breakdown (of 35 critical bugs) | 15 violate tx-WSS, 32 violate stmt-WSS (all 15 tx-WSS are a subset) | Sec. 3.2 |
+| Serializable read-result check | Supported except PostgreSQL (SSI); 0 bugs found in evaluation | Secs. 5.4, 6.2 |
 | Deterministic triggering | 29 of the 32 WSS violations (90.6%) | Sec. 3.4, Finding 5 |
 | Discovery | 101 WSS violations, 22 unique; 13 confirmed critical (11 new, 2 known); 9 false positives | Table 2, Sec. 6.2 |
 | Protocol | 5 rounds; 8 cores, 32 GB | Sec. 6.1 |

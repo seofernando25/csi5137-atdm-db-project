@@ -24,10 +24,10 @@
   (-0.5,1.1) -- node[above=3pt, font=\sffamily\fontsize{7.2}{8.4}\selectfont, text=ink!80]
   {database state $D$} (3*\dx+0.5,1.1);
 \foreach \r/\n/\c/\w/\o in {
-  0/CODDTest/4/fold/result rows,
-  1/DDLCheck/3/rebuild/{rows, errors,\\data, schema},
-  2/Radar/2/drop/result rows,
-  3/WriteCheck/4/serialize/final state}{
+  0/CODDTest/4/fold/{query results\\(incl. INSERT)},
+  1/DDLCheck/3/rebuild/{rows, status,\\data, schema},
+  2/Radar/2/drop/{supported\\read results},
+  3/WriteCheck/4/serialize/{final state,\\write status}}{
   \pgfmathsetmacro{\y}{-\r*0.74}
   \node[rowh] at (-0.6,\y) {\n};
   \foreach \i in {0,...,4}{ \node[keep] at (\i*\dx,\y) {}; }

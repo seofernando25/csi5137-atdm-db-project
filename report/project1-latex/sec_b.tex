@@ -1,37 +1,39 @@
 % sec_b.tex: Experimental study, Discussion, Conclusions
 
 \section{Experimental study}\label{sec:experiments}
-All four papers make a solid case that their oracles work in practice, yet the strength of their experimental backing varies sharply across claims. Below we summarize the shared setup, review each paper's key experiments and grade its claims using the symbols from Table~\ref{tab:coverage}: \yes\ for solid support, \half\ for directional or conditional evidence, and \no\ when the experiments do not back the claim.
+All four papers make a solid case that their oracles work in practice, yet the strength of their experimental backing varies sharply across claims. Below we summarize the shared setup, review each paper's experimental procedures and results, and grade its claims using the symbols from Table~\ref{tab:coverage}: \yes\ for solid support, \half\ for directional or conditional evidence, and \no\ when the published evidence does not establish the claim.
 
 \subsection{Setup, datasets and metrics}
 \paragraph{Setup.} Table~\ref{tab:glance} summarizes the four setups. All four tools are written in Java: CODDTest, Radar and WriteCheck extend SQLancer, while DDLCheck is standalone. Where deployment is described, client-server engines run in Docker or from official binaries, with SQLite embedded. DDLCheck, Radar and WriteCheck used 8-core, 32\,GB hosts; CODDTest's efficiency study used a 64-core, 512\,GB server with 10 threads per configuration. Because engine versions, budgets and baselines vary across papers (and authors upgraded builds mid-campaign), raw counts across studies reflect setup as much as oracle quality. We therefore compare quantitative numbers strictly within each paper.
 
 \begin{table*}[!tb]
-\caption{\textbf{Experimental setup of the four studies,} taken from each paper's evaluation section. Engine versions reflect the start of each campaign; generator defaults list upper limits per generated test case.}
+\caption{\textbf{Experimental setup of the four studies,} taken from each paper's evaluation section. Engine versions identify evaluation snapshots; development campaigns could upgrade builds. Generator defaults list upper limits per generated test case.}
 \label{tab:glance}
 \centering\footnotesize\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.4cm}@{}}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{3.5cm}@{}}
 \toprule
 \textbf{Study} & \textbf{DBMSs and versions} & \textbf{Deployment and hardware} & \textbf{Discovery budget} & \textbf{Generator defaults} \\
 \midrule
 CODDTest & SQLite, MySQL, CockroachDB, DuckDB, TiDB (development versions); SQLite 3.42.0.0 and 3.30.0 for comparisons & 64 cores, 512\,GB, 10 threads (efficiency study) & Intermittent runs over four months; 24\,h per comparison & Expression depth 3 (sweep 1 to 15) \\
-DDLCheck & MySQL 8.0.36, PostgreSQL 16.2, SQLite 3.43.0, MariaDB 11.3.2, CockroachDB 23.2, TiDB 8.0.0 & 8 cores, 32\,GB; Docker or official binaries & 24\,h per DBMS & 5,000 statements per pair of databases \\
+DDLCheck & MySQL 8.0.36, PostgreSQL 16.2, SQLite 3.43.0, MariaDB 11.3.2, CockroachDB 23.2, TiDB 8.0.0 & 8 cores, 32\,GB; Docker or official binaries & 24\,h per DBMS & Max DDL length 10; 5,000 statements per DB pair \\
 Radar & MySQL 8.0.32, SQLite 3.41.0, MariaDB 11.0.3, CockroachDB 22.2.5, TiDB 6.6.0 & 8 cores, 32\,GB; three-node CockroachDB, distributed TiDB & 10 rounds of 24\,h per DBMS & 3 tables, 3 columns, 30 rows, 5 indexes, 3 foreign keys \\
-WriteCheck & MySQL 8.0.32, PostgreSQL 15.2, SQLite 3.36.0, MariaDB 10.11.2, CockroachDB 22.2.5, TiDB 6.6.0 & 8 cores, 32\,GB; single-node CockroachDB & 5 rounds of about 24\,h & 5 transactions of up to 5 statements; 2\,s lock wait \\
+WriteCheck & MySQL 8.0.32, PostgreSQL 15.2, SQLite 3.36.0, MariaDB 10.11.2, CockroachDB 22.2.5, TiDB 6.6.0 & 8 cores, 32\,GB; single-node CockroachDB & 5 rounds of about 24\,h & Up to 5 transactions, 5 statements each; 2\,s client wait \\
 \bottomrule
 \end{tabularx}
 \end{table*}
 
-\paragraph{Datasets.} None of the papers uses a standard benchmark, and three rely solely on synthetic inputs: SQLancer tables and expressions in CODDTest, random DDL chains and DML in DDLCheck, typed tables with constraints and indexes in Radar, and small typed tables with up to five explicit and autocommit transactions in WriteCheck. Synthetic generation fits semantic testing well. Correctness depends on SQL rules rather than domain data, fuzzing reaches unusual type, NULL and constraint combinations, and tiny databases keep counterexamples short enough to reduce. The cost is that none of the experiments says how these tools behave on large production databases.
+\paragraph{Datasets.} None of the papers uses a common standard benchmark; their generated test inputs are synthetic: SQLancer tables and expressions in CODDTest, random DDL chains and DML in DDLCheck, typed tables with constraints and indexes in Radar, and small typed tables with up to five explicit and autocommit transactions in WriteCheck. Synthetic generation fits semantic testing well. Correctness depends on SQL rules rather than domain data, fuzzing reaches unusual type, NULL and constraint combinations, and tiny databases keep counterexamples short enough to reduce. The cost is that none of the experiments says how these tools behave on large production databases.
 
-WriteCheck is the only paper grounded in real bug history. Its authors studied 140 transaction bugs filed from 2018 to 2022, identifying 35 critical bugs that leave wrong data behind, of which 32 (91.4\%) violate WSS~\cite{writecheck}. Those 32 real defects are strikingly small~\cite[Fig.~2]{writecheck}: all need at most two tables and five transactions, 97\% of their initial tables have at most five rows, and 72\% require a specific key, index or column constraint. Historical bugs thus validate the oracle and calibrate generator bounds, while synthetic fuzzing finds new defects. Confirmed bug sets in the capability studies below provide a second source of real data.
+WriteCheck additionally uses a systematic study of historical transaction bugs to motivate its design and calibrate generator bounds. Its authors studied 140 transaction bugs filed from 2018 to 2022, identifying 35 critical bugs that leave wrong data behind, of which 32 (91.4\%) violate WSS~\cite{writecheck}. Those 32 real defects are strikingly small~\cite[Fig.~2]{writecheck}: all need at most two tables and five transactions, 97\% of their initial tables have at most five rows, and 72\% require a specific key, index or column constraint. Historical bugs thus validate the oracle and calibrate generator bounds, while synthetic fuzzing finds new defects. Confirmed bug sets in the capability studies below provide a second source of real data.
 
 \paragraph{Metrics and methodology.} Unique confirmed bugs serve as the headline metric, since developer confirmation is the clearest proof a finding is real, though counts still depend on how strictly authors reduce and deduplicate reports. Cost is measured as tests or queries per unit time. Two diversity proxies also appear: unique query plans in CODDTest (motivated by prior work linking plan diversity to bugs) and unique schema structures in DDLCheck. Code coverage is reported too, yet reveals little here: SQLite's own test suite reaches 100\% branch coverage while still shipping logic bugs~\cite[Sec.~4.3]{coddtest}.
 
 Baseline comparisons take two distinct forms. A \textbf{capability study} fixes a set of known bugs and asks whether each tool could expose them. A \textbf{fresh run} gives every tool the same wall-clock budget to generate its own tests and counts what each finds. None of the papers reports variance or confidence intervals: comparative runs and ablations are single trials, and Radar's ten and WriteCheck's five discovery rounds report only totals.
 
 \subsection{CODDTest results}
-CODDTest reports four series: an intermittent four-month campaign on five DBMSs; an oracle comparison combining a fresh run on SQLite 3.30.0, bug-age tracking and a manual detectability check; an efficiency benchmark against NoREC, TLP, DQE and two CODDTest variants; and a sweep over maximum expression depth. Default runs use depth 3, 24 hours and 10 threads.
+\paragraph{Procedure.} CODDTest obtains an expression's value through an auxiliary query and substitutes that value into the original query while preserving SQL context. Its efficiency benchmark separates expression-only, subquery-only and full modes, using separate matched 24-hour runs to measure throughput and to collect distinct query plans and branch coverage. The depth sweep varies \texttt{MaxDepth} from 1 to 15 in expression-only mode under a fixed 24-hour budget to isolate expression complexity~\cite[Sec.~4.3]{coddtest}.
+
+CODDTest reports four series: an intermittent four-month campaign on five DBMSs; an oracle comparison combining a fresh run on SQLite 3.30.0, bug-age tracking and a manual detectability check; an efficiency benchmark against NoREC, TLP, DQE and two CODDTest variants; and the expression-depth sweep. Default runs use depth 3, 24 hours and 10 threads.
 
 Across five DBMSs, CODDTest found 45 new bugs, including 24 logic bugs (19 fixed and 5 verified at publication). In the authors' manual breakdown, 11 of those 24 involve constructs earlier oracles omit, such as subqueries, \texttt{ON} clauses and \texttt{CASE} expressions~\cite[Table~2]{coddtest}.
 
@@ -54,51 +56,59 @@ In the fresh 24-hour run on SQLite 3.30.0 (an older build where NoREC and TLP ha
 \begin{verdicts}
 \verdict{\yes}{CODDTest uncovers new logic bugs in mature engines.}{24 confirmed logic bugs across five DBMSs, 19 fixed.}
 \verdict{\half}{It reaches bugs earlier oracles miss.}{The 11-of-24 count is measured on its own bugs (Figure~\ref{fig:homeset}); the fresh run shows complementarity, not superiority.}
-\verdict{\no}{Deep expressions are unnecessary, as the authors suggest.}{The depth sweep measures cost, not bug yield per depth.}
+\verdict{\no}{Deeper expressions are unnecessary.}{The depth sweep establishes runtime cost, not bug yield by depth.}
 \end{verdicts}
 
 \subsection{DDLCheck results}
+\paragraph{Procedure.} DDLCheck executes a generated DDL sequence (up to length 10), extracts the resulting schema from the catalog and synthesizes a direct \texttt{CREATE} twin. It then runs the same generated DML and DQL statements on both databases, comparing query output, statement status, stored data and schema state. Its optimization records a database schema transition graph whose nodes hold table structures and whose edges represent DDL transitions; a new sequence is skipped if an equivalent graph (matching structural attributes and transition types up to column renaming) was already tested. This acts as a novelty filter rather than a numerical ranker, and the ablation varies this filter under a fixed 24-hour budget~\cite[Secs.~3.5, 4.4]{ddlcheck}.
+
 DDLCheck presents a 24-hour-per-DBMS campaign across six engines, an ablation of its schema-diversity filter, and a conceptual check of whether NoREC, Radar and DQP could catch its confirmed schema bugs. Its default of 5,000 statements per database pair came from a pilot that also tested 25,000 and 100,000.
 
-The campaign submitted 34 reports and earned 29 confirmations (21 schema logic bugs and 8 crashes), with zero false positives, 4 duplicates and 9 fixes~\cite[Table~2]{ddlcheck}. Seven of the 21 logic bugs never altered a query result: four corrupted stored data and three corrupted the schema. Across all 29 confirmed bugs, \texttt{SELECT} revealed 23 while \texttt{CREATE} (2), \texttt{INSERT} (2), \texttt{ALTER} (1) and \texttt{REPLACE} (1) exposed six~\cite[Fig.~6]{ddlcheck}, putting them beyond read-only oracles. In the conceptual comparison, NoREC exposed 0 of the 21 schema bugs, Radar 13 and DQP 9. In the ablation, keeping only DDL sequences yielding unseen schema structures raised unique bugs from 5 (random selection) to 8 (Figure~\ref{fig:ablation}b); a stricter filter triggered the same 9 raw failures but only 4 unique bugs.
+The campaign submitted 34 reports and earned 29 confirmations (21 schema logic bugs and 8 crashes), with zero false positives, 4 duplicates and 9 fixes~\cite[Table~2]{ddlcheck}. Seven of the 21 logic bugs never altered a query result: four corrupted stored data and three corrupted the schema. Across all 29 confirmed bugs, \texttt{SELECT} revealed 23 while \texttt{CREATE} (2), \texttt{INSERT} (2), \texttt{ALTER} (1) and \texttt{REPLACE} (1) exposed six~\cite[Fig.~6]{ddlcheck}, showing why checking only \texttt{SELECT} results is insufficient. In the conceptual comparison, NoREC exposed 0 of the 21 schema bugs, Radar 13 and DQP 9. In the ablation, keeping only DDL sequences yielding unseen schema structures raised unique bugs from 5 (random selection) to 8 (Figure~\ref{fig:ablation}b); a stricter filter triggered the same 9 raw failures but only 4 unique bugs.
 
 \begin{verdicts}
 \verdict{\yes}{Schema history exposes defects query oracles miss.}{29 confirmed bugs, zero false positives and 7 invisible to query output.}
 \verdict{\half}{The diversity filter improves discovery.}{8 unique bugs against 5, from one 24-hour run per DBMS.}
-\verdict{\no}{Effective testing of PostgreSQL and SQLite.}{Zero bugs in 24 hours cannot separate bug-free engines from an unexercised search space.}
+\verdict{\no}{Effective testing of PostgreSQL and SQLite.}{Zero bugs in 24 hours cannot separate bug-free engines from generator limits.}
 \end{verdicts}
 
 \subsection{Radar results}
+\paragraph{Procedure.} Radar abstracts database metadata by stripping table and column names and replacing column references inside constraints with their data types. A generated database is tested only when its abstract metadata pattern is unseen, after which the pattern is recorded. Radar then builds a raw twin retaining compulsory metadata and stored rows, runs up to 5,000 read queries on both databases and compares returned rows (ignoring order) and errors. The ablation disables the novelty filter while holding the rest of the pipeline fixed~\cite[Secs.~3.1, 3.4--3.5, 4.3]{radar}.
+
 Radar reports ten 24-hour discovery rounds per DBMS on five systems, a 12-hour ablation of metadata-guided generation with function coverage, and a comparison against DQE, NoREC, TLP and MutaSQL combining conceptual analysis with a fresh 12-hour run (omitting MutaSQL, which is not public).
 
-Ten rounds produced 1,663 raw reports. Roughly three weeks of manual reduction distilled them into 42 unique submissions: 38 confirmed (30 metadata-related, 8 other), 1 duplicate and 3 false positives~\cite[Sec.~4.2]{radar}. TiDB accounts for 31 of the 42 submissions and 24 of the 30 metadata bugs~\cite[Table~2]{radar}. Radar's guidance ablation (Figure~\ref{fig:ablation}a) is the cleanest controlled signal across all four papers: on TiDB, guided fuzzing separates within two hours and ends at 19 unique bugs versus 12. Across all five DBMSs the totals are 22 versus 14, so TiDB supplies most of the gain. Function coverage barely moves (20.3\% versus 19.7\% on MySQL; 19.7\% versus 19.3\% on MariaDB). In the fresh 12-hour run, all tools combined found 21 metadata bugs; Radar found 20, including 15 missed by every baseline.
+Ten rounds produced 1,663 raw reports. Roughly three weeks of manual reduction distilled them into 42 unique submissions: 38 confirmed (30 metadata-related, 8 other), 1 duplicate and 3 false positives~\cite[Sec.~4.2]{radar}. TiDB accounts for 31 of the 42 submissions and 24 of the 30 metadata bugs~\cite[Table~2]{radar}. Radar's guidance ablation (Figure~\ref{fig:ablation}a) provides a direct within-tool comparison: on TiDB, guided fuzzing separates within two hours and ends at 19 unique bugs versus 12. Across all five DBMSs the totals are 22 versus 14, so TiDB supplies most of the gain. Function coverage barely moves (20.3\% versus 19.7\% on MySQL; 19.7\% versus 19.3\% on MariaDB). In the fresh 12-hour run, all tools combined found 21 metadata bugs; Radar found 20, including 15 missed by every baseline.
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig_ablation}
-\caption{\textbf{Ablation results from DDLCheck and Radar.} (a) Radar on TiDB: cumulative unique bugs with and without metadata guidance, read from \cite[Fig.~7]{radar} (approximate). (b) Total unique bugs with and without each design choice, from \cite[Table~3]{ddlcheck} and \cite[Table~3]{radar}. Each bar comes from a single run.}
+\caption{\textbf{Ablation results from DDLCheck and Radar.} (a) Radar on TiDB: cumulative unique bugs with and without metadata guidance, read from \cite[Fig.~7]{radar} (approximate). (b) Total unique bugs with and without each design choice, from \cite[Table~3]{ddlcheck} and \cite[Table~3]{radar}. Each bar comes from a single run; differing targets and budgets preclude cross-tool ranking.}
 \label{fig:ablation}
 \end{figure}
 
 \begin{verdicts}
 \verdict{\yes}{Raw copies uncover metadata bugs other oracles miss.}{15 of 21 metadata bugs in the fresh run were found by Radar alone.}
-\verdict{\half}{Metadata guidance improves detection.}{22 versus 14 bugs in a single run, mostly on TiDB.}
+\verdict{\half}{Metadata guidance improves detection.}{22 versus 14 bugs in a single run, concentrated in TiDB.}
 \verdict{\half}{Findings generalize evenly across DBMSs.}{24 of the 30 confirmed metadata bugs come from one system.}
 \end{verdicts}
 
 \subsection{WriteCheck results}
+\paragraph{Procedure.} WriteCheck randomly interleaves statements across concurrent transactions while preserving intra-transaction order. Each submitted statement runs in its own thread, and the client waits up to 2\,s before classifying a transaction as blocked so other eligible transactions can proceed; this client threshold is not an engine lock-wait timeout and does not by itself prove deadlock. Error recovery follows engine semantics: deadlock victims abort automatically in MySQL and TiDB, whereas SQLite, MariaDB, PostgreSQL and CockroachDB require an explicit \texttt{ROLLBACK} after relevant transaction errors. Serial replay is inferred from observed commit, rollback and abort events rather than submission order~\cite[Secs.~5.2--5.4]{writecheck}.
+
 WriteCheck backs its oracle with the historical study of 35 critical bugs, a five-round campaign on six DBMSs, a capability comparison on 29 known bugs, and a fresh 12-hour run against DT\textsuperscript{2}, Troc and TxCheck.
 
-The historical study anchors the design: 32 of 35 critical bugs (91.4\%) violate WSS, and 29 of those 32 (90.6\%) trigger deterministically under controlled statement order. Discovery flagged 101 WSS violations that reduced to 22 unique cases: 13 confirmed critical bugs (11 new, 2 known: 9 in TiDB, 3 in MariaDB, 1 in MySQL) and 9 false positives. One detail requires care: the capability study also evaluates 29 bugs, yet it is a \emph{different} set of 29, combining WriteCheck's 13 bugs with 16 found earlier by DT\textsuperscript{2}, Troc and TxCheck~\cite[Sec.~6.5.1]{writecheck}. WriteCheck detects all 29, versus 23 for DT\textsuperscript{2}, 16 for TxCheck, 14 for Troc and 0 for Elle, Cobra and Emme (Figure~\ref{fig:homeset}). Because most cases come from competing tools, this is the fairest capability study of the four. In the fresh 12-hour run (Table~\ref{tab:fresh}), WriteCheck found 4 critical bugs against 1 or 2 for each baseline, though rivals also catch non-critical bugs outside WriteCheck's scope.
+The historical study anchors the design: 32 of 35 critical bugs (91.4\%) violate WSS, and 29 of those 32 (90.6\%) trigger deterministically under controlled statement order. Breaking down the two variants, 15 of the 35 critical bugs violate \texttt{tx-WSS} whereas 32 violate \texttt{stmt-WSS} (including all 15 \texttt{tx-WSS} cases)~\cite[Sec.~3.2]{writecheck}, demonstrating why checking whole-transaction replay alone misses defects exposed by statement-level replay.
+
+Discovery flagged 101 WSS violations that reduced to 22 unique cases: 13 confirmed critical bugs (11 new, 2 known: 9 in TiDB, 3 in MariaDB, 1 in MySQL) and 9 false positives. One detail requires care: the capability study also evaluates 29 bugs, yet it is a \emph{different} set of 29, combining WriteCheck's 13 bugs with 16 found earlier by DT\textsuperscript{2}, Troc and TxCheck~\cite[Sec.~6.5.1]{writecheck}. WriteCheck detects all 29, versus 23 for DT\textsuperscript{2}, 16 for TxCheck, 14 for Troc and 0 for Elle, Cobra and Emme (Figure~\ref{fig:homeset}). Because most cases come from competing tools, this study is less restricted to the new tool's own discoveries than the other three capability studies. In the fresh 12-hour run (Table~\ref{tab:fresh}), WriteCheck found 4 critical bugs against 1 or 2 for each baseline, while rivals also catch non-critical bugs outside WriteCheck's main WSS target. WriteCheck's separate Serializable read-result check (excluding PostgreSQL) found no bugs in the evaluation.
 
 \begin{table}[!tb]
-\caption{\textbf{Results of the fresh end-to-end comparisons.} Unique bugs discovered, with exclusive finds in parentheses and false positives after the slash. From \cite[Sec.~4.2]{coddtest}, \cite[Table~6]{radar} and \cite[Table~4]{writecheck}.}
+\caption{\textbf{Results of the fresh end-to-end comparisons.} Unique bugs discovered, with exclusive finds in parentheses and false positives after the slash. Counts must not be interpreted as a ranking across papers. From \cite[Sec.~4.2]{coddtest}, \cite[Table~6]{radar} and \cite[Table~4]{writecheck}.}
 \label{tab:fresh}
 \centering\footnotesize\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.95cm}>{\raggedright\arraybackslash}p{1.45cm}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{1.95cm}>{\raggedright\arraybackslash}p{1.55cm}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Run} & \textbf{Reviewed tool} & \textbf{Baselines} \\
 \midrule
-CODDTest, SQLite, 24\,h & 25 (4) & NoREC 27 (3), TLP 27 (2), EET 6 (3) \\
+CODDTest, SQLite, 24\,h & 25 (4); 14/39 missed & NoREC 27 (3), TLP 27 (2), EET 6 (3) \\
 Radar, 12\,h per DBMS & 20 of 21 (15) & all others together: 6 \\
 WriteCheck, 12\,h per DBMS & 4 / 5 FP & DT\textsuperscript{2} 2 / 24, Troc 2 / 4, TxCheck 1 / 4 \\
 \bottomrule
@@ -107,7 +117,7 @@ WriteCheck, 12\,h per DBMS & 4 / 5 FP & DT\textsuperscript{2} 2 / 24, Troc 2 / 4
 
 \begin{verdicts}
 \verdict{\yes}{WSS captures most critical transaction bugs.}{32 of 35 historical defects, drawn independently, violate it.}
-\verdict{\half}{WriteCheck beats earlier transaction testers.}{29 versus at most 23 on the capability set, and 4 versus 2 in one run; counts are small.}
+\verdict{\half}{WriteCheck beats earlier transaction testers.}{29 versus at most 23 on the mixed capability set, and 4 versus 2 in one run; counts are small.}
 \verdict{\half}{A WSS violation reliably signals a bug.}{9 of 22 unique discovery violations (and 5 in the 12-hour run) were false positives from semi-consistent reads and missing gap locks.}
 \end{verdicts}
 
@@ -122,13 +132,13 @@ Each paper reads well on its own. Side by side, three reporting habits blur any 
 \label{fig:homeset}
 \end{figure*}
 
-\paragraph{Capability studies on the tool's own bugs.} Three of the four capability studies take the new tool's discoveries and ask how many older tools could catch them (Figure~\ref{fig:homeset}), guaranteeing the new tool 100\% by construction. That proves the new oracle reaches fresh territory, yet leaves the mirror question untouched: what does the new tool miss? CODDTest's fresh SQLite run shows that side most clearly, missing 14 of 39 bugs found collectively, while Radar also missed 1 of 21 metadata bugs in its comparison.
+\paragraph{Capability studies on the tool's own bugs.} Three of the four capability studies take the new tool's discoveries and ask how many older tools could catch them (Figure~\ref{fig:homeset}), guaranteeing the new tool 100\% by construction. That proves the new oracle reaches fresh territory, yet leaves the mirror question untouched: what does the new tool miss? Fresh comparisons partly answer that side: CODDTest missed 14 of 39 bugs found collectively in its SQLite experiment, while Radar missed 1 of 21 metadata bugs in its separate comparison. Because these fractions span different bug classes, targets and budgets, they cannot establish an overall ranking.
 
-\paragraph{Headline counts from different triage stages.} Figure~\ref{fig:units} draws each reported item as one square. Every abstract highlights its row total, yet those totals represent different stages: all 45 of CODDTest's bugs are confirmed, WriteCheck's 22 unique violations include 9 false positives and 2 known bugs, and Radar's 42 submissions include 1 duplicate and 3 false positives. Ranking abstracts mixes confirmed fixes with raw alarms. Confirmation counts are also frozen at submission, and overlap across the four campaigns is unchecked.
+\paragraph{Headline counts from different triage stages.} Figure~\ref{fig:units} draws each reported item as one square colored by triage outcome. Every abstract highlights its row total, yet those totals represent different stages: all 45 of CODDTest's bugs are confirmed, DDLCheck's 34 reports include 4 duplicates and 1 awaiting confirmation, Radar's 42 submissions include 1 duplicate and 3 false positives, and WriteCheck's 22 unique violations include 2 known bugs and 9 false positives. Ranking abstract totals mixes confirmed fixes with duplicates and false alarms. Confirmation counts are also frozen at submission, and overlap across the four campaigns is unchecked.
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig_units}
-\caption{\textbf{Breakdown of each paper's headline bug count.} Each square represents one reported case; row totals match the headline numbers in each abstract. From \cite[Table~1]{coddtest}, \cite[Table~2]{ddlcheck}, \cite[Table~2]{radar} and \cite[Table~2]{writecheck}.}
+\caption{\textbf{Breakdown of each paper's headline count by triage status.} Each square represents one reported case; row totals match each abstract. WriteCheck's 2 known bugs are confirmed duplicates; DDLCheck has 1 report awaiting confirmation. From \cite[Table~1]{coddtest}, \cite[Table~2]{ddlcheck}, \cite[Table~2]{radar} and \cite[Table~2]{writecheck}.}
 \label{fig:units}
 \end{figure}
 
@@ -136,33 +146,14 @@ Each paper reads well on its own. Side by side, three reporting habits blur any 
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig_triage}
-\caption{\textbf{Raw reports per unique bug,} with raw totals shown on the right. From \cite[Sec.~4.2]{coddtest}, \cite[Sec.~4.2]{radar} and \cite[Sec.~6.2]{writecheck}. Because run durations and target DBMSs differ, only orders of magnitude are directly comparable.}
+\caption{\textbf{Raw reports per unique bug,} with raw totals shown on the right. From \cite[Sec.~4.2]{coddtest}, \cite[Sec.~4.2]{radar} and \cite[Sec.~6.2]{writecheck}. Run durations, targets and triage definitions differ; ratios illustrate reported workload rather than a ranking of triage efficiency.}
 \label{fig:triage}
 \end{figure}
 
-\paragraph{Evidence summary.} Table~\ref{tab:scorecard} collects all verdicts: the top two rows hold across all four papers, while the comparative claims below remain directional at best.
+\paragraph{Evidence summary.} Table~\ref{tab:scorecard} collects all verdicts: the top two rows hold across all four papers, while the comparative claims below remain directional or conditional at best.
 
-\begin{table*}[!tb]
-\caption{\textbf{Strength of evidence for recurring claims across the four papers.} Our assessment.}
-\label{tab:scorecard}
-\centering\small\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{5.1cm}*{4}{>{\centering\arraybackslash}p{1.2cm}}>{\raggedright\arraybackslash}X@{}}
-\toprule
-\textbf{Claim} & \textbf{\shortstack{CODD-\\Test}} & \textbf{\shortstack{DDL-\\Check}} & \textbf{\shortstack{\strut\\Radar}} & \textbf{\shortstack{Write-\\Check}} & \textbf{What limits the evidence} \\
-\midrule
-Finds new bugs that developers confirm & \yes & \yes & \yes & \yes & Snapshots at publication; overlap unknown \\
-Reaches bugs that earlier oracles miss & \yes & \yes & \yes & \yes & Measured on the tool's own bugs (Figure~\ref{fig:homeset}) \\
-Finds more bugs than baselines in a fresh run & \no & \nt & \half & \half & One run each; small counts \\
-Its key design choice helps & \half & \half & \half & \half & Single runs; WriteCheck: study of past bugs \\
-False alarms are counted & \half & \yes & \yes & \yes & CODDTest: ``none after two fixes'', no count \\
-Results hold across DBMSs & \yes & \half & \half & \half & Radar 24/30 and WriteCheck 9/13 in TiDB \\
-Variance across repeated runs is reported & \no & \no & \no & \no & 10 and 5 rounds run, no spread given \\
-\bottomrule
-\end{tabularx}
-\symkey{\yes/supported, \half/{directional, small or conditional}, \no/not shown, \nt/not tested}
-\end{table*}
 
-\paragraph{Threats to validity.} Internal validity rests on precondition soundness: stray nondeterminism, implicit casts or incomplete catalog reconstruction trigger mismatches without any DBMS bug. Construct validity is limited because distinct query plans do not ensure distinct semantic paths, and 100\% branch coverage still coexists with logic bugs in SQLite~\cite[Sec.~4.3]{coddtest}. External validity faces three constraints: deployments differ even for one engine (single-node CockroachDB in WriteCheck versus a three-node cluster in Radar), small generated tables differ from long-lived production databases, and bug finds cluster unevenly. In Figure~\ref{fig:dbms}, only CODDTest spreads its bugs evenly across targets; DDLCheck clusters in MySQL and MariaDB, while Radar and WriteCheck concentrate in TiDB. Because none of the papers separates dialect fit, engineering effort and maturity, Figure~\ref{fig:dbms} does not rank DBMS reliability.
+\paragraph{Threats to validity.} Internal validity rests on precondition soundness: stray nondeterminism, implicit casts or incomplete catalog reconstruction trigger mismatches without any DBMS bug. Construct validity is limited because distinct query plans do not ensure distinct semantic paths, and 100\% branch coverage still coexists with logic bugs in SQLite~\cite[Sec.~4.3]{coddtest}. External validity faces four constraints: deployments differ even for one engine (single-node CockroachDB in WriteCheck versus a three-node cluster in Radar), small generated tables differ from long-lived production databases, three of the four papers (DDLCheck, Radar and WriteCheck) originate from the same research group and three (CODDTest, Radar and WriteCheck) share the SQLancer framework, and bug finds cluster unevenly. In Figure~\ref{fig:dbms}, CODDTest's logic bugs are distributed more broadly across its targets; DDLCheck clusters in MySQL and MariaDB, while Radar and WriteCheck concentrate in TiDB. Because none of the papers separates dialect fit, engineering effort and maturity, Figure~\ref{fig:dbms} does not rank DBMS reliability.
 
 \begin{figure}[!tb]
 \centering\includegraphics[width=\columnwidth]{fig_dbms}
@@ -172,7 +163,28 @@ Variance across repeated runs is reported & \no & \no & \no & \no & 10 and 5 rou
 
 
 \section{Conclusions and research directions}\label{sec:conclusions}
-Read together, these papers suggest a modular testing suite built from independent oracles: CODDTest for expressions, DDLCheck for schema history, Radar for metadata and WriteCheck for concurrent writes. Keeping them separate ties every failure to one invariant; chaining them, such as running CODDTest or Radar over DDLCheck schemas, needs its own soundness proof.
+
+\begin{table*}[!tb]
+\caption{\textbf{Strength of evidence for recurring claims across the four papers.} Our assessment of the published record.}
+\label{tab:scorecard}
+\centering\small\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{4.9cm}*{4}{>{\centering\arraybackslash}p{1.15cm}}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Claim} & \textbf{\shortstack{CODD-\\Test}} & \textbf{\shortstack{DDL-\\Check}} & \textbf{\shortstack{\strut\\Radar}} & \textbf{\shortstack{Write-\\Check}} & \textbf{Main qualification} \\
+\midrule
+Finds new bugs that developers confirm & \yes & \yes & \yes & \yes & Publication snapshots; cross-campaign overlap unknown \\
+Reaches bugs that earlier oracles miss & \yes & \yes & \yes & \yes & Three sets use own bugs (Fig.~\ref{fig:homeset}); WriteCheck uses a mixed set \\
+Finds more bugs than baselines in a fresh run & \no & \nt & \half & \half & Single runs, small counts; different targets and bug classes \\
+Generation or design choice helps & \half & \half & \half & \half & Single runs; CODDTest sweep tests cost, not bug yield \\
+False alarms are characterized & \half & \yes & \yes & \yes & CODDTest notes causes without initial count; WriteCheck quantifies FPs \\
+Effectiveness generalizes across DBMSs & \yes & \half & \half & \half & Radar 24/30 and WriteCheck 9/13 in TiDB; zeros may reflect generators \\
+Repeated-run uncertainty is reported & \no & \no & \no & \no & 10 and 5 rounds run, no spread or confidence intervals given \\
+\bottomrule
+\end{tabularx}
+\symkey{\yes/supported, \half/{directional, small or conditional}, \no/not established, \nt/not tested}
+\end{table*}
+
+Read together, these papers suggest a modular testing suite built from independent oracles: CODDTest for expressions, DDLCheck for schema history, Radar for metadata and WriteCheck for concurrent writes. Returning to our shop's \texttt{Product} table, such a suite would check folded stock predicates with CODDTest, validate \texttt{ALTER TABLE} migrations with DDLCheck, audit stock-index queries against a raw copy with Radar, and replay concurrent checkouts with WriteCheck. Keeping them separate ties every failure to one invariant; chaining them, such as running CODDTest or Radar over DDLCheck schemas, needs its own soundness proof.
 
 \paragraph{Open questions.}
 \begin{enumerate}[leftmargin=1.3em,itemsep=1pt,topsep=2pt]
@@ -183,4 +195,4 @@ Read together, these papers suggest a modular testing suite built from independe
 
 \paragraph{Toward a neutral comparison.} Answering the open comparative questions requires a shared protocol: pin common DBMS revisions, build a neutral bug suite from independent historical reports (extending WriteCheck's start), and run all tools under equal budgets across multiple seeded trials. Report unique bugs with variance, false positives, raw reports per bug and triage time; include negative controls (valid tricky cases) to test precision; and score each oracle only on its claimed failure classes (Table~\ref{tab:coverage}).
 
-\paragraph{Closing thoughts.} Each system opens a distinct layer of DBMS behavior to automated testing by pairing two executions SQL semantics force to agree, and each rests on its precondition: stable evaluation for folding, a faithful catalog for reconstruction, metadata-agnostic queries for raw copies, and an obeyed conflict model for serial replay. Within those bounds, all four papers show convincingly that they catch bugs earlier oracles miss; comparing them under one neutral protocol is the clear next step.
+\paragraph{Closing thoughts.} Each system opens a distinct layer of DBMS behavior to automated testing by pairing two executions expected to agree under explicit preconditions, and each rests on its precondition: stable evaluation for folding, a faithful catalog for reconstruction, metadata-agnostic queries for raw copies, and an obeyed conflict model for serial replay. Within those bounds, all four papers show convincingly that they catch bugs earlier oracles miss; comparing them under one neutral protocol is the clear next step.

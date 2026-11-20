@@ -197,28 +197,36 @@ def fig_ablation():
 
 
 def fig_units():
-    """One square per reported bug. Sources: CODDTest Table 1; DDLCheck Table 2;
-    Radar Table 2 and Sec. 4.2; WriteCheck Table 2 and Sec. 6.2."""
+    """One square per reported case, split by triage outcome.
+    Sources: CODDTest Table 1; DDLCheck Table 2; Radar Table 2 & Sec. 4.2;
+    WriteCheck Table 2 & Sec. 6.2."""
     LIGHT = "#A9CDE8"
-    rows = [  # paper, target, other confirmed, not confirmed, target label, raw-report note
-        ("CODDTest", 24, 21, 0, "logic", ""),
-        ("DDLCheck", 21, 8, 5, "schema", ""),
-        ("Radar", 30, 8, 4, "metadata", "from 1,663 raw reports"),
-        ("WriteCheck", 11, 2, 9, "new critical", "from 101 raw violations"),
+    DUP = "#BDBDBD"
+    FP = ORANGE
+    rows = [  # paper, target, other_conf, dup_known, fp, awaiting, target label, raw-report note
+        ("CODDTest", 24, 21, 0, 0, 0, "logic", ""),
+        ("DDLCheck", 21, 8, 4, 0, 1, "schema", ""),
+        ("Radar", 30, 8, 1, 3, 0, "metadata", "from 1,663 raw reports"),
+        ("WriteCheck", 11, 0, 2, 9, 0, "new critical", "from 101 raw violations"),
     ]
     per_row, sz, gap = 23, 1.0, 0.24
-    fig, ax = plt.subplots(figsize=(W, 2.45))
+    fig, ax = plt.subplots(figsize=(W, 2.35))
     y0 = 0
-    for paper, tgt, oth, unc, tlab, note in rows:
-        cells = ["t"] * tgt + ["o"] * oth + ["u"] * unc
+    for paper, tgt, oth, dup, fp, aw, tlab, note in rows:
+        cells = ["t"] * tgt + ["o"] * oth + ["d"] * dup + ["f"] * fp + ["a"] * aw
         for k, c in enumerate(cells):
             cx = (k % per_row) * (sz + gap)
             cy = y0 - (k // per_row) * (sz + gap)
-            if c == "u":
-                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, fc="white", ec="#9A9A9A", lw=0.6))
-            else:
-                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, lw=0,
-                                           fc=BLUE if c == "t" else LIGHT))
+            if c == "a":
+                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, fc="white", ec="#6E6E6D", lw=0.7))
+            elif c == "t":
+                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, lw=0, fc=BLUE))
+            elif c == "o":
+                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, lw=0, fc=LIGHT))
+            elif c == "d":
+                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, lw=0, fc=DUP))
+            elif c == "f":
+                ax.add_patch(plt.Rectangle((cx, cy), sz, sz, lw=0, fc=FP))
         n = len(cells)
         ax.text(-0.9, y0 + sz / 2 - (0.62 if n > per_row else 0), paper, ha="right", va="center",
                 fontsize=7.6, fontweight="bold")
@@ -228,13 +236,24 @@ def fig_units():
         rows_used = (n - 1) // per_row + 1
         ax.text(0, y0 - rows_used * (sz + gap) + 0.12, lab, ha="left", va="top", fontsize=6.6,
                 color="#4A4A49", style="italic")
-        y0 -= rows_used * (sz + gap) + 2.75
-    for (lx, fc, ec, lab) in ((0, BLUE, "none", "target class"), (10.0, LIGHT, "none", "other confirmed"),
-                              (22.2, "white", "#9A9A9A", "unconfirmed")):
-        ax.add_patch(plt.Rectangle((lx, 2.4), sz, sz, fc=fc, ec=ec, lw=0.6))
-        ax.text(lx + sz + 0.4, 2.4 + sz / 2, lab, va="center", fontsize=6.8)
+        y0 -= rows_used * (sz + gap) + 2.35
+    legend_row1 = [
+        (-4.5, BLUE, "none", "new target class"),
+        (8.8, LIGHT, "none", "other confirmed"),
+        (21.5, DUP, "none", "dup. / known"),
+    ]
+    legend_row2 = [
+        (-4.5, FP, "none", "false positives"),
+        (8.8, "white", "#6E6E6D", "awaiting confirmation"),
+    ]
+    for lx, fc, ec, lab in legend_row1:
+        ax.add_patch(plt.Rectangle((lx, 3.45), sz, sz, fc=fc, ec=ec, lw=0.7 if ec != "none" else 0))
+        ax.text(lx + sz + 0.4, 3.45 + sz / 2, lab, va="center", fontsize=6.5)
+    for lx, fc, ec, lab in legend_row2:
+        ax.add_patch(plt.Rectangle((lx, 1.95), sz, sz, fc=fc, ec=ec, lw=0.7 if ec != "none" else 0))
+        ax.text(lx + sz + 0.4, 1.95 + sz / 2, lab, va="center", fontsize=6.5)
     ax.set_xlim(-7.4, per_row * (sz + gap) + 2.4)
-    ax.set_ylim(y0 + 1.6, 3.8)
+    ax.set_ylim(y0 + 1.25, 4.75)
     ax.set_aspect("equal")
     ax.axis("off")
     save(fig, "fig_units")
